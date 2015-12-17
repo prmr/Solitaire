@@ -56,7 +56,7 @@ public class Deck
 	}
 
 	/**
-	 * Shuffle the deck.
+	 * Shuffles the deck.
 	 */
 	public void shuffle()
 	{

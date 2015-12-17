@@ -65,14 +65,6 @@ public final class Card
 	public enum Suit 
 	{ CLUBS, DIAMONDS, HEARTS, SPADES }
 	
-	/**
-	 * A card color, red or black.
-	 */
-	public enum Color
-	{
-		RED, BLACK;
-	}
-	
 	private final Rank aRank;
 	private final Suit aSuit;
 	

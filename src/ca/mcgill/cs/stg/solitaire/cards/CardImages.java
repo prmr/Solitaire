@@ -48,6 +48,7 @@ public final class CardImages
 	 */
 	public static Image getCard( Card pCard )
 	{
+		assert pCard != null;
 		return getCard( getCode( pCard ) );
 	}
 	
