@@ -50,7 +50,7 @@ public class Deck
 		{
             for( Rank lRank : Rank.values() )
             {
-                aCards.add( new Card( lRank, lSuit ));
+                aCards.add( Card.get( lRank, lSuit ));
             }
 		}
 	}

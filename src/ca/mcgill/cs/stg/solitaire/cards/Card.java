@@ -21,10 +21,37 @@
 package ca.mcgill.cs.stg.solitaire.cards;
 
 /**
- * An immutable description of a playing card.
+ * An immutable description of a playing card. This abstraction
+ * is designed to be independent of game logic, so it does
+ * not provide any service that relies on the knowledge
+ * of the rules of any particular game.
+ * 
+ * This class implements the Flyweight design pattern: 
+ * there can only ever be one instance of a card that 
+ * represents a specific real-world playing card (such as ace
+ * of spaces). In the absence of serialization and reflection,
+ * this ensures that the behavior of the == operator is identical 
+ * to that of the equals method when two card arguments are 
+ * provided.
  */
-public final class Card implements Comparable<Card>
+public final class Card
 {
+	// Indexed by suit, then rank
+	private static final Card[][] CARDS = new Card[Suit.values().length][];
+	
+	// Create the flyweight objects
+	static
+	{
+		for( Suit suit : Suit.values() )
+		{
+			CARDS[suit.ordinal()] = new Card[Rank.values().length];
+			for( Rank rank : Rank.values() )
+			{
+				CARDS[suit.ordinal()][rank.ordinal()] = new Card(rank, suit);
+			}
+		}
+	}
+	
 	/**
 	 * Represents the rank of the card.
 	 */
@@ -49,26 +76,35 @@ public final class Card implements Comparable<Card>
 	private final Rank aRank;
 	private final Suit aSuit;
 	
-	/**
-	 * Create a new card object. 
-	 * @param pRank The rank of the card.
-	 * @param pSuit The suit of the card.
-	 */
-	public Card(Rank pRank, Suit pSuit )
+	private Card(Rank pRank, Suit pSuit )
 	{
 		aRank = pRank;
 		aSuit = pSuit;
 	}
 	
 	/**
-	 * Create a new card from a card description string.
-	 * @param pString The description string.
+	 * @param pRank The rank of the card (from ace to kind)
+	 * @param pSuit The suit of the card (clubs, diamond, spades, hearts)
+	 * @return The card object representing the card with pRank and pSuit
 	 */
-	public Card(String pString)
+	public static Card get(Rank pRank, Suit pSuit)
 	{
-		String[] tokens = pString.split(" ");
-		aRank = Rank.valueOf(tokens[0]);
-		aSuit = Suit.valueOf(tokens[2]);
+		assert pRank != null && pSuit != null;
+		return CARDS[pSuit.ordinal()][pRank.ordinal()];
+	}
+	
+	/**
+	 * @param pId The id string for the card. This is needs to have
+	 * been produced by Card.getIDString to be considered a
+	 * valid input to this method.
+	 * @return The card object with id string pId
+	 */
+	public static Card get( String pId )
+	{
+		assert pId != null;
+		int id = Integer.parseInt(pId);
+		return get(Rank.values()[id % Rank.values().length],
+				Suit.values()[id / Rank.values().length]);
 	}
 	
 	/**
@@ -81,18 +117,31 @@ public final class Card implements Comparable<Card>
 	}
 	
 	/**
-	 * @return The color of the card.
+	 * @param pCard The card to compare against
+	 * @return True if and only if pCard's suit is of the same color as 
+	 * this card.
 	 */
-	public Color getColor()
+	public boolean sameColorAs(Card pCard)
 	{
-		if( aSuit == Suit.DIAMONDS || aSuit == Suit.HEARTS )
+		assert pCard != null;
+		if( getSuit() == Suit.DIAMONDS || getSuit() == Suit.HEARTS )
 		{
-			return Color.RED;
+			return pCard.getSuit() == Suit.DIAMONDS || pCard.getSuit() == Suit.HEARTS;
 		}
 		else
 		{
-			return Color.BLACK;
+			return pCard.getSuit() == Suit.CLUBS || pCard.getSuit() == Suit.SPADES;
 		}
+	}
+	
+	/**
+	 * @return A string uniquely representing this card. The string
+	 * format is not specified except that it is fully compatible
+	 * with the format expected by Card.get(String).
+	 */
+	public String getIDString()
+	{
+		return Integer.toString(getSuit().ordinal() * Rank.values().length + getRank().ordinal());
 	}
 	
 	/**
@@ -106,84 +155,10 @@ public final class Card implements Comparable<Card>
 	
 	/**
 	 * @see java.lang.Object#toString()
-	 * @return See above.
 	 */
+	@Override
 	public String toString()
 	{
 		return aRank + " of " + aSuit;
-	}
-	
-	/**
-	 * @return A compact representation of this card.
-	 */
-	public String toShortString()
-	{
-		StringBuilder lReturn = new StringBuilder();
-		if( aRank.ordinal() == Rank.ACE.ordinal() || aRank.ordinal() >= Rank.TEN.ordinal())
-		{
-			lReturn.append(aRank.toString().charAt(0));
-		}
-		else
-		{
-			lReturn.append(aRank.ordinal() + 1);
-		}
-		lReturn.append(aSuit.toString().charAt(0));
-		return lReturn.toString();
-	}
-	
-	/**
-	 * Compares two cards according to gin rules (ace is low, suits 
-	 * run as Spade, Hearts, Diamonds, Clubs (high to low)).
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 * @param pCard The card to compare to
-	 * @return Returns a negative integer, zero, or a positive integer 
-	 * as this object is less than, equal to, or greater than pCard
-	 */
-	public int compareTo(Card pCard)
-	{
-		int lRankDifference = getRank().ordinal() - pCard.getRank().ordinal();
-		if( lRankDifference != 0 )
-		{
-			return lRankDifference;
-		}
-		else
-		{
-			return getSuit().ordinal() - pCard.getSuit().ordinal();
-		}
-	}
-
-	/**
-	 * Two cards are equal if they have the same suit and rank.
-	 * @param pCard The card to test.
-	 * @return true if the two cards are equal
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals( Object pCard ) 
-	{
-		if( pCard == null )
-		{
-			return false;
-		}
-		if( pCard == this )
-		{
-			return true;
-		}
-		if( pCard.getClass() != getClass() )
-		{
-			return false;
-		}
-		return (((Card)pCard).getRank() == getRank()) && (((Card)pCard).getSuit() == getSuit());
-	}
-
-	/** 
-	 * The hashcode for a card is the suit*13 + that of the rank (perfect hash).
-	 * @return the hashcode
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() 
-	{
-		return getSuit().ordinal() * Rank.values().length + getRank().ordinal();
 	}
 }
