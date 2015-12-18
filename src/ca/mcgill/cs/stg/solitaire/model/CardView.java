@@ -55,6 +55,14 @@ public class CardView
 	}
 	
 	/**
+	 * @return true if the card is visible
+	 */
+	public boolean isVisible()
+	{
+		return aVisible;
+	}
+	
+	/**
 	 * @return The image of the card, either 
 	 * the value side of the card if it is visible,
 	 * or the back of the card if the card is not visible.

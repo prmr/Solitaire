@@ -28,24 +28,23 @@ import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
 
 /**
- * Manages the state of the top stacks where completed
+ * Manages the state of the four stacks where completed
  * suits are accumulated.
  */
-class TopStackManager
+class SuitStackManager
 {
 	private Map<Suit, Stack<Card>> aStacks = new HashMap<>();
 	
 	/**
-	 * Creates an initialized topstack manager.
+	 * Creates an initialized suit stack manager.
 	 */
-	TopStackManager()
+	SuitStackManager()
 	{
 		initialize();
 	}
 	
 	/**
-	 * Fills and shuffles the deck and empty
-	 * the discard pile.
+	 * Initialize the inernal data structures.
 	 */
 	void initialize()
 	{
@@ -59,7 +58,7 @@ class TopStackManager
 	 * @param pSuit
 	 * @return True if the top stack for suit pSuit is empty.
 	 */
-	boolean stackEmpty(Suit pSuit)
+	boolean isEmpty(Suit pSuit)
 	{
 		return aStacks.get(pSuit).isEmpty();
 	}
@@ -68,46 +67,30 @@ class TopStackManager
 	 * @param pSuit
 	 * @return The card on top of the stack for suit pSuit
 	 */
-	Card seeTopCard(Suit pSuit)
+	Card peek(Suit pSuit)
 	{
 		assert !aStacks.get(pSuit).isEmpty();
 		return aStacks.get(pSuit).peek();
 	}
 	
+	/**
+	 * Push pCard onto the stack corresponding to its
+	 * suit.
+	 * @param pCard The card to push.
+	 */
 	void push(Card pCard)
 	{
 		aStacks.get(pCard.getSuit()).push(pCard);
 	}
 	
 	/**
-	 * @param pCard
-	 * @return True if pCard is the top card of
-	 * one of the stacks.
+	 * Pop the top card of the stack.
+	 * @param pSuit The card to pop.
+	 * @pre !isEmpty(pSuit)
 	 */
-	boolean isInTopStacks(Card pCard)
+	Card pop(Suit pSuit)
 	{
-		for( Stack<Card> stack : aStacks.values() )
-		{
-			if( !stack.isEmpty() && stack.peek() == pCard )
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	/**
-	 * If pCard is on one of the top stacks, pop it.
-	 * @param pCard The card to pop.
-	 */
-	void popCard(Card pCard)
-	{
-		for( Stack<Card> stack : aStacks.values() )
-		{
-			if( !stack.isEmpty() && stack.peek() == pCard )
-			{
-				stack.pop();
-			}
-		}
+		assert !isEmpty(pSuit);
+		return aStacks.get(pSuit).pop();
 	}
 }

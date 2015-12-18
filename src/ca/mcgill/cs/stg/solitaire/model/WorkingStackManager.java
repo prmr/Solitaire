@@ -26,22 +26,21 @@ import java.util.Stack;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
-import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
+import ca.mcgill.cs.stg.solitaire.cards.Deck;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
 
 /**
  * Manages the state of the bottom stacks where partial
  * suits are accumulated.
  */
-class BottomStackManager
+class WorkingStackManager
 {
 	private Map<StackIndex, Stack<CardView>> aStacks = new HashMap<>();
 	
 	/**
-	 * Fills and shuffles the deck and empty
-	 * the discard pile.
+	 * Fills the working stacks by drawing cards from the deck.
 	 */
-	void initialize(DeckManager pDeckManager)
+	void initialize(Deck pDeck)
 	{
 		for( StackIndex index : StackIndex.values() )
 		{
@@ -52,7 +51,7 @@ class BottomStackManager
 		{
 			for( int j = 0; j < i+1; j++ )
 			{
-				CardView view = new CardView(pDeckManager.getCardFromDeck());
+				CardView view = new CardView(pDeck.draw());
 				if( j == i )
 				{
 					view.makeVisible();
@@ -80,7 +79,7 @@ class BottomStackManager
 	{
 		for( Stack<CardView> cardView : aStacks.values() )
 		{
-			if(cardView.peek().getCard() == pCard )
+			if(!cardView.isEmpty() && cardView.peek().getCard() == pCard )
 			{
 				return true;
 			}
@@ -92,10 +91,13 @@ class BottomStackManager
 	{
 		for( Stack<CardView> cardView : aStacks.values() )
 		{
-			if(cardView.peek().getCard() == pCard )
+			if(!cardView.isEmpty() && cardView.peek().getCard() == pCard )
 			{
 				cardView.pop();
-				cardView.peek().makeVisible();
+				if( !cardView.isEmpty() )
+				{
+					cardView.peek().makeVisible();
+				}
 			}
 		}
 	}

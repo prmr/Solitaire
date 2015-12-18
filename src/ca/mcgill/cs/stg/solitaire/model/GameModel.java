@@ -22,18 +22,26 @@ package ca.mcgill.cs.stg.solitaire.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
 import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
+import ca.mcgill.cs.stg.solitaire.cards.Deck;
 
 /**
  * Keeps track of the current state of the game and provides
  * a facade to it. Implements the Singleton design pattern.
  * 
+ * The game state can logically be separated into four distinct 
+ * conceptual elements: the deck, the discard pile, the four
+ * "suit stacks" where completed suits are accumulated, and the
+ * seven "working stacks" where cards can be accumulated in sequences
+ * of alternating suit colors.
+ * 
  * To prevent
  * this class from degenerating into a God class, responsibilities
- * are separated into three package-private "manager" classes 
+ * are separated into package-private "manager" classes 
  * in charge of managing the state. However, these manager classes
  * are not responsible for notifying observers.
  */
@@ -41,9 +49,10 @@ public final class GameModel
 {
 	private static final GameModel INSTANCE = new GameModel();
 	
-	private DeckManager aDeckManager = new DeckManager();
-	private TopStackManager aTopStackManager = new TopStackManager();
-	private BottomStackManager aBottomStackManager;
+	private Deck aDeck = new Deck();
+	private Stack<Card> aDiscard = new Stack<>();
+	private SuitStackManager aSuitStacks = new SuitStackManager();
+	private WorkingStackManager aWorkingStacks = new WorkingStackManager();
 	private List<GameModelListener> aListeners = new ArrayList<>();
 	
 	/**
@@ -58,21 +67,18 @@ public final class GameModel
 		initialize();
 	}
 	
-	public boolean hasTopPileCard(Suit pSuit)
-	{
-		return !aTopStackManager.stackEmpty(pSuit);
-	}
-	
-	public Card getTopPileCard(Suit pSuit)
-	{
-		return aTopStackManager.seeTopCard(pSuit);
-	}
-	
+	/**
+	 * @return The singleton instance for this class.
+	 */
 	public static GameModel instance()
 	{
 		return INSTANCE;
 	}
 	
+	/**
+	 * Registers an observer for the state of the game model.
+	 * @param pListener A listener to register.
+	 */
 	public void addListener(GameModelListener pListener)
 	{
 		aListeners.add(pListener);
@@ -88,105 +94,142 @@ public final class GameModel
 	
 	private void initialize()
 	{
-		aDeckManager.initialize();
-		aTopStackManager.initialize();
-		aBottomStackManager.initialize(aDeckManager);
+		aDeck.shuffle();
+		aDiscard.clear();
+		aSuitStacks.initialize();
+		aWorkingStacks.initialize(aDeck);
 	}
 	
-	public boolean canDropOnTopPile(Card pCard, Suit pSuit )
+	/**
+	 * @return True if the deck has no card left in it.
+	 */
+	public boolean isEmptyDeck()
 	{
-		if( pCard.getRank() == Rank.ACE && pCard.getSuit() == pSuit )
-		{
-			return true;
-		}
-		if( aTopStackManager.stackEmpty(pSuit) )
-		{
-			return false;
-		}
-
-		if( pCard.getRank().ordinal() == aTopStackManager.seeTopCard(pSuit).getRank().ordinal()+1 &&
-				pCard.getSuit() == pSuit)
-		{
-			return true;
-		}
-		return false;
+		return aDeck.size() == 0;
 	}
 	
-	public boolean canDropOnStack(Card pCard, int pIndex )
+	/**
+	 * @return True if the discard pile has no card in it.
+	 */
+	public boolean isEmptyDiscardPile()
 	{
-		return aBottomStackManager.canDropOnStack(pCard, StackIndex.values()[pIndex]); // TODO change the method signature
+		return aDiscard.size() == 0;
 	}
 	
-	public void dropToTopPile(Card pCard)
+	/**
+	 * Draw a card from the deck and place it on top
+	 * of the discard pile.
+	 * @pre !isEmptyDeck()
+	 */
+	public void discard()
 	{
-		// look for the card
-		Card card = null;
-		if( aDeckManager.isOnTopOfDiscardPile(pCard))
-		{
-			aDeckManager.popDiscardPile();
-			card = pCard;
-		}
-		else if( aBottomStackManager.isInStacks(pCard))
-		{
-			aBottomStackManager.popTopCard(pCard);
-			card = pCard;
-		}
-		assert card != null;
-		aTopStackManager.push(card);
+		assert !isEmptyDeck();
+		aDiscard.push(aDeck.draw());
 		notifyListeners();
 	}
 	
-	public void dropToStack(Card pCard, int pIndex)
+	/**
+	 * @param pCard The card to test
+	 * @param pSuit The suit to test
+	 * @return True if pCard can be moved to the top of its suit stack.
+	 * This is only possible if its rank is immediately superior
+	 * to that of the card currently on top of the suit stack.
+	 */
+	public boolean canMoveToSuitStack(Card pCard, Suit pSuit )
+	{
+		assert pCard != null && pSuit != null;
+		if( pCard.getSuit() != pSuit )
+		{
+			return false;
+		}
+		if( pCard.getRank() == Rank.ACE )
+		{
+			return true;
+		}
+		if( aSuitStacks.isEmpty(pSuit) )
+		{
+			return false;
+		}
+		return pCard.getRank().ordinal() == aSuitStacks.peek(pSuit).getRank().ordinal()+1 &&
+				pCard.getSuit() == pSuit;
+	}
+	
+	/**
+	 * Moves pCard from wherever it is in a legally 
+	 * movable position and adds it to its suit stack.
+	 * @param pCard The card to move.
+	 */
+	public void moveToSuitStack(Card pCard)
+	{
+		assert canMoveToSuitStack(pCard, pCard.getSuit());
+		if( !aDiscard.isEmpty() && aDiscard.peek() == pCard )
+		{
+			aDiscard.pop();
+		}
+		else if( aWorkingStacks.isInStacks(pCard))
+		{
+			aWorkingStacks.popTopCard(pCard);
+		}
+		aSuitStacks.push(pCard);
+		notifyListeners();
+	}
+	
+	
+	public boolean hasTopPileCard(Suit pSuit)
+	{
+		return !aSuitStacks.isEmpty(pSuit);
+	}
+	
+	public Card getTopPileCard(Suit pSuit)
+	{
+		return aSuitStacks.peek(pSuit);
+	}
+	
+	
+	
+	public boolean canDropOnStack(Card pCard, StackIndex pIndex )
+	{
+		return aWorkingStacks.canDropOnStack(pCard, pIndex); 
+	}
+	
+	
+	
+	public void dropToStack(Card pCard, StackIndex pIndex)
 	{
 		// look for the card
 		Card card = null;
-		if( aDeckManager.isOnTopOfDiscardPile(pCard))
+		if( !aDiscard.isEmpty() && aDiscard.peek() == pCard )
 		{
-			aDeckManager.popDiscardPile();
-			card = pCard;
+			card = aDiscard.pop();
 		}
-		else if( aBottomStackManager.isInStacks(pCard))
+		else if( aWorkingStacks.isInStacks(pCard))
 		{
-			aBottomStackManager.popTopCard(pCard);
+			aWorkingStacks.popTopCard(pCard);
 			card = pCard;
 		}
 		if( card == null )
 		{
-			if( aTopStackManager.isInTopStacks(pCard))
+			if( !aSuitStacks.isEmpty(pCard.getSuit()) && aSuitStacks.peek(pCard.getSuit()) == pCard )
 			{
-				card = pCard;
-				aTopStackManager.popCard(pCard);
+				card = aSuitStacks.pop(pCard.getSuit());
 			}
 		}
 		assert card != null;
-		aBottomStackManager.push(pCard, StackIndex.values()[pIndex]); // TODO
+		aWorkingStacks.push(pCard, pIndex); 
 		notifyListeners();
 	}
 	
-	public CardView[] getStackAt(int pIndex)
+	public CardView[] getStackAt(StackIndex pIndex)
 	{
-		return aBottomStackManager.getStack(StackIndex.values()[pIndex]); // TODO
+		return aWorkingStacks.getStack(pIndex); 
 	}
 	
-	public boolean hasEmptyDeck()
-	{
-		return aDeckManager.deckEmpty();
-	}
-	
-	public boolean hasEmptyDiscardPile()
-	{
-		return aDeckManager.discardPileEmpty();
-	}
 	
 	public Card getDiscardPileTop()
 	{
-		assert !aDeckManager.discardPileEmpty();
-		return aDeckManager.getDiscardPileTop();
+		assert aDiscard.size() != 0;
+		return aDiscard.peek();
 	}
 	
-	public void discard()
-	{
-		aDeckManager.discardFromDeck();
-		notifyListeners();
-	}
+	
 }
