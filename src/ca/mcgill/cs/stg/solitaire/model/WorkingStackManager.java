@@ -40,17 +40,24 @@ class WorkingStackManager
 	private Map<StackIndex, Stack<CardView>> aStacks = new HashMap<>();
 	
 	/**
-	 * Fills the working stacks by drawing cards from the deck.
+	 * Creates working stacks with no cards in them.
 	 */
-	void initialize(Deck pDeck)
+	WorkingStackManager()
 	{
 		for( StackIndex index : StackIndex.values() )
 		{
 			aStacks.put(index, new Stack<CardView>());
 		}
-		
+	}
+	
+	/**
+	 * Fills the working stacks by drawing cards from the deck.
+	 */
+	void initialize(Deck pDeck)
+	{
 		for( int i = 0; i < StackIndex.values().length; i++ )
 		{
+			aStacks.get(StackIndex.values()[i]).clear();
 			for( int j = 0; j < i+1; j++ )
 			{
 				CardView view = new CardView(pDeck.draw());
@@ -63,7 +70,7 @@ class WorkingStackManager
 		}
 	}
 	
-	boolean canDropOnStack(Card pCard, StackIndex pIndex )
+	boolean canMoveTo(Card pCard, StackIndex pIndex )
 	{
 		Stack<CardView> stack = aStacks.get(pIndex);
 		if( stack.isEmpty() )
@@ -75,6 +82,11 @@ class WorkingStackManager
 			return pCard.getRank().ordinal() == stack.peek().getCard().getRank().ordinal()-1 && 
 					!pCard.sameColorAs(stack.peek().getCard());
 		}
+	}
+	
+	CardView[] getStack(StackIndex pIndex)
+	{
+		return aStacks.get(pIndex).toArray(new CardView[aStacks.get(pIndex).size()]);
 	}
 	
 	public Card[] getSequence(Card pCard, StackIndex pIndex)
@@ -108,7 +120,7 @@ class WorkingStackManager
 		return false;
 	}
 	
-	void popTopCard(Card pCard)
+	void pop(Card pCard)
 	{
 		for( Stack<CardView> cardView : aStacks.values() )
 		{
@@ -130,8 +142,5 @@ class WorkingStackManager
 		aStacks.get(pIndex).push(cardView);
 	}
 	
-	CardView[] getStack(StackIndex pIndex)
-	{
-		return aStacks.get(pIndex).toArray(new CardView[aStacks.get(pIndex).size()]);
-	}
+	
 }

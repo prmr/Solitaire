@@ -177,7 +177,7 @@ public final class GameModel
 		}
 		else if( aWorkingStacks.isInStacks(pCard))
 		{
-			aWorkingStacks.popTopCard(pCard);
+			aWorkingStacks.pop(pCard);
 		}
 		aSuitStacks.push(pCard);
 		notifyListeners();
@@ -214,7 +214,7 @@ public final class GameModel
 	 */
 	public boolean canMoveToWorkingStack(Card pCard, StackIndex pIndex )
 	{
-		return aWorkingStacks.canDropOnStack(pCard, pIndex); 
+		return aWorkingStacks.canMoveTo(pCard, pIndex); 
 	}
 	
 	/**
@@ -236,7 +236,7 @@ public final class GameModel
 			Stack<Card> temp = new Stack<>();
 			for( int i = pCards.length-1; i >=0; i-- )
 			{
-				aWorkingStacks.popTopCard(pCards[i]);
+				aWorkingStacks.pop(pCards[i]);
 				temp.push(pCards[i]);
 			}
 			while( !temp.isEmpty() )
@@ -259,7 +259,7 @@ public final class GameModel
 		}
 		else if( aWorkingStacks.isInStacks(pCard))
 		{
-			aWorkingStacks.popTopCard(pCard);
+			aWorkingStacks.pop(pCard);
 		}
 		aWorkingStacks.push(pCard, pIndex);
 	}
