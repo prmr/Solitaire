@@ -192,31 +192,57 @@ public final class GameModel
 		return aWorkingStacks.canDropOnStack(pCard, pIndex); 
 	}
 	
-	
-	
-	public void dropToStack(Card pCard, StackIndex pIndex)
+	/**
+	 * Get the sequence consisting of pCard and all 
+	 * the other cards below it.
+	 * @param pCard
+	 * @param pIndex
+	 * @return A non-empty sequence of cards.
+	 */
+	public Card[] getSequence(Card pCard, StackIndex pIndex)
 	{
-		// look for the card
-		Card card = null;
+		return aWorkingStacks.getSequence(pCard, pIndex);
+	}
+	
+	public void dropToStack(Card[] pCards, StackIndex pIndex)
+	{
+		// If there is only one card, move it
+		if( pCards.length == 1 )
+		{
+			moveOneCardToWorkingStack( pCards[0], pIndex);
+		}
+		else // The source is a working stack, unwind
+		{
+			Stack<Card> temp = new Stack<>();
+			for( int i = pCards.length-1; i >=0; i-- )
+			{
+				aWorkingStacks.popTopCard(pCards[i]);
+				temp.push(pCards[i]);
+			}
+			while( !temp.isEmpty() )
+			{
+				aWorkingStacks.push(temp.pop(), pIndex);
+			}
+		}
+		
+		notifyListeners();
+	}
+	
+	private void moveOneCardToWorkingStack( Card pCard, StackIndex pIndex)
+	{
 		if( !aDiscard.isEmpty() && aDiscard.peek() == pCard )
 		{
-			card = aDiscard.pop();
+			aDiscard.pop();
+		}
+		else if( !aSuitStacks.isEmpty(pCard.getSuit()) && aSuitStacks.peek(pCard.getSuit()) == pCard )
+		{
+			aSuitStacks.pop(pCard.getSuit());
 		}
 		else if( aWorkingStacks.isInStacks(pCard))
 		{
 			aWorkingStacks.popTopCard(pCard);
-			card = pCard;
 		}
-		if( card == null )
-		{
-			if( !aSuitStacks.isEmpty(pCard.getSuit()) && aSuitStacks.peek(pCard.getSuit()) == pCard )
-			{
-				card = aSuitStacks.pop(pCard.getSuit());
-			}
-		}
-		assert card != null;
-		aWorkingStacks.push(pCard, pIndex); 
-		notifyListeners();
+		aWorkingStacks.push(pCard, pIndex);
 	}
 	
 	public CardView[] getStackAt(StackIndex pIndex)

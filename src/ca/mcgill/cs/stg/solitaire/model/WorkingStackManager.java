@@ -20,7 +20,9 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
@@ -64,15 +66,34 @@ class WorkingStackManager
 	boolean canDropOnStack(Card pCard, StackIndex pIndex )
 	{
 		Stack<CardView> stack = aStacks.get(pIndex);
-		if( stack.isEmpty() && pCard.getRank() == Rank.KING )
+		if( stack.isEmpty() )
 		{
 			return pCard.getRank() == Rank.KING;
 		}
 		else
-		{
+		{ 
 			return pCard.getRank().ordinal() == stack.peek().getCard().getRank().ordinal()-1 && 
 					!pCard.sameColorAs(stack.peek().getCard());
 		}
+	}
+	
+	public Card[] getSequence(Card pCard, StackIndex pIndex)
+	{
+		Stack<CardView> stack = aStacks.get(pIndex);
+		List<Card> lReturn = new ArrayList<>();
+		boolean aSeen = false;
+		for( CardView card : stack )
+		{
+			if( card.getCard() == pCard )
+			{
+				aSeen = true;
+			}
+			if( aSeen )
+			{
+				lReturn.add(card.getCard());
+			}
+		}
+		return lReturn.toArray(new Card[lReturn.size()]);
 	}
 	
 	boolean isInStacks(Card pCard )
