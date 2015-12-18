@@ -117,6 +117,15 @@ public final class GameModel
 	}
 	
 	/**
+	 * @param pSuit The suit stack to check
+	 * @return True if the suit stack for pSuit is empty
+	 */
+	public boolean isEmptySuitStack(Suit pSuit)
+	{
+		return aSuitStacks.isEmpty(pSuit);
+	}
+	
+	/**
 	 * Draw a card from the deck and place it on top
 	 * of the discard pile.
 	 * @pre !isEmptyDeck()
@@ -174,37 +183,48 @@ public final class GameModel
 		notifyListeners();
 	}
 	
-	
-	public boolean hasTopPileCard(Suit pSuit)
+	/**
+	 * Obtain the card on top of the suit stack for
+	 * pSuit without discarding it.
+	 * @param pSuit The suit to check for.
+	 * @return The card on top of the stack.
+	 * @pre !isEmptySuitStack(pSuit)
+	 */
+	public Card peekSuitStack(Suit pSuit)
 	{
-		return !aSuitStacks.isEmpty(pSuit);
-	}
-	
-	public Card getTopPileCard(Suit pSuit)
-	{
+		assert !isEmptySuitStack(pSuit);
 		return aSuitStacks.peek(pSuit);
 	}
 	
+	/**
+	 * @return The card on top of the discard pile.
+	 * @pre !emptyDiscardPile()
+	 */
+	public Card peekDiscardPile()
+	{
+		assert aDiscard.size() != 0;
+		return aDiscard.peek();
+	}
 	
-	
-	public boolean canDropOnStack(Card pCard, StackIndex pIndex )
+	/**
+	 * @param pCard The card to move 
+	 * @param pIndex The index of the stack of interest.
+	 * @return True if pCard can be moved to the top of the working
+	 * stack indexed at pIndex
+	 */
+	public boolean canMoveToWorkingStack(Card pCard, StackIndex pIndex )
 	{
 		return aWorkingStacks.canDropOnStack(pCard, pIndex); 
 	}
 	
 	/**
-	 * Get the sequence consisting of pCard and all 
-	 * the other cards below it.
-	 * @param pCard
-	 * @param pIndex
-	 * @return A non-empty sequence of cards.
+	 * Move the sequence of cards pCards (ordered higher-rank to
+	 * lower-rank) to the working stack at pIndex.
+	 * @param pCards The cards to move to the stack.
+	 * @param pIndex The index of the stack
+	 * @pre This is assumed to be a valid move
 	 */
-	public Card[] getSequence(Card pCard, StackIndex pIndex)
-	{
-		return aWorkingStacks.getSequence(pCard, pIndex);
-	}
-	
-	public void dropToStack(Card[] pCards, StackIndex pIndex)
+	public void moveToWorkingStack(Card[] pCards, StackIndex pIndex)
 	{
 		// If there is only one card, move it
 		if( pCards.length == 1 )
@@ -224,7 +244,6 @@ public final class GameModel
 				aWorkingStacks.push(temp.pop(), pIndex);
 			}
 		}
-		
 		notifyListeners();
 	}
 	
@@ -245,17 +264,26 @@ public final class GameModel
 		aWorkingStacks.push(pCard, pIndex);
 	}
 	
-	public CardView[] getStackAt(StackIndex pIndex)
+	/**
+	 * @param pIndex The position of the stack to return.
+	 * @return A copy of the stack at position pIndex
+	 */
+	public CardView[] getStack(StackIndex pIndex)
 	{
 		return aWorkingStacks.getStack(pIndex); 
 	}
 	
-	
-	public Card getDiscardPileTop()
+	/**
+	 * Get the sub-stack consisting of pCard and all 
+	 * the other cards below it.
+	 * @param pCard The top card of the sub-stack
+	 * @param pIndex The position of the stack to return.
+	 * @return A non-empty sequence of cards.
+	 * @pre pCard is in stack pIndex
+	 */
+	public Card[] getSubStack(Card pCard, StackIndex pIndex)
 	{
-		assert aDiscard.size() != 0;
-		return aDiscard.peek();
+		return aWorkingStacks.getSequence(pCard, pIndex);
 	}
-	
-	
+
 }
