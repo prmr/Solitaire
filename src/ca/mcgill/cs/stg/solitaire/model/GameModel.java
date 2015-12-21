@@ -64,7 +64,7 @@ public final class GameModel
 	
 	private GameModel()
 	{
-		initialize();
+		reset();
 	}
 	
 	/**
@@ -92,7 +92,11 @@ public final class GameModel
 		}
 	}
 	
-	private void initialize()
+	/**
+	 * Restores the model to the state 
+	 * corresponding to the start of a new game.
+	 */
+	public void reset()
 	{
 		aDeck.shuffle();
 		aDiscard.clear();
@@ -159,8 +163,7 @@ public final class GameModel
 		{
 			return false;
 		}
-		return pCard.getRank().ordinal() == aSuitStacks.peek(pSuit).getRank().ordinal()+1 &&
-				pCard.getSuit() == pSuit;
+		return pCard.getRank().ordinal() == aSuitStacks.peek(pSuit).getRank().ordinal()+1;
 	}
 	
 	/**

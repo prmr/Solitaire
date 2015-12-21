@@ -86,4 +86,10 @@ public class CardView
 	{
 		return aCard;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return aCard.toString() + "(" + aVisible + ")";
+	}
 }
