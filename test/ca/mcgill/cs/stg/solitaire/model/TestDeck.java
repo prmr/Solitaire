@@ -21,11 +21,7 @@
 package ca.mcgill.cs.stg.solitaire.model;
 
 import java.lang.reflect.Method;
-import java.util.Stack;
 
-import ca.mcgill.cs.stg.solitaire.cards.Card;
-import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
-import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
 import ca.mcgill.cs.stg.solitaire.cards.Deck;
 
 /**

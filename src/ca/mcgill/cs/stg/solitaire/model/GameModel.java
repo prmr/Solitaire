@@ -102,6 +102,15 @@ public final class GameModel
 		aDiscard.clear();
 		aSuitStacks.initialize();
 		aWorkingStacks.initialize(aDeck);
+		notifyListeners();
+	}
+	
+	/**
+	 * @return True if the game is completed.
+	 */
+	public boolean isCompleted()
+	{
+		return aSuitStacks.isCompleted();
 	}
 	
 	/**

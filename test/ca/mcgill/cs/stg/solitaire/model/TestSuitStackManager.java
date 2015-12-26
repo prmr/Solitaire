@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
@@ -67,5 +68,19 @@ public class TestSuitStackManager
 		assertEquals(CAD, aSuitStackManager.peek(Suit.DIAMONDS));
 		aSuitStackManager.pop(Suit.DIAMONDS);
 		assertTrue( aSuitStackManager.isEmpty(Suit.DIAMONDS));
+	}
+	
+	@Test
+	public void testIsCompleted()
+	{
+		assertFalse( aSuitStackManager.isCompleted() );
+		for( Rank rank : Rank.values() )
+		{
+			for( Suit suit : Suit.values() )
+			{
+				aSuitStackManager.push(Card.get(rank, suit));
+			}
+		}
+		assertTrue( aSuitStackManager.isCompleted() );
 	}
 }

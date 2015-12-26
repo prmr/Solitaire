@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Stack;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
+import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
 import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
 
 /**
@@ -61,6 +62,18 @@ class SuitStackManager
 	boolean isEmpty(Suit pSuit)
 	{
 		return aStacks.get(pSuit).isEmpty();
+	}
+	
+	boolean isCompleted()
+	{
+		for( Stack<Card> stack : aStacks.values())
+		{
+			if( stack.size() < Rank.values().length )
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	/**

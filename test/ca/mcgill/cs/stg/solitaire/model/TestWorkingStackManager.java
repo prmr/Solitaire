@@ -20,18 +20,17 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.model;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
 import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
-import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
 import ca.mcgill.cs.stg.solitaire.cards.Deck;
+import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
 
 public class TestWorkingStackManager
 {
@@ -43,7 +42,6 @@ public class TestWorkingStackManager
 	private static final Card C4C = Card.get(Rank.FOUR, Suit.CLUBS);
 	private static final Card C4S = Card.get(Rank.FOUR, Suit.SPADES);
 	private static final Card C4H = Card.get(Rank.FOUR, Suit.HEARTS);
-	private static final Card C3C = Card.get(Rank.THREE, Suit.CLUBS);
 	private static final Card C3H = Card.get(Rank.THREE, Suit.HEARTS);
 	
 	@Test
