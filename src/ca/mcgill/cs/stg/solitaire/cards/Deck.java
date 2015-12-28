@@ -20,6 +20,7 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.cards;
 
+import java.util.Collections;
 import java.util.Stack;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
@@ -60,7 +61,7 @@ public class Deck
 	public void shuffle()
 	{
 		reset();
-//		Collections.shuffle( aCards );
+		Collections.shuffle( aCards );
 	}
 	
 	/**

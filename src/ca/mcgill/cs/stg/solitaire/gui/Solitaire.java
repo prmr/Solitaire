@@ -42,6 +42,7 @@ public class Solitaire extends Application
 	private static final int HEIGHT = 500;
 	private static final int MARGIN_OUTER = 10;
 	private static final String TITLE = "Solitaire";
+	private static final String VERSION = "0.1";
 
     private DeckView aDeckView = new DeckView();
     private DiscardPileView aDiscardPileView = new DiscardPileView();
@@ -60,7 +61,7 @@ public class Solitaire extends Application
     @Override
     public void start(Stage pPrimaryStage) 
     {
-		pPrimaryStage.setTitle(TITLE); 
+		pPrimaryStage.setTitle(TITLE + " " + VERSION); 
            
         GridPane root = new GridPane();
         root.setStyle("-fx-background-color: green;");
