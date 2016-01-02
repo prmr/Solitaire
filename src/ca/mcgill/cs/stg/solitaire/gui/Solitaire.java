@@ -20,9 +20,9 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.gui;
 
-import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
+import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -72,10 +72,10 @@ public class Solitaire extends Application
         root.add(aDeckView, 0, 0);
         root.add(aDiscardPileView, 1, 0);
                 
-        for( Card.Suit suit : Card.Suit.values() )
+        for( SuitStackIndex index : SuitStackIndex.values() )
         {
-        	aSuitStacks[suit.ordinal()] = new SuitStack(suit);
-        	root.add(aSuitStacks[suit.ordinal()], 3+suit.ordinal(), 0);
+        	aSuitStacks[index.ordinal()] = new SuitStack(index);
+        	root.add(aSuitStacks[index.ordinal()], 3+index.ordinal(), 0);
         }
       
         for( StackIndex index : StackIndex.values() )

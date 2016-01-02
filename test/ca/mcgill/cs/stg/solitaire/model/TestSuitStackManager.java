@@ -30,6 +30,7 @@ import static org.junit.Assert.assertFalse;
 import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
 import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
+import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
 
 public class TestSuitStackManager
 {
@@ -47,27 +48,27 @@ public class TestSuitStackManager
 	@Test
 	public void testInitialize()
 	{
-		assertTrue( aSuitStackManager.isEmpty(Suit.CLUBS));
-		assertTrue( aSuitStackManager.isEmpty(Suit.DIAMONDS));
-		assertTrue( aSuitStackManager.isEmpty(Suit.HEARTS));
-		assertTrue( aSuitStackManager.isEmpty(Suit.SPADES));
+		assertTrue( aSuitStackManager.isEmpty(SuitStackIndex.FIRST));
+		assertTrue( aSuitStackManager.isEmpty(SuitStackIndex.SECOND));
+		assertTrue( aSuitStackManager.isEmpty(SuitStackIndex.THIRD));
+		assertTrue( aSuitStackManager.isEmpty(SuitStackIndex.FOURTH));
 	}
 	
 	@Test
 	public void testPushPop()
 	{
-		aSuitStackManager.push(CAC);
-		assertTrue( aSuitStackManager.isEmpty(Suit.DIAMONDS));
-		assertTrue( aSuitStackManager.isEmpty(Suit.HEARTS));
-		assertTrue( aSuitStackManager.isEmpty(Suit.SPADES));
-		aSuitStackManager.push(CAD);
-		assertEquals(CAD, aSuitStackManager.peek(Suit.DIAMONDS));
-		aSuitStackManager.push(C3D);
-		assertEquals(C3D, aSuitStackManager.peek(Suit.DIAMONDS));
-		aSuitStackManager.pop(Suit.DIAMONDS);
-		assertEquals(CAD, aSuitStackManager.peek(Suit.DIAMONDS));
-		aSuitStackManager.pop(Suit.DIAMONDS);
-		assertTrue( aSuitStackManager.isEmpty(Suit.DIAMONDS));
+		aSuitStackManager.push(CAC, SuitStackIndex.FIRST);
+		assertTrue( aSuitStackManager.isEmpty(SuitStackIndex.SECOND));
+		assertTrue( aSuitStackManager.isEmpty(SuitStackIndex.THIRD));
+		assertTrue( aSuitStackManager.isEmpty(SuitStackIndex.FOURTH));
+		aSuitStackManager.push(CAD, SuitStackIndex.SECOND);
+		assertEquals(CAD, aSuitStackManager.peek(SuitStackIndex.SECOND));
+		aSuitStackManager.push(C3D, SuitStackIndex.SECOND);
+		assertEquals(C3D, aSuitStackManager.peek(SuitStackIndex.SECOND));
+		aSuitStackManager.pop(SuitStackIndex.SECOND);
+		assertEquals(CAD, aSuitStackManager.peek(SuitStackIndex.SECOND));
+		aSuitStackManager.pop(SuitStackIndex.SECOND);
+		assertTrue( aSuitStackManager.isEmpty(SuitStackIndex.SECOND));
 	}
 	
 	@Test
@@ -78,7 +79,7 @@ public class TestSuitStackManager
 		{
 			for( Suit suit : Suit.values() )
 			{
-				aSuitStackManager.push(Card.get(rank, suit));
+				aSuitStackManager.push(Card.get(rank, suit), SuitStackIndex.values()[suit.ordinal()]);
 			}
 		}
 		assertTrue( aSuitStackManager.isCompleted() );
