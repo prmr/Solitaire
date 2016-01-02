@@ -26,7 +26,7 @@ import java.util.Stack;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
-import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
+import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
 
 /**
  * Manages the state of the four stacks where completed
@@ -34,7 +34,7 @@ import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
  */
 class SuitStackManager
 {
-	private Map<Suit, Stack<Card>> aStacks = new HashMap<>();
+	private Map<SuitStackIndex, Stack<Card>> aStacks = new HashMap<>();
 	
 	/**
 	 * Creates an initialized suit stack manager.
@@ -45,25 +45,29 @@ class SuitStackManager
 	}
 	
 	/**
-	 * Initialize the inernal data structures.
+	 * Initialize the internal data structures.
 	 */
 	void initialize()
 	{
-		for( Suit suit : Suit.values() )
+		for( SuitStackIndex index : SuitStackIndex.values() )
 		{
-			aStacks.put(suit, new Stack<Card>());
+			aStacks.put(index, new Stack<Card>());
 		}
 	}
 	
 	/**
 	 * @param pSuit
-	 * @return True if the top stack for suit pSuit is empty.
+	 * @return True if the stack at index pIndex is empty
 	 */
-	boolean isEmpty(Suit pSuit)
+	boolean isEmpty(SuitStackIndex pIndex)
 	{
-		return aStacks.get(pSuit).isEmpty();
+		return aStacks.get(pIndex).isEmpty();
 	}
 	
+	/**
+	 * @return True if all cards are in their proper
+	 * suit stack.
+	 */
 	boolean isCompleted()
 	{
 		for( Stack<Card> stack : aStacks.values())
@@ -77,33 +81,34 @@ class SuitStackManager
 	}
 	
 	/**
-	 * @param pSuit
-	 * @return The card on top of the stack for suit pSuit
+	 * @param pIndex The index of the stack to peek
+	 * @return The card on top of the stack at index pIndex
 	 */
-	Card peek(Suit pSuit)
+	Card peek(SuitStackIndex pIndex)
 	{
-		assert !aStacks.get(pSuit).isEmpty();
-		return aStacks.get(pSuit).peek();
+		assert !aStacks.get(pIndex).isEmpty();
+		return aStacks.get(pIndex).peek();
 	}
 	
 	/**
 	 * Push pCard onto the stack corresponding to its
-	 * suit.
+	 * index.
 	 * @param pCard The card to push.
+	 * @param pIndex The index where to push the card.
 	 */
-	void push(Card pCard)
+	void push(Card pCard, SuitStackIndex pIndex)
 	{
-		aStacks.get(pCard.getSuit()).push(pCard);
+		aStacks.get(pIndex).push(pCard);
 	}
 	
 	/**
 	 * Pop the top card of the stack.
-	 * @param pSuit The card to pop.
+	 * @param pIndex the index of the stack to pop
 	 * @pre !isEmpty(pSuit)
 	 */
-	Card pop(Suit pSuit)
+	Card pop(SuitStackIndex pIndex)
 	{
-		assert !isEmpty(pSuit);
-		return aStacks.get(pSuit).pop();
+		assert !isEmpty(pIndex);
+		return aStacks.get(pIndex).pop();
 	}
 }

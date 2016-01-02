@@ -26,7 +26,6 @@ import java.util.Stack;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
-import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
 import ca.mcgill.cs.stg.solitaire.cards.Deck;
 
 /**
@@ -61,6 +60,15 @@ public final class GameModel
 	 */
 	public enum StackIndex 
 	{ FIRST, SECOND, THIRD, FOURTH, FIFTH, SIXTH, SEVENTH }
+	
+	/**
+	 * Represents the different stacks where completed
+	 * suits can be accumulated.
+	 */
+	public enum SuitStackIndex
+	{
+		FIRST, SECOND, THIRD, FOURTH;
+	}
 	
 	private GameModel()
 	{
@@ -130,12 +138,12 @@ public final class GameModel
 	}
 	
 	/**
-	 * @param pSuit The suit stack to check
+	 * @param pIndex The suit stack to check
 	 * @return True if the suit stack for pSuit is empty
 	 */
-	public boolean isEmptySuitStack(Suit pSuit)
+	public boolean isEmptySuitStack(SuitStackIndex pIndex)
 	{
-		return aSuitStacks.isEmpty(pSuit);
+		return aSuitStacks.isEmpty(pIndex);
 	}
 	
 	/**
@@ -152,37 +160,34 @@ public final class GameModel
 	
 	/**
 	 * @param pCard The card to test
-	 * @param pSuit The suit to test
+	 * @param pIndex The suitstack to test
 	 * @return True if pCard can be moved to the top of its suit stack.
 	 * This is only possible if its rank is immediately superior
 	 * to that of the card currently on top of the suit stack.
 	 */
-	public boolean canMoveToSuitStack(Card pCard, Suit pSuit )
+	public boolean canMoveToSuitStack(Card pCard, SuitStackIndex pIndex )
 	{
-		assert pCard != null && pSuit != null;
-		if( pCard.getSuit() != pSuit )
+		assert pCard != null && pIndex != null;
+		if( aSuitStacks.isEmpty(pIndex))
 		{
-			return false;
+			return pCard.getRank() == Rank.ACE;
 		}
-		if( pCard.getRank() == Rank.ACE )
+		else
 		{
-			return true;
+			Card top =  aSuitStacks.peek(pIndex);
+			return pCard.getSuit() == top.getSuit() && pCard.getRank().ordinal() == top.getRank().ordinal()+1;
 		}
-		if( aSuitStacks.isEmpty(pSuit) )
-		{
-			return false;
-		}
-		return pCard.getRank().ordinal() == aSuitStacks.peek(pSuit).getRank().ordinal()+1;
 	}
 	
 	/**
 	 * Moves pCard from wherever it is in a legally 
-	 * movable position and adds it to its suit stack.
+	 * movable position and adds it to a suit stack.
 	 * @param pCard The card to move.
+	 * @param pIndex The index of the stack to move the card to.
 	 */
-	public void moveToSuitStack(Card pCard)
+	public void moveToSuitStack(Card pCard, SuitStackIndex pIndex)
 	{
-		assert canMoveToSuitStack(pCard, pCard.getSuit());
+		assert canMoveToSuitStack(pCard, pIndex);
 		if( !aDiscard.isEmpty() && aDiscard.peek() == pCard )
 		{
 			aDiscard.pop();
@@ -191,21 +196,31 @@ public final class GameModel
 		{
 			aWorkingStacks.pop(pCard);
 		}
-		aSuitStacks.push(pCard);
+		else
+		{
+			for( SuitStackIndex index : SuitStackIndex.values())
+			{
+				if( !aSuitStacks.isEmpty(index) && aSuitStacks.peek(index) == pCard )
+				{
+					aSuitStacks.pop(index);
+				}
+			}
+		}
+		aSuitStacks.push(pCard, pIndex);
 		notifyListeners();
 	}
 	
 	/**
 	 * Obtain the card on top of the suit stack for
-	 * pSuit without discarding it.
-	 * @param pSuit The suit to check for.
+	 * pIndex without discarding it.
+	 * @param pIndex The index of the stack to check
 	 * @return The card on top of the stack.
-	 * @pre !isEmptySuitStack(pSuit)
+	 * @pre !isEmptySuitStack(pIndex)
 	 */
-	public Card peekSuitStack(Suit pSuit)
+	public Card peekSuitStack(SuitStackIndex pIndex)
 	{
-		assert !isEmptySuitStack(pSuit);
-		return aSuitStacks.peek(pSuit);
+		assert !isEmptySuitStack(pIndex);
+		return aSuitStacks.peek(pIndex);
 	}
 	
 	/**
@@ -265,13 +280,19 @@ public final class GameModel
 		{
 			aDiscard.pop();
 		}
-		else if( !aSuitStacks.isEmpty(pCard.getSuit()) && aSuitStacks.peek(pCard.getSuit()) == pCard )
-		{
-			aSuitStacks.pop(pCard.getSuit());
-		}
 		else if( aWorkingStacks.isInStacks(pCard))
 		{
 			aWorkingStacks.pop(pCard);
+		}
+		else 
+		{
+			for( SuitStackIndex index : SuitStackIndex.values())
+			{
+				if( !aSuitStacks.isEmpty(index) && aSuitStacks.peek(index) == pCard )
+				{
+					aSuitStacks.pop(index);
+				}
+			}
 		}
 		aWorkingStacks.push(pCard, pIndex);
 	}

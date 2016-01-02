@@ -21,9 +21,9 @@
 package ca.mcgill.cs.stg.solitaire.gui;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
-import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
 import ca.mcgill.cs.stg.solitaire.cards.CardImages;
 import ca.mcgill.cs.stg.solitaire.model.GameModel;
+import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
 import ca.mcgill.cs.stg.solitaire.model.GameModelListener;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -48,11 +48,11 @@ public class SuitStack extends StackPane implements GameModelListener
 			+ "-fx-border-width: 3;" + " -fx-border-radius: 10.0";
 	
 	private CardDragHandler aDragHandler;
-	private Suit aSuit;
+	private SuitStackIndex aIndex;
 	
-	SuitStack(Suit pSuit)
+	SuitStack(SuitStackIndex pIndex)
 	{
-		aSuit = pSuit;
+		aIndex = pIndex;
 		setPadding(new Insets(PADDING));
 		setStyle(BORDER_STYLE);
 		final ImageView image = new ImageView(CardImages.getBack());
@@ -70,14 +70,14 @@ public class SuitStack extends StackPane implements GameModelListener
 	@Override
 	public void gameStateChanged()
 	{
-		if( GameModel.instance().isEmptySuitStack(aSuit))
+		if( GameModel.instance().isEmptySuitStack(aIndex))
 		{
 			getChildren().get(0).setVisible(false);
 		}
 		else
 		{
 			getChildren().get(0).setVisible(true);
-			Card topCard = GameModel.instance().peekSuitStack(aSuit);
+			Card topCard = GameModel.instance().peekSuitStack(aIndex);
 			ImageView image = (ImageView)getChildren().get(0);
 			image.setImage(CardImages.getCard(topCard));
 			aDragHandler.setCard(topCard);
@@ -93,7 +93,7 @@ public class SuitStack extends StackPane implements GameModelListener
     	    	if(pEvent.getGestureSource() != pView && pEvent.getDragboard().hasString())
     	    	{
     	    		CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
-    	    		if( transfer.size() == 1 && GameModel.instance().canMoveToSuitStack(transfer.getTop(), aSuit) )
+    	    		if( transfer.size() == 1 && GameModel.instance().canMoveToSuitStack(transfer.getTop(), aIndex) )
     	    		{
     	    			pEvent.acceptTransferModes(TransferMode.MOVE);
     	    		}
@@ -111,7 +111,7 @@ public class SuitStack extends StackPane implements GameModelListener
     		public void handle(DragEvent pEvent) 
     		{
     			CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
-	    		if( transfer.size() == 1 && GameModel.instance().canMoveToSuitStack(transfer.getTop(), aSuit) )
+	    		if( transfer.size() == 1 && GameModel.instance().canMoveToSuitStack(transfer.getTop(), aIndex) )
     			{
     				setStyle(BORDER_STYLE_DRAGGED);
     			}
@@ -143,7 +143,7 @@ public class SuitStack extends StackPane implements GameModelListener
     			if(db.hasString()) 
     			{
     				CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
-    				GameModel.instance().moveToSuitStack(transfer.getTop());
+    				GameModel.instance().moveToSuitStack(transfer.getTop(), aIndex);
     				success = true;
     			}
     			pEvent.setDropCompleted(success);

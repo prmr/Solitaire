@@ -33,6 +33,7 @@ import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
 import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
+import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
 
 public class TestGameModel
 {
@@ -130,11 +131,11 @@ public class TestGameModel
 	public void testMoves()
 	{
 		GameModel model = GameModel.instance();
-		assertTrue(model.isEmptySuitStack(Suit.CLUBS));
-		assertFalse(model.canMoveToSuitStack(Card.get(Rank.THREE, Suit.CLUBS), Suit.DIAMONDS));
-		assertFalse(model.canMoveToSuitStack(Card.get(Rank.THREE, Suit.CLUBS), Suit.CLUBS));
-		assertFalse(model.canMoveToSuitStack(Card.get(Rank.TWO, Suit.CLUBS), Suit.CLUBS));
-		assertTrue(model.canMoveToSuitStack(Card.get(Rank.ACE, Suit.CLUBS), Suit.CLUBS));
+		assertTrue(model.isEmptySuitStack(SuitStackIndex.FIRST)); // Clusts on first
+		assertFalse(model.canMoveToSuitStack(Card.get(Rank.THREE, Suit.CLUBS), SuitStackIndex.SECOND));
+		assertFalse(model.canMoveToSuitStack(Card.get(Rank.THREE, Suit.CLUBS), SuitStackIndex.FIRST));
+		assertFalse(model.canMoveToSuitStack(Card.get(Rank.TWO, Suit.CLUBS), SuitStackIndex.FIRST));
+		assertTrue(model.canMoveToSuitStack(Card.get(Rank.ACE, Suit.CLUBS), SuitStackIndex.FIRST));
 		model.discard(); // Jack of diamond
 		model.discard(); // Ten of diamond
 		assertTrue(model.canMoveToWorkingStack(model.peekDiscardPile(), StackIndex.SECOND));
@@ -154,19 +155,19 @@ public class TestGameModel
 		model.discard();
 		model.discard();
 		assertEquals(Card.get(Rank.ACE, Suit.DIAMONDS), model.peekDiscardPile());
-		assertTrue(model.canMoveToSuitStack(model.peekDiscardPile(), Suit.DIAMONDS));
-		model.moveToSuitStack(model.peekDiscardPile());
-		assertEquals(Card.get(Rank.ACE, Suit.DIAMONDS), model.peekSuitStack(Suit.DIAMONDS));
+		assertTrue(model.canMoveToSuitStack(model.peekDiscardPile(), SuitStackIndex.SECOND));
+		model.moveToSuitStack(model.peekDiscardPile(), SuitStackIndex.SECOND);
+		assertEquals(Card.get(Rank.ACE, Suit.DIAMONDS), model.peekSuitStack(SuitStackIndex.SECOND));
 		assertEquals(Card.get(Rank.TWO, Suit.DIAMONDS), model.peekDiscardPile());
-		model.moveToSuitStack(model.peekDiscardPile());
-		assertEquals(Card.get(Rank.TWO, Suit.DIAMONDS), model.peekSuitStack(Suit.DIAMONDS));
-		model.moveToSuitStack(model.peekDiscardPile());
-		model.moveToSuitStack(model.peekDiscardPile());
-		model.moveToSuitStack(model.peekDiscardPile());
-		model.moveToSuitStack(model.peekDiscardPile()); 
+		model.moveToSuitStack(model.peekDiscardPile(), SuitStackIndex.SECOND);
+		assertEquals(Card.get(Rank.TWO, Suit.DIAMONDS), model.peekSuitStack(SuitStackIndex.SECOND));
+		model.moveToSuitStack(model.peekDiscardPile(), SuitStackIndex.SECOND);
+		model.moveToSuitStack(model.peekDiscardPile(), SuitStackIndex.SECOND);
+		model.moveToSuitStack(model.peekDiscardPile(), SuitStackIndex.SECOND);
+		model.moveToSuitStack(model.peekDiscardPile(), SuitStackIndex.SECOND); 
 		// 8th of diamond is on top of the discard pile
-		assertFalse(model.canMoveToSuitStack(model.peekDiscardPile(), Suit.DIAMONDS));
-		model.moveToSuitStack(Card.get(Rank.SEVEN, Suit.DIAMONDS));
+		assertFalse(model.canMoveToSuitStack(model.peekDiscardPile(), SuitStackIndex.SECOND));
+		model.moveToSuitStack(Card.get(Rank.SEVEN, Suit.DIAMONDS), SuitStackIndex.SECOND);
 		// move the 7th back to the working stack
 		model.moveToWorkingStack(new Card[]{Card.get(Rank.SEVEN, Suit.DIAMONDS)}, StackIndex.THIRD);
 	}
