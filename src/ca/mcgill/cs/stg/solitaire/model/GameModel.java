@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Stack;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
-import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
 import ca.mcgill.cs.stg.solitaire.cards.Deck;
 
 /**
@@ -55,17 +54,30 @@ public final class GameModel
 	private List<GameModelListener> aListeners = new ArrayList<>();
 	
 	/**
+	 * Represents anywhere a card can be placed in 
+	 * Solitaire.
+	 */
+	public interface Location 
+	{}
+	
+	/**
+	 * Places where a card can be obtained.
+	 */
+	public enum CardSources implements Location
+	{ DISCARD_PILE  }
+	
+	/**
 	 * Represents the different stacks where cards
 	 * can be accumulated.
 	 */
-	public enum StackIndex 
+	public enum StackIndex implements Location
 	{ FIRST, SECOND, THIRD, FOURTH, FIFTH, SIXTH, SEVENTH }
 	
 	/**
 	 * Represents the different stacks where completed
 	 * suits can be accumulated.
 	 */
-	public enum SuitStackIndex
+	public enum SuitStackIndex implements Location
 	{
 		FIRST, SECOND, THIRD, FOURTH;
 	}
@@ -159,27 +171,6 @@ public final class GameModel
 	}
 	
 	/**
-	 * @param pCard The card to test
-	 * @param pIndex The suitstack to test
-	 * @return True if pCard can be moved to the top of its suit stack.
-	 * This is only possible if its rank is immediately superior
-	 * to that of the card currently on top of the suit stack.
-	 */
-	public boolean canMoveToSuitStack(Card pCard, SuitStackIndex pIndex )
-	{
-		assert pCard != null && pIndex != null;
-		if( aSuitStacks.isEmpty(pIndex))
-		{
-			return pCard.getRank() == Rank.ACE;
-		}
-		else
-		{
-			Card top =  aSuitStacks.peek(pIndex);
-			return pCard.getSuit() == top.getSuit() && pCard.getRank().ordinal() == top.getRank().ordinal()+1;
-		}
-	}
-	
-	/**
 	 * Moves pCard from wherever it is in a legally 
 	 * movable position and adds it to a suit stack.
 	 * @param pCard The card to move.
@@ -187,7 +178,7 @@ public final class GameModel
 	 */
 	public void moveToSuitStack(Card pCard, SuitStackIndex pIndex)
 	{
-		assert canMoveToSuitStack(pCard, pIndex);
+		assert aSuitStacks.canMoveTo(pCard, pIndex);
 		if( !aDiscard.isEmpty() && aDiscard.peek() == pCard )
 		{
 			aDiscard.pop();
@@ -231,17 +222,6 @@ public final class GameModel
 	{
 		assert aDiscard.size() != 0;
 		return aDiscard.peek();
-	}
-	
-	/**
-	 * @param pCard The card to move 
-	 * @param pIndex The index of the stack of interest.
-	 * @return True if pCard can be moved to the top of the working
-	 * stack indexed at pIndex
-	 */
-	public boolean canMoveToWorkingStack(Card pCard, StackIndex pIndex )
-	{
-		return aWorkingStacks.canMoveTo(pCard, pIndex); 
 	}
 	
 	/**
@@ -319,4 +299,27 @@ public final class GameModel
 		return aWorkingStacks.getSequence(pCard, pIndex);
 	}
 
+	/**
+	 * Determines if pCard can be moved to pLocation
+	 * according to the rules of the game and given the current
+	 * game state. 
+	 * @param pCard The card to move. 
+	 * @param pDestination The destination of the move.
+	 * @return True if the move is a legal move.
+	 */
+	public boolean isLegalMove(Card pCard, Location pDestination )
+	{ 
+		if( pDestination instanceof SuitStackIndex )
+		{
+			return aSuitStacks.canMoveTo(pCard, (SuitStackIndex) pDestination);
+		}
+		else if( pDestination instanceof StackIndex )
+		{
+			return aWorkingStacks.canMoveTo(pCard, (StackIndex) pDestination);
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

@@ -81,6 +81,26 @@ class SuitStackManager
 	}
 	
 	/**
+	 * @param pCard The card to test
+	 * @param pIndex The suitstack to test
+	 * @return True if pCard can be moved to the top of its suit stack.
+	 * This is only possible if its rank is immediately superior
+	 * to that of the card currently on top of the suit stack.
+	 */
+	boolean canMoveTo(Card pCard, SuitStackIndex pIndex )
+	{
+		assert pCard != null && pIndex != null;
+		if( isEmpty(pIndex))
+		{
+			return pCard.getRank() == Rank.ACE;
+		}
+		else
+		{
+			return pCard.getSuit() == peek(pIndex).getSuit() && pCard.getRank().ordinal() == peek(pIndex).getRank().ordinal()+1;
+		}
+	}
+	
+	/**
 	 * @param pIndex The index of the stack to peek
 	 * @return The card on top of the stack at index pIndex
 	 */

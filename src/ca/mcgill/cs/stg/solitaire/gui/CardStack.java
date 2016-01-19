@@ -116,7 +116,7 @@ public class CardStack extends StackPane implements GameModelListener
 				if(pEvent.getGestureSource() != pImageView && pEvent.getDragboard().hasString())
 				{
 					CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
-					if( GameModel.instance().canMoveToWorkingStack(transfer.getTop(), aIndex) )
+					if( GameModel.instance().isLegalMove(transfer.getTop(), aIndex) )
 					{
 						pEvent.acceptTransferModes(TransferMode.MOVE);
 					}
@@ -133,7 +133,7 @@ public class CardStack extends StackPane implements GameModelListener
 			public void handle(DragEvent pEvent)
 			{
 				CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
-				if( GameModel.instance().canMoveToWorkingStack(transfer.getTop(), aIndex) )
+				if( GameModel.instance().isLegalMove(transfer.getTop(), aIndex) )
 				{
 					pImageView.setEffect(new DropShadow());
 				}
