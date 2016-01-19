@@ -135,6 +135,13 @@ public class TestWorkingStackManager
 	}
 	
 	@Test
+	public void showTop()
+	{
+		aWorkingStackManager.showTop(StackIndex.SECOND);
+		aWorkingStackManager.push(C5D, StackIndex.SECOND);
+	}
+	
+	@Test
 	public void testIsInStacks()
 	{
 		assertFalse(aWorkingStackManager.isInStacks(CAC));

@@ -176,30 +176,30 @@ public final class GameModel
 	 * @param pCard The card to move.
 	 * @param pIndex The index of the stack to move the card to.
 	 */
-	public void moveToSuitStack(Card pCard, SuitStackIndex pIndex)
-	{
-		assert aSuitStacks.canMoveTo(pCard, pIndex);
-		if( !aDiscard.isEmpty() && aDiscard.peek() == pCard )
-		{
-			aDiscard.pop();
-		}
-		else if( aWorkingStacks.isInStacks(pCard))
-		{
-			aWorkingStacks.pop(pCard);
-		}
-		else
-		{
-			for( SuitStackIndex index : SuitStackIndex.values())
-			{
-				if( !aSuitStacks.isEmpty(index) && aSuitStacks.peek(index) == pCard )
-				{
-					aSuitStacks.pop(index);
-				}
-			}
-		}
-		aSuitStacks.push(pCard, pIndex);
-		notifyListeners();
-	}
+//	public void moveToSuitStack(Card pCard, SuitStackIndex pIndex)
+//	{
+//		assert aSuitStacks.canMoveTo(pCard, pIndex);
+//		if( !aDiscard.isEmpty() && aDiscard.peek() == pCard )
+//		{
+//			aDiscard.pop();
+//		}
+//		else if( aWorkingStacks.isInStacks(pCard))
+//		{
+//			aWorkingStacks.pop(pCard);
+//		}
+//		else
+//		{
+//			for( SuitStackIndex index : SuitStackIndex.values())
+//			{
+//				if( !aSuitStacks.isEmpty(index) && aSuitStacks.peek(index) == pCard )
+//				{
+//					aSuitStacks.pop(index);
+//				}
+//			}
+//		}
+//		aSuitStacks.push(pCard, pIndex);
+//		notifyListeners();
+//	}
 	
 	/**
 	 * Obtain the card on top of the suit stack for
@@ -255,16 +255,46 @@ public final class GameModel
 	}
 	
 	/**
+	 * @param pCard A card to locate
+	 * @return The game location where this card currently is.
+	 * @pre the card is in a location where it can be found and moved.
+	 */
+	private Location find(Card pCard)
+	{
+		if( !aDiscard.isEmpty() && aDiscard.peek() == pCard )
+		{
+			return CardSources.DISCARD_PILE;
+		}
+		for( SuitStackIndex index : SuitStackIndex.values() )
+		{
+			if( !aSuitStacks.isEmpty(index) && aSuitStacks.peek(index) == pCard )
+			{
+				return index;
+			}
+		}
+		for( StackIndex index : StackIndex.values() )
+		{
+			if( aWorkingStacks.contains(pCard, index))
+			{
+				return index;
+			}
+		}
+		
+		assert false; // We did not find the card: the precondition was not met.
+		return null;
+	}
+	
+	/**
 	 * Moves pCard from the source to the destination. Assumes this
 	 * is a legal move.
 	 * @param pCard The card to move. Not null.
-	 * @param pSource The source location
 	 * @param pDestination The destination location.
 	 */
-	public void move(Card pCard, Location pSource, Location pDestination)
+	public void move(Card pCard, Location pDestination)
 	{
 		assert isLegalMove(pCard, pDestination);
-		Card[] cardsToMove = processSource(pCard, pSource);
+		Location source = find(pCard);
+		Card[] cardsToMove = processSource(pCard, source);
 		if( pDestination instanceof SuitStackIndex )
 		{
 			for( Card card : cardsToMove )
@@ -279,7 +309,9 @@ public final class GameModel
 			{
 				aWorkingStacks.push(card, (StackIndex)pDestination);
 			}
+			aWorkingStacks.showTop((StackIndex)pDestination);
 		}
+		notifyListeners();
 	}
 	
 	private Card[] processSource(Card pCard, Location pSource)

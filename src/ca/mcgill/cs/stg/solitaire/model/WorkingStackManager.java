@@ -121,7 +121,6 @@ class WorkingStackManager
 		Stack<CardView> stack = aStacks.get(pIndex);
 		List<Card> lReturn = new ArrayList<>();
 		boolean aSeen = false;
-		List<CardView> toDelete = new ArrayList<>();
 		for( CardView card : stack )
 		{
 			if( card.getCard() == pCard )
@@ -131,12 +130,11 @@ class WorkingStackManager
 			if( aSeen )
 			{
 				lReturn.add(card.getCard());
-				toDelete.add(card);
 			}
 		}
-		for( CardView cardView : toDelete )
+		for( int i = 0; i < lReturn.size(); i++ )
 		{
-			stack.remove(cardView);
+			stack.pop();
 		}
 		return lReturn.toArray(new Card[lReturn.size()]);
 	}
@@ -180,11 +178,29 @@ class WorkingStackManager
 		}
 	}
 	
+	void pop(Card pCard, StackIndex pIndex)
+	{
+		assert !aStacks.get(pIndex).isEmpty();
+		aStacks.get(pIndex).pop();
+		if( !aStacks.get(pIndex).isEmpty())
+		{
+			aStacks.get(pIndex).peek().makeVisible();
+		}
+	}
+	
 	void push(Card pCard, StackIndex pIndex)
 	{
 		CardView cardView = new CardView(pCard);
 		cardView.makeVisible();
 		aStacks.get(pIndex).push(cardView);
+	}
+	
+	void showTop(StackIndex pIndex)
+	{
+		if( !aStacks.get(pIndex).isEmpty() )
+		{
+			aStacks.get(pIndex).peek().makeVisible();
+		}
 	}
 	
 	
