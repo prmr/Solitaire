@@ -134,21 +134,9 @@ class WorkingStackManager
 		}
 		for( int i = 0; i < lReturn.size(); i++ )
 		{
-			stack.pop();
+			pop(pIndex);
 		}
 		return lReturn.toArray(new Card[lReturn.size()]);
-	}
-	
-	boolean isInStacks(Card pCard )
-	{
-		for( Stack<CardView> cardView : aStacks.values() )
-		{
-			if(!cardView.isEmpty() && cardView.peek().getCard() == pCard )
-			{
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	boolean contains(Card pCard, StackIndex pIndex)
@@ -163,22 +151,7 @@ class WorkingStackManager
 		return false;
 	}
 	
-	void pop(Card pCard)
-	{
-		for( Stack<CardView> cardView : aStacks.values() )
-		{
-			if(!cardView.isEmpty() && cardView.peek().getCard() == pCard )
-			{
-				cardView.pop();
-				if( !cardView.isEmpty() )
-				{
-					cardView.peek().makeVisible();
-				}
-			}
-		}
-	}
-	
-	void pop(Card pCard, StackIndex pIndex)
+	void pop(StackIndex pIndex)
 	{
 		assert !aStacks.get(pIndex).isEmpty();
 		aStacks.get(pIndex).pop();
@@ -194,14 +167,4 @@ class WorkingStackManager
 		cardView.makeVisible();
 		aStacks.get(pIndex).push(cardView);
 	}
-	
-	void showTop(StackIndex pIndex)
-	{
-		if( !aStacks.get(pIndex).isEmpty() )
-		{
-			aStacks.get(pIndex).peek().makeVisible();
-		}
-	}
-	
-	
 }

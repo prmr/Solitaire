@@ -133,47 +133,4 @@ public class TestWorkingStackManager
 		assertEquals(1, sequence.length);
 		assertEquals(C4C, sequence[0]);
 	}
-	
-	@Test
-	public void showTop()
-	{
-		aWorkingStackManager.showTop(StackIndex.SECOND);
-		aWorkingStackManager.push(C5D, StackIndex.SECOND);
-	}
-	
-	@Test
-	public void testIsInStacks()
-	{
-		assertFalse(aWorkingStackManager.isInStacks(CAC));
-		aWorkingStackManager.push(C5D, StackIndex.SECOND);
-		assertFalse(aWorkingStackManager.isInStacks(CAC));
-		assertTrue(aWorkingStackManager.isInStacks(C5D));
-	}
-	
-	@Test
-	public void testPop()
-	{
-		aWorkingStackManager.pop(C5D); // Test absence of crash, no oracle
-		aWorkingStackManager.push(C5D, StackIndex.SECOND);
-		aWorkingStackManager.pop(C5D);
-		CardView[] stack = aWorkingStackManager.getStack(StackIndex.SECOND);
-		assertEquals(0, stack.length);
-		aWorkingStackManager.push(CAC, StackIndex.FIRST);
-		aWorkingStackManager.push(C5D, StackIndex.SECOND);
-		aWorkingStackManager.push(C4C, StackIndex.SECOND);
-		aWorkingStackManager.push(C3H, StackIndex.SECOND);
-		aWorkingStackManager.pop(C3H);
-		stack = aWorkingStackManager.getStack(StackIndex.SECOND);
-		assertEquals(2, stack.length);
-		assertEquals(stack[1].getCard(), C4C);
-		assertEquals(stack[0].getCard(), C5D);
-		aWorkingStackManager.pop(C4C);
-		stack = aWorkingStackManager.getStack(StackIndex.SECOND);
-		assertEquals(1, stack.length);
-		assertEquals(stack[0].getCard(), C5D);
-		aWorkingStackManager.pop(C5D);
-		stack = aWorkingStackManager.getStack(StackIndex.SECOND);
-		assertEquals(0, stack.length);
-	}
-	
 }

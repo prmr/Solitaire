@@ -171,37 +171,6 @@ public final class GameModel
 	}
 	
 	/**
-	 * Moves pCard from wherever it is in a legally 
-	 * movable position and adds it to a suit stack.
-	 * @param pCard The card to move.
-	 * @param pIndex The index of the stack to move the card to.
-	 */
-//	public void moveToSuitStack(Card pCard, SuitStackIndex pIndex)
-//	{
-//		assert aSuitStacks.canMoveTo(pCard, pIndex);
-//		if( !aDiscard.isEmpty() && aDiscard.peek() == pCard )
-//		{
-//			aDiscard.pop();
-//		}
-//		else if( aWorkingStacks.isInStacks(pCard))
-//		{
-//			aWorkingStacks.pop(pCard);
-//		}
-//		else
-//		{
-//			for( SuitStackIndex index : SuitStackIndex.values())
-//			{
-//				if( !aSuitStacks.isEmpty(index) && aSuitStacks.peek(index) == pCard )
-//				{
-//					aSuitStacks.pop(index);
-//				}
-//			}
-//		}
-//		aSuitStacks.push(pCard, pIndex);
-//		notifyListeners();
-//	}
-	
-	/**
 	 * Obtain the card on top of the suit stack for
 	 * pIndex without discarding it.
 	 * @param pIndex The index of the stack to check
@@ -222,36 +191,6 @@ public final class GameModel
 	{
 		assert aDiscard.size() != 0;
 		return aDiscard.peek();
-	}
-	
-	/**
-	 * Move the sequence of cards pCards (ordered higher-rank to
-	 * lower-rank) to the working stack at pIndex.
-	 * @param pCards The cards to move to the stack.
-	 * @param pIndex The index of the stack
-	 * @pre This is assumed to be a valid move
-	 */
-	public void moveToWorkingStack(Card[] pCards, StackIndex pIndex)
-	{
-		// If there is only one card, move it
-		if( pCards.length == 1 )
-		{
-			moveOneCardToWorkingStack( pCards[0], pIndex);
-		}
-		else // The source is a working stack, unwind
-		{
-			Stack<Card> temp = new Stack<>();
-			for( int i = pCards.length-1; i >=0; i-- )
-			{
-				aWorkingStacks.pop(pCards[i]);
-				temp.push(pCards[i]);
-			}
-			while( !temp.isEmpty() )
-			{
-				aWorkingStacks.push(temp.pop(), pIndex);
-			}
-		}
-		notifyListeners();
 	}
 	
 	/**
@@ -309,7 +248,6 @@ public final class GameModel
 			{
 				aWorkingStacks.push(card, (StackIndex)pDestination);
 			}
-			aWorkingStacks.showTop((StackIndex)pDestination);
 		}
 		notifyListeners();
 	}
@@ -335,31 +273,6 @@ public final class GameModel
 				aWorkingStacks.contains(pCard, (StackIndex)pSource);
 			return aWorkingStacks.removeSequence(pCard, (StackIndex)pSource);
 		}
-	}
-	
-	
-	
-	private void moveOneCardToWorkingStack( Card pCard, StackIndex pIndex)
-	{
-		if( !aDiscard.isEmpty() && aDiscard.peek() == pCard )
-		{
-			aDiscard.pop();
-		}
-		else if( aWorkingStacks.isInStacks(pCard))
-		{
-			aWorkingStacks.pop(pCard);
-		}
-		else 
-		{
-			for( SuitStackIndex index : SuitStackIndex.values())
-			{
-				if( !aSuitStacks.isEmpty(index) && aSuitStacks.peek(index) == pCard )
-				{
-					aSuitStacks.pop(index);
-				}
-			}
-		}
-		aWorkingStacks.push(pCard, pIndex);
 	}
 	
 	/**
