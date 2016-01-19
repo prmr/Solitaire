@@ -108,11 +108,56 @@ class WorkingStackManager
 		return lReturn.toArray(new Card[lReturn.size()]);
 	}
 	
+	/**
+	 * Removes and returns a sequence of cards starting at 
+	 * pCard and running until the top of the stack.
+	 * @param pCard The card to start the sequence at.
+	 * @param pIndex The stack index.
+	 * @return The first card was further from the bottom
+	 * of the stack.
+	 */
+	Card[] removeSequence(Card pCard, StackIndex pIndex)
+	{
+		Stack<CardView> stack = aStacks.get(pIndex);
+		List<Card> lReturn = new ArrayList<>();
+		boolean aSeen = false;
+		List<CardView> toDelete = new ArrayList<>();
+		for( CardView card : stack )
+		{
+			if( card.getCard() == pCard )
+			{
+				aSeen = true;
+			}
+			if( aSeen )
+			{
+				lReturn.add(card.getCard());
+				toDelete.add(card);
+			}
+		}
+		for( CardView cardView : toDelete )
+		{
+			stack.remove(cardView);
+		}
+		return lReturn.toArray(new Card[lReturn.size()]);
+	}
+	
 	boolean isInStacks(Card pCard )
 	{
 		for( Stack<CardView> cardView : aStacks.values() )
 		{
 			if(!cardView.isEmpty() && cardView.peek().getCard() == pCard )
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	boolean contains(Card pCard, StackIndex pIndex)
+	{
+		for( CardView card : aStacks.get(pIndex))
+		{
+			if( card.getCard() == pCard )
 			{
 				return true;
 			}

@@ -254,6 +254,59 @@ public final class GameModel
 		notifyListeners();
 	}
 	
+	/**
+	 * Moves pCard from the source to the destination. Assumes this
+	 * is a legal move.
+	 * @param pCard The card to move. Not null.
+	 * @param pSource The source location
+	 * @param pDestination The destination location.
+	 */
+	public void move(Card pCard, Location pSource, Location pDestination)
+	{
+		assert isLegalMove(pCard, pDestination);
+		Card[] cardsToMove = processSource(pCard, pSource);
+		if( pDestination instanceof SuitStackIndex )
+		{
+			for( Card card : cardsToMove )
+			{
+				aSuitStacks.push(card, (SuitStackIndex)pDestination);
+			}
+		}
+		else
+		{
+			assert pDestination instanceof StackIndex;
+			for( Card card : cardsToMove )
+			{
+				aWorkingStacks.push(card, (StackIndex)pDestination);
+			}
+		}
+	}
+	
+	private Card[] processSource(Card pCard, Location pSource)
+	{
+		if( pSource == CardSources.DISCARD_PILE )
+		{
+			assert !aDiscard.isEmpty() && aDiscard.peek() == pCard;
+			aDiscard.pop();
+			return new Card[]{pCard};
+		}
+		else if( pSource instanceof SuitStackIndex )
+		{
+			assert !aSuitStacks.isEmpty((SuitStackIndex)pSource) && 
+				aSuitStacks.peek((SuitStackIndex)pSource) == pCard;
+			aSuitStacks.pop((SuitStackIndex)pSource);
+			return new Card[]{pCard};
+		}
+		else
+		{
+			assert pSource instanceof StackIndex && 
+				aWorkingStacks.contains(pCard, (StackIndex)pSource);
+			return aWorkingStacks.removeSequence(pCard, (StackIndex)pSource);
+		}
+	}
+	
+	
+	
 	private void moveOneCardToWorkingStack( Card pCard, StackIndex pIndex)
 	{
 		if( !aDiscard.isEmpty() && aDiscard.peek() == pCard )

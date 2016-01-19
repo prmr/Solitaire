@@ -74,6 +74,37 @@ public class TestWorkingStackManager
 	}
 	
 	@Test
+	public void testContains()
+	{
+		assertFalse(aWorkingStackManager.contains(CAC, StackIndex.FIRST));
+		aWorkingStackManager.push(CAC, StackIndex.FIRST);
+		assertTrue(aWorkingStackManager.contains(CAC, StackIndex.FIRST));
+		aWorkingStackManager.push(C3H, StackIndex.FIRST);
+		aWorkingStackManager.push(C5D, StackIndex.FIRST);
+		assertTrue(aWorkingStackManager.contains(C5D, StackIndex.FIRST));
+	}
+	
+	@Test
+	public void testRemoveSequence()
+	{
+		aWorkingStackManager.push(Card.get(Rank.TEN, Suit.CLUBS), StackIndex.FIRST);
+		aWorkingStackManager.push(Card.get(Rank.NINE, Suit.DIAMONDS), StackIndex.FIRST);
+		aWorkingStackManager.push(Card.get(Rank.EIGHT, Suit.CLUBS), StackIndex.FIRST);
+		aWorkingStackManager.push(Card.get(Rank.SEVEN, Suit.DIAMONDS), StackIndex.FIRST);
+		aWorkingStackManager.push(Card.get(Rank.SIX, Suit.CLUBS), StackIndex.FIRST);
+		aWorkingStackManager.push(Card.get(Rank.FIVE, Suit.DIAMONDS), StackIndex.FIRST);
+		aWorkingStackManager.push(Card.get(Rank.FOUR, Suit.CLUBS), StackIndex.FIRST);
+		aWorkingStackManager.push(Card.get(Rank.THREE, Suit.DIAMONDS), StackIndex.FIRST);
+		Card[] sequence = aWorkingStackManager.removeSequence(Card.get(Rank.NINE, Suit.DIAMONDS), StackIndex.FIRST);
+		CardView[] stack = aWorkingStackManager.getStack(StackIndex.FIRST);
+		assertEquals(1, stack.length);
+		assertEquals(Card.get(Rank.TEN, Suit.CLUBS), stack[0].getCard());
+		assertEquals( 7, sequence.length);
+		assertEquals( Card.get(Rank.NINE, Suit.DIAMONDS), sequence[0]);
+		assertEquals( Card.get(Rank.EIGHT, Suit.CLUBS), sequence[1]);
+	}
+	
+	@Test
 	public void testCanMoveTo()
 	{
 		assertFalse(aWorkingStackManager.canMoveTo(CAC, StackIndex.FIRST)); 
