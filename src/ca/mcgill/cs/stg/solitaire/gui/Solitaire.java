@@ -21,11 +21,14 @@
 package ca.mcgill.cs.stg.solitaire.gui;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
+import ca.mcgill.cs.stg.solitaire.model.GameModel;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -42,7 +45,7 @@ public class Solitaire extends Application
 	private static final int HEIGHT = 500;
 	private static final int MARGIN_OUTER = 10;
 	private static final String TITLE = "Solitaire";
-	private static final String VERSION = "0.2";
+	private static final String VERSION = "0.3";
 
     private DeckView aDeckView = new DeckView();
     private DiscardPileView aDiscardPileView = new DiscardPileView();
@@ -83,7 +86,22 @@ public class Solitaire extends Application
         	aStacks[index.ordinal()] = new CardStack(index);
         	root.add(aStacks[index.ordinal()], index.ordinal(), 1);
         }
-                    
+        
+        root.setOnKeyTyped(new EventHandler<KeyEvent>()
+		{
+
+			@Override
+			public void handle(final KeyEvent pEvent)
+			{
+				if( pEvent.getCharacter().equals("\r"))
+				{
+					GameModel.instance().tryToAutoPlay();
+				}
+				pEvent.consume();
+			}
+        	
+		});
+        
         pPrimaryStage.setResizable(false);
         pPrimaryStage.setScene(new Scene(root, WIDTH, HEIGHT));
         pPrimaryStage.show();

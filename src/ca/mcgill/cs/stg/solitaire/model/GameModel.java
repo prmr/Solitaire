@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import ca.mcgill.cs.stg.solitaire.ai.GreedyPlayingStrategy;
+import ca.mcgill.cs.stg.solitaire.ai.PlayingStrategy;
 import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.Deck;
 
@@ -52,6 +54,7 @@ public final class GameModel
 	private SuitStackManager aSuitStacks = new SuitStackManager();
 	private WorkingStackManager aWorkingStacks = new WorkingStackManager();
 	private List<GameModelListener> aListeners = new ArrayList<>();
+	private PlayingStrategy aPlayingStrategy = new GreedyPlayingStrategy();
 	
 	/**
 	 * Represents anywhere a card can be placed in 
@@ -85,6 +88,17 @@ public final class GameModel
 	private GameModel()
 	{
 		reset();
+	}
+	
+	/**
+	 * Try to automatically make a move. 
+	 * This may result in nothing happening
+	 * if the auto-play strategy cannot make a 
+	 * decision.
+	 */
+	public void tryToAutoPlay()
+	{
+		aPlayingStrategy.makeAMoveIfPossible(this);
 	}
 	
 	/**
