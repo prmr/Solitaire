@@ -21,14 +21,21 @@
 package ca.mcgill.cs.stg.solitaire.model;
 
 /**
- * Represents one possible action in the game.
+ * A do-nothing move. Useful as a stand-in to 
+ * represent an attempt at computing a move
+ * that was unsuccessful.
  */
-public interface Move
+public class NullMove implements Move
 {
-	/**
-	 * Perform the move. 
-	 * @param pModel A game model upon which the move can be performed.
-	 * @pre The move is legal
-	 */
-	void perform(GameModel pModel);
+	@Override
+	public void perform(GameModel pModel)
+	{
+		// This method does nothing on purpose.
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "No move";
+	}
 }

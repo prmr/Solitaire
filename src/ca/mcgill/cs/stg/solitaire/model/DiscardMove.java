@@ -21,14 +21,27 @@
 package ca.mcgill.cs.stg.solitaire.model;
 
 /**
- * Represents one possible action in the game.
+ * Represents taking a card from the deck and 
+ * moving it to the top of the discard pile.
  */
-public interface Move
+public class DiscardMove implements Move
 {
 	/**
-	 * Perform the move. 
-	 * @param pModel A game model upon which the move can be performed.
-	 * @pre The move is legal
+	 * Creates a discard move.
 	 */
-	void perform(GameModel pModel);
+	public DiscardMove()
+	{}
+	
+	@Override
+	public String toString()
+	{
+		return "Discard";
+	}
+
+	@Override
+	public void perform(GameModel pModel)
+	{
+		assert !pModel.isEmptyDeck();
+		pModel.discard();
+	}
 }

@@ -91,14 +91,25 @@ public final class GameModel
 	}
 	
 	/**
+	 * @return The number of cards in the suit stacks.
+	 */
+	public int getScore()
+	{
+		return aSuitStacks.getScore();
+	}
+	
+	/**
 	 * Try to automatically make a move. 
 	 * This may result in nothing happening
 	 * if the auto-play strategy cannot make a 
 	 * decision.
+	 * @return whether a move was performed or not.
 	 */
-	public void tryToAutoPlay()
+	public boolean tryToAutoPlay()
 	{
-		aPlayingStrategy.makeAMoveIfPossible(this);
+		Move move = aPlayingStrategy.computeNextMove(this);
+		move.perform(this);
+		return !(move instanceof NullMove);
 	}
 	
 	/**

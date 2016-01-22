@@ -21,6 +21,8 @@
 package ca.mcgill.cs.stg.solitaire.ai;
 
 import ca.mcgill.cs.stg.solitaire.model.GameModel;
+import ca.mcgill.cs.stg.solitaire.model.Move;
+import ca.mcgill.cs.stg.solitaire.model.NullMove;
 
 /**
  * Never does anything except flip the first card over.
@@ -28,11 +30,8 @@ import ca.mcgill.cs.stg.solitaire.model.GameModel;
 public class NullPlayingStrategy implements PlayingStrategy
 {
 	@Override
-	public void makeAMoveIfPossible(GameModel pModel)
+	public Move computeNextMove(GameModel pModel)
 	{
-		if( pModel.isEmptyDiscardPile() )
-		{
-			pModel.discard();
-		}
+		return new NullMove();
 	}
 }

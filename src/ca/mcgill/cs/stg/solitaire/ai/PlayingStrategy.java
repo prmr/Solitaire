@@ -21,6 +21,7 @@
 package ca.mcgill.cs.stg.solitaire.ai;
 
 import ca.mcgill.cs.stg.solitaire.model.GameModel;
+import ca.mcgill.cs.stg.solitaire.model.Move;
 
 /**
  * Defines the behavior necessary to make 
@@ -32,7 +33,8 @@ public interface PlayingStrategy
 	 * If a move is both legal and supported 
 	 * by the concrete strategy, execute the move. If
 	 * not, do nothing.
-	 * @param pModel A game model to modify.
+	 * @param pModel A game model to query.
+	 * @return The next move.
 	 */
-	void makeAMoveIfPossible(GameModel pModel);
+	Move computeNextMove(GameModel pModel);
 }

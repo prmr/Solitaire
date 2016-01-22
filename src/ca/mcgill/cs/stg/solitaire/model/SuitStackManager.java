@@ -45,6 +45,19 @@ class SuitStackManager
 	}
 	
 	/**
+	 * @return The number of cards in the suit stacks.
+	 */
+	int getScore()
+	{
+		int total = 0;
+		for( Stack<Card> stack : aStacks.values())
+		{
+			total += stack.size();
+		}
+		return total;
+	}
+	
+	/**
 	 * Initialize the internal data structures.
 	 */
 	void initialize()
