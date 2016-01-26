@@ -78,22 +78,6 @@ class SuitStackManager
 	}
 	
 	/**
-	 * @return True if all cards are in their proper
-	 * suit stack.
-	 */
-	boolean isCompleted()
-	{
-		for( Stack<Card> stack : aStacks.values())
-		{
-			if( stack.size() < Rank.values().length )
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	/**
 	 * @param pCard The card to test
 	 * @param pIndex The suitstack to test
 	 * @return True if pCard can be moved to the top of its suit stack.
