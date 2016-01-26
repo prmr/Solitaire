@@ -85,6 +85,18 @@ public final class Card
 		return CARDS[pSuit.ordinal()][pRank.ordinal()];
 	}
 	
+	@Override
+	public boolean equals(Object pObject)
+	{
+		if( pObject == null )
+		{
+			return false;
+		}
+		if( pObject == this ) return true;
+		if( pObject.getClass() != getClass() ) return false;
+		return aRank == ((Card)pObject).aRank && aSuit == ((Card)pObject).aSuit;
+	}
+	
 	/**
 	 * @param pId The id string for the card. This is needs to have
 	 * been produced by Card.getIDString to be considered a

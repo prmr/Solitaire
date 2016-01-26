@@ -28,7 +28,8 @@ import ca.mcgill.cs.stg.solitaire.model.GameModel;
  */
 public final class Driver
 {
-	private static final int NUMBER_OF_GAMES = 1000;
+	private static final int ALL_CARDS = 52;
+	private static final int NUMBER_OF_GAMES = 10000;
 	private static final int TO_PERCENT = 100;
 	
 	private Driver() {}
@@ -42,9 +43,10 @@ public final class Driver
 		int totalWon = 0;
 		for( int i = 0; i < NUMBER_OF_GAMES; i++ )
 		{
-			boolean won = playGame(GameModel.instance());
-			total += GameModel.instance().getScore();
-			if( won )
+			playGame(GameModel.instance());
+			int score = GameModel.instance().getScore();
+			total += score;
+			if( score == ALL_CARDS )
 			{
 				totalWon++;
 			}
@@ -55,20 +57,13 @@ public final class Driver
 				((double)total)/((double)NUMBER_OF_GAMES)));
 	}
 	
-	/*
-	 * @return true if the game is won
-	 */
-	private static boolean playGame(GameModel pModel)
+	private static void playGame(GameModel pModel)
 	{
 		pModel.reset();
-		while( !pModel.isEmptyDeck() )
+		boolean advanced = true;
+		while( advanced )
 		{
-			boolean advanced = pModel.tryToAutoPlay();
-			if( !advanced )
-			{
-				break;
-			}
+			advanced = pModel.tryToAutoPlay();
 		}
-		return pModel.isCompleted();
 	}
 }

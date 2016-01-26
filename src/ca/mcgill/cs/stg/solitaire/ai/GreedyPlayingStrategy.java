@@ -92,28 +92,33 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 	private List<CardMove> movesFromDiscardPileToSuitStack(GameModel pModel)
 	{
 		ArrayList<CardMove> moves = new ArrayList<>();
-		for(SuitStackIndex index : SuitStackIndex.values())
+		if( !pModel.isEmptyDiscardPile())
 		{
-			if( pModel.isLegalMove(pModel.peekDiscardPile(), index))
+			for(SuitStackIndex index : SuitStackIndex.values())
 			{
-				moves.add(new CardMove(pModel.peekDiscardPile(), index));
-				if( pModel.isEmptySuitStack(index))
+				if( pModel.isLegalMove(pModel.peekDiscardPile(), index))
 				{
-					break; // we take the first possible blank space
+					moves.add(new CardMove(pModel.peekDiscardPile(), index));
+					if( pModel.isEmptySuitStack(index))
+					{
+						break; // we take the first possible blank space
+					}
 				}
-			}
-		}
+		}}
 		return moves;
 	}
 	
 	private List<CardMove> movesFromDiscardPileToWorkingStacks(GameModel pModel)
 	{
 		ArrayList<CardMove> moves = new ArrayList<>();
-		for(StackIndex index : StackIndex.values())
+		if( !pModel.isEmptyDiscardPile() )
 		{
-			if( pModel.isLegalMove(pModel.peekDiscardPile(), index))
+			for(StackIndex index : StackIndex.values())
 			{
-				moves.add(new CardMove(pModel.peekDiscardPile(), index));
+				if( pModel.isLegalMove(pModel.peekDiscardPile(), index))
+				{
+					moves.add(new CardMove(pModel.peekDiscardPile(), index));
+				}
 			}
 		}
 		return moves;
