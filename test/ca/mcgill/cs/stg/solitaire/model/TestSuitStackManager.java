@@ -69,4 +69,13 @@ public class TestSuitStackManager
 		aSuitStackManager.pop(SuitStackIndex.SECOND);
 		assertTrue( aSuitStackManager.isEmpty(SuitStackIndex.SECOND));
 	}
+	
+	@Test
+	public void testGetScore()
+	{
+		assertEquals(0, aSuitStackManager.getScore());
+		aSuitStackManager.push(CAC, SuitStackIndex.FIRST);
+		aSuitStackManager.push(CAD, SuitStackIndex.SECOND);
+		assertEquals(2, aSuitStackManager.getScore());
+	}
 }

@@ -47,7 +47,7 @@ import ca.mcgill.cs.stg.solitaire.cards.Deck;
  * in charge of managing the state. However, these manager classes
  * are not responsible for notifying observers.
  */
-public final class GameModel 
+public final class GameModel implements GameModelView
 {
 	private static final GameModel INSTANCE = new GameModel();
 	
@@ -160,26 +160,19 @@ public final class GameModel
 		return aSuitStacks.getScore() == Rank.values().length * Suit.values().length;
 	}
 	
-	/**
-	 * @return True if the deck has no card left in it.
-	 */
+	@Override
 	public boolean isEmptyDeck()
 	{
 		return aDeck.size() == 0;
 	}
 	
-	/**
-	 * @return True if the discard pile has no card in it.
-	 */
+	@Override
 	public boolean isEmptyDiscardPile()
 	{
 		return aDiscard.size() == 0;
 	}
 	
-	/**
-	 * @param pIndex The suit stack to check
-	 * @return True if the suit stack for pSuit is empty
-	 */
+	@Override
 	public boolean isEmptySuitStack(SuitStackIndex pIndex)
 	{
 		return aSuitStacks.isEmpty(pIndex);
@@ -210,10 +203,7 @@ public final class GameModel
 		return aSuitStacks.peek(pIndex);
 	}
 	
-	/**
-	 * @return The card on top of the discard pile.
-	 * @pre !emptyDiscardPile()
-	 */
+	@Override
 	public Card peekDiscardPile()
 	{
 		assert aDiscard.size() != 0;
@@ -302,10 +292,7 @@ public final class GameModel
 		}
 	}
 	
-	/**
-	 * @param pIndex The position of the stack to return.
-	 * @return A copy of the stack at position pIndex
-	 */
+	@Override
 	public CardView[] getStack(StackIndex pIndex)
 	{
 		return aWorkingStacks.getStack(pIndex); 
@@ -324,14 +311,7 @@ public final class GameModel
 		return aWorkingStacks.getSequence(pCard, pIndex);
 	}
 
-	/**
-	 * Determines if pCard can be moved to pLocation
-	 * according to the rules of the game and given the current
-	 * game state. 
-	 * @param pCard The card to move. 
-	 * @param pDestination The destination of the move.
-	 * @return True if the move is a legal move.
-	 */
+	@Override
 	public boolean isLegalMove(Card pCard, Location pDestination )
 	{ 
 		if( pDestination instanceof SuitStackIndex )

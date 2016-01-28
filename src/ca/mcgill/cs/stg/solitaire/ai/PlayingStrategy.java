@@ -20,7 +20,7 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.ai;
 
-import ca.mcgill.cs.stg.solitaire.model.GameModel;
+import ca.mcgill.cs.stg.solitaire.model.GameModelView;
 import ca.mcgill.cs.stg.solitaire.model.Move;
 
 /**
@@ -36,5 +36,5 @@ public interface PlayingStrategy
 	 * @param pModel A game model to query.
 	 * @return The next move.
 	 */
-	Move computeNextMove(GameModel pModel);
+	Move computeNextMove(GameModelView pModel);
 }

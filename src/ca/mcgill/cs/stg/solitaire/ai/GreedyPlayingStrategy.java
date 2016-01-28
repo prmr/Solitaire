@@ -27,14 +27,14 @@ import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.model.CardMove;
 import ca.mcgill.cs.stg.solitaire.model.CardView;
 import ca.mcgill.cs.stg.solitaire.model.DiscardMove;
-import ca.mcgill.cs.stg.solitaire.model.GameModel;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
+import ca.mcgill.cs.stg.solitaire.model.GameModelView;
 import ca.mcgill.cs.stg.solitaire.model.Move;
 import ca.mcgill.cs.stg.solitaire.model.NullMove;
 
 /**
- * Makes the first move in this order: 
+ * Makes the first possible move in this order: 
  * 0. Discarding if the discard pile is empty
  * 1. Moving a card from the discard pile to a suit stack
  * 2. Moving a card from the discard pile to a working stack
@@ -48,7 +48,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 {
 	// CSOFF:
 	@Override 
-	public Move computeNextMove(GameModel pModel)
+	public Move computeNextMove(GameModelView pModel)
 	{
 		if( pModel.isEmptyDiscardPile() && !pModel.isEmptyDeck() )
 		{
@@ -89,7 +89,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 		}
 	} // CSON:
 	
-	private List<CardMove> movesFromDiscardPileToSuitStack(GameModel pModel)
+	private List<CardMove> movesFromDiscardPileToSuitStack(GameModelView pModel)
 	{
 		ArrayList<CardMove> moves = new ArrayList<>();
 		if( !pModel.isEmptyDiscardPile())
@@ -108,7 +108,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 		return moves;
 	}
 	
-	private List<CardMove> movesFromDiscardPileToWorkingStacks(GameModel pModel)
+	private List<CardMove> movesFromDiscardPileToWorkingStacks(GameModelView pModel)
 	{
 		ArrayList<CardMove> moves = new ArrayList<>();
 		if( !pModel.isEmptyDiscardPile() )
@@ -124,7 +124,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 		return moves;
 	}
 	
-	private List<CardMove> movesFromWorkingStacksToSuitStacks(GameModel pModel)
+	private List<CardMove> movesFromWorkingStacksToSuitStacks(GameModelView pModel)
 	{
 		ArrayList<CardMove> moves = new ArrayList<>();
 		for(StackIndex index : StackIndex.values())
@@ -149,7 +149,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 		return moves;
 	}
 	
-	private List<CardMove> movesFromWorkingStacksRevealsCard(GameModel pModel)
+	private List<CardMove> movesFromWorkingStacksRevealsCard(GameModelView pModel)
 	{
 		ArrayList<CardMove> moves = new ArrayList<>();
 		for(StackIndex index : StackIndex.values())
