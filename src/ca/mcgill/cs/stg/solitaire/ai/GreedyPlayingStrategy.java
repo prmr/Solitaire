@@ -24,14 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
-import ca.mcgill.cs.stg.solitaire.model.CardMove;
 import ca.mcgill.cs.stg.solitaire.model.CardView;
-import ca.mcgill.cs.stg.solitaire.model.DiscardMove;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
 import ca.mcgill.cs.stg.solitaire.model.GameModelView;
 import ca.mcgill.cs.stg.solitaire.model.Move;
-import ca.mcgill.cs.stg.solitaire.model.NullMove;
 
 /**
  * Makes the first possible move in this order: 
@@ -52,11 +49,11 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 	{
 		if( pModel.isEmptyDiscardPile() && !pModel.isEmptyDeck() )
 		{
-			return new DiscardMove();
+			return pModel.getDiscardMove();
 		}
 		else
 		{
-			ArrayList<CardMove> moves = new ArrayList<>();
+			ArrayList<Move> moves = new ArrayList<>();
 			moves.addAll(movesFromWorkingStacksRevealsCard(pModel));
 			if( moves.size() > 0 )
 			{
@@ -80,25 +77,25 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 			
 			if( !pModel.isEmptyDeck() )
 			{
-				return new DiscardMove();
+				return pModel.getDiscardMove();
 			}
 			else
 			{
-				return new NullMove();
+				return pModel.getNullMove();
 			}
 		}
 	} // CSON:
 	
-	private List<CardMove> movesFromDiscardPileToSuitStack(GameModelView pModel)
+	private List<Move> movesFromDiscardPileToSuitStack(GameModelView pModel)
 	{
-		ArrayList<CardMove> moves = new ArrayList<>();
+		ArrayList<Move> moves = new ArrayList<>();
 		if( !pModel.isEmptyDiscardPile())
 		{
 			for(SuitStackIndex index : SuitStackIndex.values())
 			{
 				if( pModel.isLegalMove(pModel.peekDiscardPile(), index))
 				{
-					moves.add(new CardMove(pModel.peekDiscardPile(), index));
+					moves.add(pModel.getCardMove(pModel.peekDiscardPile(), index));
 					if( pModel.isEmptySuitStack(index))
 					{
 						break; // we take the first possible blank space
@@ -108,25 +105,25 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 		return moves;
 	}
 	
-	private List<CardMove> movesFromDiscardPileToWorkingStacks(GameModelView pModel)
+	private List<Move> movesFromDiscardPileToWorkingStacks(GameModelView pModel)
 	{
-		ArrayList<CardMove> moves = new ArrayList<>();
+		ArrayList<Move> moves = new ArrayList<>();
 		if( !pModel.isEmptyDiscardPile() )
 		{
 			for(StackIndex index : StackIndex.values())
 			{
 				if( pModel.isLegalMove(pModel.peekDiscardPile(), index))
 				{
-					moves.add(new CardMove(pModel.peekDiscardPile(), index));
+					moves.add(pModel.getCardMove(pModel.peekDiscardPile(), index));
 				}
 			}
 		}
 		return moves;
 	}
 	
-	private List<CardMove> movesFromWorkingStacksToSuitStacks(GameModelView pModel)
+	private List<Move> movesFromWorkingStacksToSuitStacks(GameModelView pModel)
 	{
-		ArrayList<CardMove> moves = new ArrayList<>();
+		ArrayList<Move> moves = new ArrayList<>();
 		for(StackIndex index : StackIndex.values())
 		{
 			CardView[] stack = pModel.getStack(index);
@@ -137,7 +134,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 				{
 					if( pModel.isLegalMove(card, index2))
 					{
-						moves.add(new CardMove(card, index2));
+						moves.add(pModel.getCardMove(card, index2));
 						if( pModel.isEmptySuitStack(index2))
 						{
 							break; // we take the first possible blank space
@@ -149,9 +146,9 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 		return moves;
 	}
 	
-	private List<CardMove> movesFromWorkingStacksRevealsCard(GameModelView pModel)
+	private List<Move> movesFromWorkingStacksRevealsCard(GameModelView pModel)
 	{
-		ArrayList<CardMove> moves = new ArrayList<>();
+		ArrayList<Move> moves = new ArrayList<>();
 		for(StackIndex index : StackIndex.values())
 		{
 			CardView[] stack = pModel.getStack(index);
@@ -163,7 +160,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 					{
 						if( pModel.isLegalMove(stack[i].getCard(), index2))
 						{
-							moves.add(new CardMove(stack[i].getCard(), index2));
+							moves.add(pModel.getCardMove(stack[i].getCard(), index2));
 						}
 					}
 				}
@@ -174,7 +171,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 						// we don't want to just move a card around
 						if( pModel.isLegalMove(stack[i].getCard(), index2) && pModel.getStack(index2).length > 0) 
 						{
-							moves.add(new CardMove(stack[i].getCard(), index2));
+							moves.add(pModel.getCardMove(stack[i].getCard(), index2));
 						}
 					}
 				}

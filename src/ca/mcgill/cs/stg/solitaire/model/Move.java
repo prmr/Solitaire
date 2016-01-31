@@ -26,9 +26,14 @@ package ca.mcgill.cs.stg.solitaire.model;
 public interface Move
 {
 	/**
-	 * Perform the move. 
-	 * @param pModel A game model upon which the move can be performed.
+	 * Performs the move. 
 	 * @pre The move is legal
 	 */
-	void perform(GameModel pModel);
+	void perform();
+	
+	/**
+	 * @return True if the move is not a move that
+	 * advances the game.
+	 */
+	boolean isNull();
 }

@@ -143,7 +143,7 @@ public class SuitStack extends StackPane implements GameModelListener
     			if(db.hasString()) 
     			{
     				CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
-    				GameModel.instance().move(transfer.getTop(), aIndex);
+    				GameModel.instance().getCardMove(transfer.getTop(), aIndex).perform();
     				success = true;
     			}
     			pEvent.setDropCompleted(success);

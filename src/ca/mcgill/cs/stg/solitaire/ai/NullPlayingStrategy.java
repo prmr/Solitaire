@@ -22,7 +22,6 @@ package ca.mcgill.cs.stg.solitaire.ai;
 
 import ca.mcgill.cs.stg.solitaire.model.GameModelView;
 import ca.mcgill.cs.stg.solitaire.model.Move;
-import ca.mcgill.cs.stg.solitaire.model.NullMove;
 
 /**
  * Never does anything.
@@ -32,6 +31,6 @@ public class NullPlayingStrategy implements PlayingStrategy
 	@Override
 	public Move computeNextMove(GameModelView pModel)
 	{
-		return new NullMove();
+		return pModel.getNullMove();
 	}
 }

@@ -164,7 +164,7 @@ public class CardStack extends StackPane implements GameModelListener
 				boolean success = false;
 				if(db.hasString()) 
 				{
-					GameModel.instance().move(new CardTransfer(db.getString()).getTop(), aIndex); 
+					GameModel.instance().getCardMove(new CardTransfer(db.getString()).getTop(), aIndex).perform(); 
 					success = true;
 				}
 

@@ -74,7 +74,7 @@ class DeckView extends HBox implements GameModelListener
     			}
     			else
     			{
-    				GameModel.instance().discard();
+    				GameModel.instance().getDiscardMove().perform();
     			}
     		}            
     	});

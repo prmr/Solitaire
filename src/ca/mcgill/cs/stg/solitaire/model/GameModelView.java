@@ -67,4 +67,26 @@ public interface GameModelView
 	 * @return True if the move is a legal move.
 	 */
 	boolean isLegalMove(Card pCard, Location pDestination );
+	
+	/**
+	 * @return An instance of the Move interface
+	 * that represents no move at all.
+	 */
+	Move getNullMove();
+	
+	/**
+	 * @return An instance of the Move interface
+	 * that represents discarding a card from the deck.
+	 */
+	Move getDiscardMove();
+	
+	/**
+	 * @return An instance of the Move interface
+	 * that represents moving a card (and possibly
+	 * all cards below it if applicable) to pDestination.
+	 * @param pCard The card to move, assumed to be in a 
+	 * legal position.
+	 * @param pDestination The required destination of the card.
+	 */
+	Move getCardMove(Card pCard, Location pDestination);
 }

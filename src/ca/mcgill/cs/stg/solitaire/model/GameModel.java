@@ -51,6 +51,36 @@ public final class GameModel implements GameModelView
 {
 	private static final GameModel INSTANCE = new GameModel();
 	
+	private static final Move NULL_MOVE = new Move()
+	{
+		@Override
+		public void perform()
+		{} // Does nothing on purpose
+
+		@Override
+		public boolean isNull()
+		{
+			return true;
+		}
+	};
+	
+	private final Move aDiscardMove = new Move()
+	{
+		@Override
+		public void perform()
+		{
+			assert !isEmptyDeck();	
+			aDiscard.push(aDeck.draw());
+			notifyListeners();
+		}
+
+		@Override
+		public boolean isNull()
+		{
+			return false;
+		}
+	};
+	
 	private Deck aDeck = new Deck();
 	private Stack<Card> aDiscard = new Stack<>();
 	private SuitStackManager aSuitStacks = new SuitStackManager();
@@ -110,8 +140,8 @@ public final class GameModel implements GameModelView
 	public boolean tryToAutoPlay()
 	{
 		Move move = aPlayingStrategy.computeNextMove(this);
-		move.perform(this);
-		return !(move instanceof NullMove);
+		move.perform();
+		return !move.isNull();
 	}
 	
 	/**
@@ -179,18 +209,6 @@ public final class GameModel implements GameModelView
 	}
 	
 	/**
-	 * Draw a card from the deck and place it on top
-	 * of the discard pile.
-	 * @pre !isEmptyDeck()
-	 */
-	public void discard()
-	{
-		assert !isEmptyDeck();
-		aDiscard.push(aDeck.draw());
-		notifyListeners();
-	}
-	
-	/**
 	 * Obtain the card on top of the suit stack for
 	 * pIndex without discarding it.
 	 * @param pIndex The index of the stack to check
@@ -246,7 +264,7 @@ public final class GameModel implements GameModelView
 	 * @param pCard The card to move. Not null.
 	 * @param pDestination The destination location.
 	 */
-	public void move(Card pCard, Location pDestination)
+	private void move(Card pCard, Location pDestination)
 	{
 		assert isLegalMove(pCard, pDestination);
 		Location source = find(pCard);
@@ -323,6 +341,56 @@ public final class GameModel implements GameModelView
 			return aWorkingStacks.canMoveTo(pCard, (StackIndex) pDestination);
 		}
 		else
+		{
+			return false;
+		}
+	}
+	
+	@Override
+	public Move getNullMove()
+	{
+		return NULL_MOVE;
+	}
+	
+	@Override
+	public Move getDiscardMove()
+	{
+		return aDiscardMove;
+	}
+	
+	@Override
+	public Move getCardMove(Card pCard, Location pDestination)
+	{
+		return new CardMove(pCard, pDestination);
+	}
+	
+	/**
+	 * A move that represents the intention to move pCard
+	 * to pDestination, possibly including all cards stacked
+	 * on top of pCard if pCard is in a working stack.
+	 */
+	private class CardMove implements Move
+	{
+		private Card aCard;
+		private Location aOrigin; 
+		private Location aDestination; 
+		
+		CardMove(Card pCard, Location pDestination)
+		{
+			aCard = pCard;
+			aDestination = pDestination;
+			aOrigin = find(pCard);
+		}
+
+		@Override
+		public void perform()
+		{
+			assert isLegalMove(aCard, aDestination);
+			move(aCard, aDestination);
+		}
+
+		@Override
+		public boolean isNull()
 		{
 			return false;
 		}
