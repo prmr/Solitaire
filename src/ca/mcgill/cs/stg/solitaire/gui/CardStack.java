@@ -22,14 +22,14 @@ package ca.mcgill.cs.stg.solitaire.gui;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.CardImages;
-import ca.mcgill.cs.stg.solitaire.model.CardView;
 import ca.mcgill.cs.stg.solitaire.model.GameModel;
-import ca.mcgill.cs.stg.solitaire.model.GameModelListener;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
+import ca.mcgill.cs.stg.solitaire.model.GameModelListener;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
@@ -58,12 +58,24 @@ public class CardStack extends StackPane implements GameModelListener
     	GameModel.instance().addListener(this);
 	}
 	
+	private static Image getImage(Card pCard)
+	{
+		if( GameModel.instance().isVisibleInWorkingStack(pCard) )
+		{
+			return CardImages.getCard(pCard);
+		}
+		else
+		{
+			return CardImages.getBack();
+		}
+	}
+	
 	private void buildLayout()
     {
 		getChildren().clear();
 		
 		int offset = 0;
-		CardView[] stack = GameModel.instance().getStack(aIndex);
+		Card[] stack = GameModel.instance().getStack(aIndex);
 		if( stack.length == 0 ) // this essentially acts as a spacer
 		{
 			ImageView image = new ImageView(CardImages.getBack());
@@ -72,21 +84,21 @@ public class CardStack extends StackPane implements GameModelListener
 			return;
 		}
 		
-		for( CardView cardView : stack)
+		for( Card cardView : stack)
 		{
-			final ImageView image = new ImageView(cardView.getImage());
+			final ImageView image = new ImageView(getImage(cardView));
         	image.setTranslateY(Y_OFFSET * offset);
         	offset++;
         	getChildren().add(image);
         
-        	setOnDragOver(createDragOverHandler(image, cardView.getCard()));
-    		setOnDragEntered(createDragEnteredHandler(image, cardView.getCard()));
-    		setOnDragExited(createDragExitedHandler(image, cardView.getCard()));
-    		setOnDragDropped(createDragDroppedHandler(image, cardView.getCard()));
+        	setOnDragOver(createDragOverHandler(image, cardView));
+    		setOnDragEntered(createDragEnteredHandler(image, cardView));
+    		setOnDragExited(createDragExitedHandler(image, cardView));
+    		setOnDragDropped(createDragDroppedHandler(image, cardView));
     		
-        	if( cardView.isVisible() )
+        	if( GameModel.instance().isVisibleInWorkingStack(cardView))
         	{
-        		image.setOnDragDetected(createDragDetectedHandler(image, cardView.getCard()));
+        		image.setOnDragDetected(createDragDetectedHandler(image, cardView));
         	}
 		}
     }

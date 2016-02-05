@@ -92,18 +92,18 @@ public class TestGameModel
 	public void testGetStack()
 	{
 		GameModel model = GameModel.instance();
-		CardView[] stack = model.getStack(StackIndex.FIRST);
-		assertEquals(Card.get(Rank.KING, Suit.SPADES), stack[0].getCard());
+		Card[] stack = model.getStack(StackIndex.FIRST);
+		assertEquals(Card.get(Rank.KING, Suit.SPADES), stack[0]);
 		assertEquals(1, stack.length);
 		// Test that the method returns a clone
-		stack[0] = new CardView(Card.get(Rank.QUEEN, Suit.CLUBS));
+		stack[0] =Card.get(Rank.QUEEN, Suit.CLUBS);
 		stack = model.getStack(StackIndex.FIRST);
-		assertEquals(Card.get(Rank.KING, Suit.SPADES), stack[0].getCard());
+		assertEquals(Card.get(Rank.KING, Suit.SPADES), stack[0]);
 		assertEquals(1, stack.length);
 		stack = model.getStack(StackIndex.SECOND);
 		assertEquals(2, stack.length);
-		assertEquals(Card.get(Rank.QUEEN, Suit.SPADES), stack[0].getCard());
-		assertEquals(Card.get(Rank.JACK, Suit.SPADES), stack[1].getCard());
+		assertEquals(Card.get(Rank.QUEEN, Suit.SPADES), stack[0]);
+		assertEquals(Card.get(Rank.JACK, Suit.SPADES), stack[1]);
 	}
 	
 	@Test
@@ -206,7 +206,7 @@ public class TestGameModel
 		stack = model.getSubStack(Card.get(Rank.JACK, Suit.SPADES), StackIndex.SEVENTH);
 		assertEquals(10, model.getStack(StackIndex.SEVENTH).length);
 		model.getCardMove(model.getSubStack(Card.get(Rank.QUEEN, Suit.DIAMONDS), StackIndex.SEVENTH)[0], StackIndex.FIRST).perform();
-		CardView[] stack2 = model.getStack(StackIndex.FIRST);
+		Card[] stack2 = model.getStack(StackIndex.FIRST);
 		assertEquals(5, stack2.length);
 	}
 	

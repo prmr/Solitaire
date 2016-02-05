@@ -56,7 +56,14 @@ public interface GameModelView
 	 * @param pIndex The position of the stack to return.
 	 * @return A copy of the stack at position pIndex
 	 */
-	CardView[] getStack(StackIndex pIndex);
+	Card[] getStack(StackIndex pIndex);
+	
+	/**
+	 * @param pCard A card to test for visibility.
+	 * @return True if the card's value is visible in
+	 * a working stack.
+	 */
+	boolean isVisibleInWorkingStack(Card pCard);
 	
 	/**
 	 * Determines if pCard can be moved to pLocation

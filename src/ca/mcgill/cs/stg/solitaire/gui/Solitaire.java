@@ -97,6 +97,10 @@ public class Solitaire extends Application
 				{
 					GameModel.instance().tryToAutoPlay();
 				}
+				else if( pEvent.getCharacter().equals("\b"))
+				{
+					GameModel.instance().undoLast();
+				}
 				pEvent.consume();
 			}
         	

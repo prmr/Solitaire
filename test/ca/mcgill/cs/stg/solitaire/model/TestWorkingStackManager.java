@@ -96,9 +96,9 @@ public class TestWorkingStackManager
 		aWorkingStackManager.push(Card.get(Rank.FOUR, Suit.CLUBS), StackIndex.FIRST);
 		aWorkingStackManager.push(Card.get(Rank.THREE, Suit.DIAMONDS), StackIndex.FIRST);
 		Card[] sequence = aWorkingStackManager.removeSequence(Card.get(Rank.NINE, Suit.DIAMONDS), StackIndex.FIRST);
-		CardView[] stack = aWorkingStackManager.getStack(StackIndex.FIRST);
+		Card[] stack = aWorkingStackManager.getStack(StackIndex.FIRST);
 		assertEquals(1, stack.length);
-		assertEquals(Card.get(Rank.TEN, Suit.CLUBS), stack[0].getCard());
+		assertEquals(Card.get(Rank.TEN, Suit.CLUBS), stack[0]);
 		assertEquals( 7, sequence.length);
 		assertEquals( Card.get(Rank.NINE, Suit.DIAMONDS), sequence[0]);
 		assertEquals( Card.get(Rank.EIGHT, Suit.CLUBS), sequence[1]);

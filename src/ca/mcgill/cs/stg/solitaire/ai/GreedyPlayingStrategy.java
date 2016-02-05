@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
-import ca.mcgill.cs.stg.solitaire.model.CardView;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
 import ca.mcgill.cs.stg.solitaire.model.GameModelView;
@@ -126,10 +125,10 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 		ArrayList<Move> moves = new ArrayList<>();
 		for(StackIndex index : StackIndex.values())
 		{
-			CardView[] stack = pModel.getStack(index);
+			Card[] stack = pModel.getStack(index);
 			if( stack.length > 0 )
 			{
-				Card card = stack[stack.length-1].getCard();
+				Card card = stack[stack.length-1];
 				for(SuitStackIndex index2 : SuitStackIndex.values())
 				{
 					if( pModel.isLegalMove(card, index2))
@@ -151,27 +150,27 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 		ArrayList<Move> moves = new ArrayList<>();
 		for(StackIndex index : StackIndex.values())
 		{
-			CardView[] stack = pModel.getStack(index);
+			Card[] stack = pModel.getStack(index);
 			for(int i = 0; i < stack.length; i++ )
 			{
-				if( stack[i].isVisible() && i > 0 && !stack[i-1].isVisible() )
+				if( pModel.isVisibleInWorkingStack(stack[i]) && i > 0 && !pModel.isVisibleInWorkingStack(stack[i-1]) )
 				{
 					for( StackIndex index2 : StackIndex.values() )
 					{
-						if( pModel.isLegalMove(stack[i].getCard(), index2))
+						if( pModel.isLegalMove(stack[i], index2))
 						{
-							moves.add(pModel.getCardMove(stack[i].getCard(), index2));
+							moves.add(pModel.getCardMove(stack[i], index2));
 						}
 					}
 				}
-				else if( stack[i].isVisible() && i == 0 )
+				else if( pModel.isVisibleInWorkingStack(stack[i]) && i == 0 )
 				{
 					for( StackIndex index2 : StackIndex.values() )
 					{
 						// we don't want to just move a card around
-						if( pModel.isLegalMove(stack[i].getCard(), index2) && pModel.getStack(index2).length > 0) 
+						if( pModel.isLegalMove(stack[i], index2) && pModel.getStack(index2).length > 0) 
 						{
-							moves.add(pModel.getCardMove(stack[i].getCard(), index2));
+							moves.add(pModel.getCardMove(stack[i], index2));
 						}
 					}
 				}

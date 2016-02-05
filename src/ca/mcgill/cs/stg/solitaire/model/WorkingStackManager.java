@@ -22,8 +22,10 @@ package ca.mcgill.cs.stg.solitaire.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
@@ -37,7 +39,8 @@ import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
  */
 class WorkingStackManager
 {
-	private Map<StackIndex, Stack<CardView>> aStacks = new HashMap<>();
+	private Map<StackIndex, Stack<Card>> aStacks = new HashMap<>();
+	private Set<Card> aVisible = new HashSet<>();
 	
 	/**
 	 * Creates working stacks with no cards in them.
@@ -46,7 +49,7 @@ class WorkingStackManager
 	{
 		for( StackIndex index : StackIndex.values() )
 		{
-			aStacks.put(index, new Stack<CardView>());
+			aStacks.put(index, new Stack<Card>());
 		}
 	}
 	
@@ -55,54 +58,55 @@ class WorkingStackManager
 	 */
 	void initialize(Deck pDeck)
 	{
+		aVisible.clear();
 		for( int i = 0; i < StackIndex.values().length; i++ )
 		{
 			aStacks.get(StackIndex.values()[i]).clear();
 			for( int j = 0; j < i+1; j++ )
 			{
-				CardView view = new CardView(pDeck.draw());
+				Card card = pDeck.draw();
+				aStacks.get(StackIndex.values()[i]).push(card);
 				if( j == i )
 				{
-					view.makeVisible();
+					aVisible.add(card);
 				}
-				aStacks.get(StackIndex.values()[i]).push(view);
 			}
 		}
 	}
 	
 	boolean canMoveTo(Card pCard, StackIndex pIndex )
 	{
-		Stack<CardView> stack = aStacks.get(pIndex);
+		Stack<Card> stack = aStacks.get(pIndex);
 		if( stack.isEmpty() )
 		{
 			return pCard.getRank() == Rank.KING;
 		}
 		else
 		{ 
-			return pCard.getRank().ordinal() == stack.peek().getCard().getRank().ordinal()-1 && 
-					!pCard.sameColorAs(stack.peek().getCard());
+			return pCard.getRank().ordinal() == stack.peek().getRank().ordinal()-1 && 
+					!pCard.sameColorAs(stack.peek());
 		}
 	}
 	
-	CardView[] getStack(StackIndex pIndex)
+	Card[] getStack(StackIndex pIndex)
 	{
-		return aStacks.get(pIndex).toArray(new CardView[aStacks.get(pIndex).size()]);
+		return aStacks.get(pIndex).toArray(new Card[aStacks.get(pIndex).size()]);
 	}
 	
 	public Card[] getSequence(Card pCard, StackIndex pIndex)
 	{
-		Stack<CardView> stack = aStacks.get(pIndex);
+		Stack<Card> stack = aStacks.get(pIndex);
 		List<Card> lReturn = new ArrayList<>();
 		boolean aSeen = false;
-		for( CardView card : stack )
+		for( Card card : stack )
 		{
-			if( card.getCard() == pCard )
+			if( card == pCard )
 			{
 				aSeen = true;
 			}
 			if( aSeen )
 			{
-				lReturn.add(card.getCard());
+				lReturn.add(card);
 			}
 		}
 		return lReturn.toArray(new Card[lReturn.size()]);
@@ -118,18 +122,18 @@ class WorkingStackManager
 	 */
 	Card[] removeSequence(Card pCard, StackIndex pIndex)
 	{
-		Stack<CardView> stack = aStacks.get(pIndex);
+		Stack<Card> stack = aStacks.get(pIndex);
 		List<Card> lReturn = new ArrayList<>();
 		boolean aSeen = false;
-		for( CardView card : stack )
+		for( Card card : stack )
 		{
-			if( card.getCard() == pCard )
+			if( card == pCard )
 			{
 				aSeen = true;
 			}
 			if( aSeen )
 			{
-				lReturn.add(card.getCard());
+				lReturn.add(card);
 			}
 		}
 		for( int i = 0; i < lReturn.size(); i++ )
@@ -141,9 +145,9 @@ class WorkingStackManager
 	
 	boolean contains(Card pCard, StackIndex pIndex)
 	{
-		for( CardView card : aStacks.get(pIndex))
+		for( Card card : aStacks.get(pIndex))
 		{
-			if( card.getCard() == pCard )
+			if( card == pCard )
 			{
 				return true;
 			}
@@ -151,20 +155,37 @@ class WorkingStackManager
 		return false;
 	}
 	
+	boolean contains(Card pCard)
+	{
+		for( StackIndex index : StackIndex.values())
+		{
+			if( contains(pCard, index))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	boolean isVisible(Card pCard)
+	{
+		assert contains(pCard);
+		return aVisible.contains(pCard);
+	}
+	
 	void pop(StackIndex pIndex)
 	{
 		assert !aStacks.get(pIndex).isEmpty();
-		aStacks.get(pIndex).pop();
+		aVisible.remove(aStacks.get(pIndex).pop());
 		if( !aStacks.get(pIndex).isEmpty())
 		{
-			aStacks.get(pIndex).peek().makeVisible();
+			aVisible.add(aStacks.get(pIndex).peek());
 		}
 	}
 	
 	void push(Card pCard, StackIndex pIndex)
 	{
-		CardView cardView = new CardView(pCard);
-		cardView.makeVisible();
-		aStacks.get(pIndex).push(cardView);
+		aStacks.get(pIndex).push(pCard);
+		aVisible.add(pCard);
 	}
 }

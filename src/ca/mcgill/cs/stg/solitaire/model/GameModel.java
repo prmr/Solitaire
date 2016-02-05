@@ -62,6 +62,10 @@ public final class GameModel implements GameModelView
 		{
 			return true;
 		}
+
+		@Override
+		public void undo()
+		{} // Does nothing on purpose
 	};
 	
 	private final Move aDiscardMove = new Move()
@@ -71,6 +75,7 @@ public final class GameModel implements GameModelView
 		{
 			assert !isEmptyDeck();	
 			aDiscard.push(aDeck.draw());
+			aMoves.push(this);
 			notifyListeners();
 		}
 
@@ -79,9 +84,18 @@ public final class GameModel implements GameModelView
 		{
 			return false;
 		}
+
+		@Override
+		public void undo()
+		{
+			assert !isEmptyDiscardPile();
+			aDeck.push(aDiscard.pop());
+			notifyListeners();
+		}
 	};
 	
 	private Deck aDeck = new Deck();
+	private Stack<Move> aMoves = new Stack<>();
 	private Stack<Card> aDiscard = new Stack<>();
 	private SuitStackManager aSuitStacks = new SuitStackManager();
 	private WorkingStackManager aWorkingStacks = new WorkingStackManager();
@@ -175,6 +189,7 @@ public final class GameModel implements GameModelView
 	 */
 	public void reset()
 	{
+		aMoves.clear();
 		aDeck.shuffle();
 		aDiscard.clear();
 		aSuitStacks.initialize();
@@ -259,6 +274,17 @@ public final class GameModel implements GameModelView
 	}
 	
 	/**
+	 * Undoes the last move.
+	 */
+	public void undoLast()
+	{
+		if( !aMoves.isEmpty() )
+		{
+			aMoves.pop().undo();
+		}
+	}
+	
+	/**
 	 * Moves pCard from the source to the destination. Assumes this
 	 * is a legal move.
 	 * @param pCard The card to move. Not null.
@@ -311,9 +337,15 @@ public final class GameModel implements GameModelView
 	}
 	
 	@Override
-	public CardView[] getStack(StackIndex pIndex)
+	public Card[] getStack(StackIndex pIndex)
 	{
 		return aWorkingStacks.getStack(pIndex); 
+	}
+	
+	@Override
+	public boolean isVisibleInWorkingStack(Card pCard)
+	{
+		return aWorkingStacks.contains(pCard) && aWorkingStacks.isVisible(pCard);
 	}
 	
 	/**
@@ -387,12 +419,20 @@ public final class GameModel implements GameModelView
 		{
 			assert isLegalMove(aCard, aDestination);
 			move(aCard, aDestination);
+			aMoves.push(this);
 		}
 
 		@Override
 		public boolean isNull()
 		{
 			return false;
+		}
+
+		@Override
+		public void undo()
+		{
+			assert isLegalMove(aCard, aOrigin);
+			move(aCard, aOrigin);
 		}
 	}
 }

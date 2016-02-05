@@ -65,6 +65,18 @@ public class Deck
 	}
 	
 	/**
+	 * Places pCard on top of the deck.
+	 * @param pCard The card to place on top
+	 * of the deck.
+	 * @pre pCard !=null
+	 */
+	public void push(Card pCard)
+	{
+		assert pCard != null;
+		aCards.push(pCard);
+	}
+	
+	/**
 	 * Draws a card from the deck and removes the card from the deck.
 	 * @return The card drawn.
 	 * @pre initial.size() > 0

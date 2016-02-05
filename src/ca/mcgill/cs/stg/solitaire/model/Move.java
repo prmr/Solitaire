@@ -32,6 +32,12 @@ public interface Move
 	void perform();
 	
 	/**
+	 * Undoes the move by reversing
+	 * its effect.
+	 */
+	void undo();
+	
+	/**
 	 * @return True if the move is not a move that
 	 * advances the game.
 	 */
