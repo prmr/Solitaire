@@ -93,6 +93,43 @@ class WorkingStackManager
 		return aStacks.get(pIndex).toArray(new Card[aStacks.get(pIndex).size()]);
 	}
 	
+	/**
+	 * Returns true if moving pCard away reveals the top of the card.
+	 * @param pCard
+	 * @param pIndex
+	 * @return
+	 */
+	boolean revealsTop(Card pCard, StackIndex pIndex)
+	{
+		int indexOf = aStacks.get(pIndex).indexOf(pCard);
+		if( indexOf < 1 )
+		{
+			return false;
+		}
+		return aVisible.contains(aStacks.get(pIndex).get(indexOf));
+	}
+	
+	/*
+	 * Move pCard and all the cards below to pDestination
+     * @pre this is a legal move
+	 */
+	void moveWithin(Card pCard, StackIndex pOrigin, StackIndex pDestination )
+	{
+		Stack<Card> temp = new Stack<>();
+		Card card = aStacks.get(pOrigin).pop();
+		temp.push(card);
+		while( card != pCard )
+		{
+			card = aStacks.get(pOrigin).pop();
+			temp.push(card);
+		}
+		while( !temp.isEmpty() )
+		{
+			aStacks.get(pDestination).push(temp.pop());
+		}
+		
+	}
+	
 	public Card[] getSequence(Card pCard, StackIndex pIndex)
 	{
 		Stack<Card> stack = aStacks.get(pIndex);
@@ -112,35 +149,16 @@ class WorkingStackManager
 		return lReturn.toArray(new Card[lReturn.size()]);
 	}
 	
-	/**
-	 * Removes and returns a sequence of cards starting at 
-	 * pCard and running until the top of the stack.
-	 * @param pCard The card to start the sequence at.
-	 * @param pIndex The stack index.
-	 * @return The first card was further from the bottom
-	 * of the stack.
-	 */
-	Card[] removeSequence(Card pCard, StackIndex pIndex)
+	void showTop(StackIndex pIndex)
 	{
-		Stack<Card> stack = aStacks.get(pIndex);
-		List<Card> lReturn = new ArrayList<>();
-		boolean aSeen = false;
-		for( Card card : stack )
-		{
-			if( card == pCard )
-			{
-				aSeen = true;
-			}
-			if( aSeen )
-			{
-				lReturn.add(card);
-			}
-		}
-		for( int i = 0; i < lReturn.size(); i++ )
-		{
-			pop(pIndex);
-		}
-		return lReturn.toArray(new Card[lReturn.size()]);
+		assert !aStacks.get(pIndex).isEmpty();
+		aVisible.add(aStacks.get(pIndex).peek());
+	}
+	
+	void hideTop(StackIndex pIndex)
+	{
+		assert !aStacks.get(pIndex).isEmpty();
+		aVisible.remove(aStacks.get(pIndex).peek());
 	}
 	
 	boolean contains(Card pCard, StackIndex pIndex)

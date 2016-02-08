@@ -285,55 +285,60 @@ public final class GameModel implements GameModelView
 	}
 	
 	/**
-	 * Moves pCard from the source to the destination. Assumes this
-	 * is a legal move.
-	 * @param pCard The card to move. Not null.
-	 * @param pDestination The destination location.
+	 * @return If there is a move to undo.
 	 */
-	private void move(Card pCard, Location pDestination)
+	public boolean canUndo()
 	{
-		assert isLegalMove(pCard, pDestination);
-		Location source = find(pCard);
-		Card[] cardsToMove = processSource(pCard, source);
-		if( pDestination instanceof SuitStackIndex )
+		return !aMoves.isEmpty();
+	}
+	
+	/*
+	 * Removes the moveable card from pLocation.
+	 */
+	private void absorbCard(Location pLocation)
+	{
+		if( pLocation == CardSources.DISCARD_PILE )
 		{
-			for( Card card : cardsToMove )
-			{
-				aSuitStacks.push(card, (SuitStackIndex)pDestination);
-			}
+			assert !aDiscard.isEmpty();
+			aDiscard.pop();
+		}
+		else if( pLocation instanceof SuitStackIndex )
+		{
+			assert aSuitStacks.isEmpty((SuitStackIndex)pLocation);
+			aSuitStacks.pop((SuitStackIndex)pLocation);
 		}
 		else
 		{
-			assert pDestination instanceof StackIndex;
-			for( Card card : cardsToMove )
+			assert pLocation instanceof StackIndex;
+			aWorkingStacks.pop((StackIndex)pLocation);
+		}
+	}
+	
+	private void move(Card pCard, Location pDestination)
+	{
+		Location source = find(pCard);
+		if( source instanceof StackIndex && pDestination instanceof StackIndex )
+		{
+			aWorkingStacks.moveWithin(pCard, (StackIndex)source, (StackIndex) pDestination);
+		}
+		else
+		{
+			absorbCard(source);
+			if( pDestination instanceof SuitStackIndex )
 			{
-				aWorkingStacks.push(card, (StackIndex)pDestination);
+				aSuitStacks.push(pCard, (SuitStackIndex)pDestination);
+			}
+			else if( pDestination == CardSources.DISCARD_PILE )
+			{
+				aDiscard.push(pCard);
+			}
+			else
+			{
+				assert pDestination instanceof StackIndex;
+				aWorkingStacks.push(pCard, (StackIndex)pDestination);
 			}
 		}
 		notifyListeners();
-	}
-	
-	private Card[] processSource(Card pCard, Location pSource)
-	{
-		if( pSource == CardSources.DISCARD_PILE )
-		{
-			assert !aDiscard.isEmpty() && aDiscard.peek() == pCard;
-			aDiscard.pop();
-			return new Card[]{pCard};
-		}
-		else if( pSource instanceof SuitStackIndex )
-		{
-			assert !aSuitStacks.isEmpty((SuitStackIndex)pSource) && 
-				aSuitStacks.peek((SuitStackIndex)pSource) == pCard;
-			aSuitStacks.pop((SuitStackIndex)pSource);
-			return new Card[]{pCard};
-		}
-		else
-		{
-			assert pSource instanceof StackIndex && 
-				aWorkingStacks.contains(pCard, (StackIndex)pSource);
-			return aWorkingStacks.removeSequence(pCard, (StackIndex)pSource);
-		}
 	}
 	
 	@Override
@@ -393,8 +398,13 @@ public final class GameModel implements GameModelView
 	@Override
 	public Move getCardMove(Card pCard, Location pDestination)
 	{
+		Location source = find( pCard );
+		if( source instanceof StackIndex  && aWorkingStacks.revealsTop(pCard, (StackIndex)source))
+		{
+			return new CompositeMove(new CardMove(pCard, pDestination), new RevealTopMove((StackIndex)source) );
+		}
 		return new CardMove(pCard, pDestination);
-	}
+	} 
 	
 	/**
 	 * A move that represents the intention to move pCard
@@ -431,8 +441,43 @@ public final class GameModel implements GameModelView
 		@Override
 		public void undo()
 		{
-			assert isLegalMove(aCard, aOrigin);
 			move(aCard, aOrigin);
+		}
+	}
+	
+	/**
+	 * reveals the top of the stack.
+	 *
+	 */
+	private class RevealTopMove implements Move
+	{
+		private final StackIndex aIndex;
+		
+		RevealTopMove(StackIndex pIndex)
+		{
+			aIndex = pIndex;
+		}
+		
+		@Override
+		public void perform()
+		{
+			aWorkingStacks.showTop(aIndex);
+			aMoves.push(this);
+			notifyListeners();
+		}
+
+		@Override
+		public boolean isNull()
+		{
+			return false;
+		}
+
+		@Override
+		public void undo()
+		{
+			aWorkingStacks.hideTop(aIndex);
+			aMoves.pop().undo();
+			notifyListeners();
 		}
 	}
 }

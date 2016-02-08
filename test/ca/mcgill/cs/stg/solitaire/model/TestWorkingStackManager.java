@@ -85,26 +85,6 @@ public class TestWorkingStackManager
 	}
 	
 	@Test
-	public void testRemoveSequence()
-	{
-		aWorkingStackManager.push(Card.get(Rank.TEN, Suit.CLUBS), StackIndex.FIRST);
-		aWorkingStackManager.push(Card.get(Rank.NINE, Suit.DIAMONDS), StackIndex.FIRST);
-		aWorkingStackManager.push(Card.get(Rank.EIGHT, Suit.CLUBS), StackIndex.FIRST);
-		aWorkingStackManager.push(Card.get(Rank.SEVEN, Suit.DIAMONDS), StackIndex.FIRST);
-		aWorkingStackManager.push(Card.get(Rank.SIX, Suit.CLUBS), StackIndex.FIRST);
-		aWorkingStackManager.push(Card.get(Rank.FIVE, Suit.DIAMONDS), StackIndex.FIRST);
-		aWorkingStackManager.push(Card.get(Rank.FOUR, Suit.CLUBS), StackIndex.FIRST);
-		aWorkingStackManager.push(Card.get(Rank.THREE, Suit.DIAMONDS), StackIndex.FIRST);
-		Card[] sequence = aWorkingStackManager.removeSequence(Card.get(Rank.NINE, Suit.DIAMONDS), StackIndex.FIRST);
-		Card[] stack = aWorkingStackManager.getStack(StackIndex.FIRST);
-		assertEquals(1, stack.length);
-		assertEquals(Card.get(Rank.TEN, Suit.CLUBS), stack[0]);
-		assertEquals( 7, sequence.length);
-		assertEquals( Card.get(Rank.NINE, Suit.DIAMONDS), sequence[0]);
-		assertEquals( Card.get(Rank.EIGHT, Suit.CLUBS), sequence[1]);
-	}
-	
-	@Test
 	public void testCanMoveTo()
 	{
 		assertFalse(aWorkingStackManager.canMoveTo(CAC, StackIndex.FIRST)); 
@@ -132,5 +112,32 @@ public class TestWorkingStackManager
 		sequence = aWorkingStackManager.getSequence(C4C, StackIndex.SECOND);
 		assertEquals(1, sequence.length);
 		assertEquals(C4C, sequence[0]);
+	}
+	
+	@Test 
+	public void testMoveWithin()
+	{
+		Deck deck = new Deck();
+		aWorkingStackManager.initialize(deck);
+		Card[] stack2a = aWorkingStackManager.getStack(StackIndex.SECOND);
+		Card[] stack4a = aWorkingStackManager.getStack(StackIndex.FOURTH);
+		aWorkingStackManager.moveWithin(stack2a[1], StackIndex.SECOND, StackIndex.FOURTH);
+		Card[] stack2b = aWorkingStackManager.getStack(StackIndex.SECOND);
+		Card[] stack4b = aWorkingStackManager.getStack(StackIndex.FOURTH);
+		assertEquals(1,stack2b.length);
+		assertEquals(5,stack4b.length);
+		assertEquals(stack2a[0], stack2b[0]);
+		assertEquals(stack4a[0], stack4b[0]);
+		assertEquals(stack4a[1], stack4b[1]);
+		assertEquals(stack4a[2], stack4b[2]);
+		assertEquals(stack4a[3], stack4b[3]);
+		assertEquals(stack2a[1], stack4b[4]);
+		assertTrue(aWorkingStackManager.isVisible(stack4b[4]));
+		aWorkingStackManager.moveWithin(stack4b[3], StackIndex.FOURTH, StackIndex.SECOND);
+		Card[] stack2c = aWorkingStackManager.getStack(StackIndex.SECOND);
+		assertEquals(3,stack2c.length);
+		assertEquals(stack2a[0], stack2c[0]);
+		assertEquals(stack4b[3], stack2c[1]);
+		assertEquals(stack4b[4], stack2c[2]);
 	}
 }
