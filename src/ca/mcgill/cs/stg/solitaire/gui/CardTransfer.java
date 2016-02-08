@@ -81,12 +81,4 @@ public class CardTransfer
 	{
 		return aCards.length;
 	}
-	
-	/**
-	 * @return The array of cards transfered.
-	 */
-	public Card[] getCards()
-	{
-		return aCards.clone();
-	}
 }

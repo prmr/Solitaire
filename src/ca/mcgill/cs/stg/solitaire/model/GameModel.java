@@ -24,8 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import ca.mcgill.cs.stg.solitaire.ai.GreedyPlayingStrategy;
+import ca.mcgill.cs.stg.solitaire.ai.PlayingStrategy;
 import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
+import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
 import ca.mcgill.cs.stg.solitaire.cards.Deck;
 
 /**
@@ -44,7 +47,7 @@ import ca.mcgill.cs.stg.solitaire.cards.Deck;
  * in charge of managing the state. However, these manager classes
  * are not responsible for notifying observers.
  */
-public final class GameModel 
+public final class GameModel implements GameModelView
 {
 	private static final GameModel INSTANCE = new GameModel();
 	
@@ -53,19 +56,33 @@ public final class GameModel
 	private SuitStackManager aSuitStacks = new SuitStackManager();
 	private WorkingStackManager aWorkingStacks = new WorkingStackManager();
 	private List<GameModelListener> aListeners = new ArrayList<>();
+	private PlayingStrategy aPlayingStrategy = new GreedyPlayingStrategy();
+	
+	/**
+	 * Represents anywhere a card can be placed in 
+	 * Solitaire.
+	 */
+	public interface Location 
+	{}
+	
+	/**
+	 * Places where a card can be obtained.
+	 */
+	public enum CardSources implements Location
+	{ DISCARD_PILE  }
 	
 	/**
 	 * Represents the different stacks where cards
 	 * can be accumulated.
 	 */
-	public enum StackIndex 
+	public enum StackIndex implements Location
 	{ FIRST, SECOND, THIRD, FOURTH, FIFTH, SIXTH, SEVENTH }
 	
 	/**
 	 * Represents the different stacks where completed
 	 * suits can be accumulated.
 	 */
-	public enum SuitStackIndex
+	public enum SuitStackIndex implements Location
 	{
 		FIRST, SECOND, THIRD, FOURTH;
 	}
@@ -73,6 +90,28 @@ public final class GameModel
 	private GameModel()
 	{
 		reset();
+	}
+	
+	/**
+	 * @return The number of cards in the suit stacks.
+	 */
+	public int getScore()
+	{
+		return aSuitStacks.getScore();
+	}
+	
+	/**
+	 * Try to automatically make a move. 
+	 * This may result in nothing happening
+	 * if the auto-play strategy cannot make a 
+	 * decision.
+	 * @return whether a move was performed or not.
+	 */
+	public boolean tryToAutoPlay()
+	{
+		Move move = aPlayingStrategy.computeNextMove(this);
+		move.perform(this);
+		return !(move instanceof NullMove);
 	}
 	
 	/**
@@ -118,29 +157,22 @@ public final class GameModel
 	 */
 	public boolean isCompleted()
 	{
-		return aSuitStacks.isCompleted();
+		return aSuitStacks.getScore() == Rank.values().length * Suit.values().length;
 	}
 	
-	/**
-	 * @return True if the deck has no card left in it.
-	 */
+	@Override
 	public boolean isEmptyDeck()
 	{
 		return aDeck.size() == 0;
 	}
 	
-	/**
-	 * @return True if the discard pile has no card in it.
-	 */
+	@Override
 	public boolean isEmptyDiscardPile()
 	{
 		return aDiscard.size() == 0;
 	}
 	
-	/**
-	 * @param pIndex The suit stack to check
-	 * @return True if the suit stack for pSuit is empty
-	 */
+	@Override
 	public boolean isEmptySuitStack(SuitStackIndex pIndex)
 	{
 		return aSuitStacks.isEmpty(pIndex);
@@ -159,58 +191,6 @@ public final class GameModel
 	}
 	
 	/**
-	 * @param pCard The card to test
-	 * @param pIndex The suitstack to test
-	 * @return True if pCard can be moved to the top of its suit stack.
-	 * This is only possible if its rank is immediately superior
-	 * to that of the card currently on top of the suit stack.
-	 */
-	public boolean canMoveToSuitStack(Card pCard, SuitStackIndex pIndex )
-	{
-		assert pCard != null && pIndex != null;
-		if( aSuitStacks.isEmpty(pIndex))
-		{
-			return pCard.getRank() == Rank.ACE;
-		}
-		else
-		{
-			Card top =  aSuitStacks.peek(pIndex);
-			return pCard.getSuit() == top.getSuit() && pCard.getRank().ordinal() == top.getRank().ordinal()+1;
-		}
-	}
-	
-	/**
-	 * Moves pCard from wherever it is in a legally 
-	 * movable position and adds it to a suit stack.
-	 * @param pCard The card to move.
-	 * @param pIndex The index of the stack to move the card to.
-	 */
-	public void moveToSuitStack(Card pCard, SuitStackIndex pIndex)
-	{
-		assert canMoveToSuitStack(pCard, pIndex);
-		if( !aDiscard.isEmpty() && aDiscard.peek() == pCard )
-		{
-			aDiscard.pop();
-		}
-		else if( aWorkingStacks.isInStacks(pCard))
-		{
-			aWorkingStacks.pop(pCard);
-		}
-		else
-		{
-			for( SuitStackIndex index : SuitStackIndex.values())
-			{
-				if( !aSuitStacks.isEmpty(index) && aSuitStacks.peek(index) == pCard )
-				{
-					aSuitStacks.pop(index);
-				}
-			}
-		}
-		aSuitStacks.push(pCard, pIndex);
-		notifyListeners();
-	}
-	
-	/**
 	 * Obtain the card on top of the suit stack for
 	 * pIndex without discarding it.
 	 * @param pIndex The index of the stack to check
@@ -223,10 +203,7 @@ public final class GameModel
 		return aSuitStacks.peek(pIndex);
 	}
 	
-	/**
-	 * @return The card on top of the discard pile.
-	 * @pre !emptyDiscardPile()
-	 */
+	@Override
 	public Card peekDiscardPile()
 	{
 		assert aDiscard.size() != 0;
@@ -234,73 +211,88 @@ public final class GameModel
 	}
 	
 	/**
-	 * @param pCard The card to move 
-	 * @param pIndex The index of the stack of interest.
-	 * @return True if pCard can be moved to the top of the working
-	 * stack indexed at pIndex
+	 * @param pCard A card to locate
+	 * @return The game location where this card currently is.
+	 * @pre the card is in a location where it can be found and moved.
 	 */
-	public boolean canMoveToWorkingStack(Card pCard, StackIndex pIndex )
+	private Location find(Card pCard)
 	{
-		return aWorkingStacks.canMoveTo(pCard, pIndex); 
+		if( !aDiscard.isEmpty() && aDiscard.peek() == pCard )
+		{
+			return CardSources.DISCARD_PILE;
+		}
+		for( SuitStackIndex index : SuitStackIndex.values() )
+		{
+			if( !aSuitStacks.isEmpty(index) && aSuitStacks.peek(index) == pCard )
+			{
+				return index;
+			}
+		}
+		for( StackIndex index : StackIndex.values() )
+		{
+			if( aWorkingStacks.contains(pCard, index))
+			{
+				return index;
+			}
+		}
+		
+		assert false; // We did not find the card: the precondition was not met.
+		return null;
 	}
 	
 	/**
-	 * Move the sequence of cards pCards (ordered higher-rank to
-	 * lower-rank) to the working stack at pIndex.
-	 * @param pCards The cards to move to the stack.
-	 * @param pIndex The index of the stack
-	 * @pre This is assumed to be a valid move
+	 * Moves pCard from the source to the destination. Assumes this
+	 * is a legal move.
+	 * @param pCard The card to move. Not null.
+	 * @param pDestination The destination location.
 	 */
-	public void moveToWorkingStack(Card[] pCards, StackIndex pIndex)
+	public void move(Card pCard, Location pDestination)
 	{
-		// If there is only one card, move it
-		if( pCards.length == 1 )
+		assert isLegalMove(pCard, pDestination);
+		Location source = find(pCard);
+		Card[] cardsToMove = processSource(pCard, source);
+		if( pDestination instanceof SuitStackIndex )
 		{
-			moveOneCardToWorkingStack( pCards[0], pIndex);
-		}
-		else // The source is a working stack, unwind
-		{
-			Stack<Card> temp = new Stack<>();
-			for( int i = pCards.length-1; i >=0; i-- )
+			for( Card card : cardsToMove )
 			{
-				aWorkingStacks.pop(pCards[i]);
-				temp.push(pCards[i]);
+				aSuitStacks.push(card, (SuitStackIndex)pDestination);
 			}
-			while( !temp.isEmpty() )
+		}
+		else
+		{
+			assert pDestination instanceof StackIndex;
+			for( Card card : cardsToMove )
 			{
-				aWorkingStacks.push(temp.pop(), pIndex);
+				aWorkingStacks.push(card, (StackIndex)pDestination);
 			}
 		}
 		notifyListeners();
 	}
 	
-	private void moveOneCardToWorkingStack( Card pCard, StackIndex pIndex)
+	private Card[] processSource(Card pCard, Location pSource)
 	{
-		if( !aDiscard.isEmpty() && aDiscard.peek() == pCard )
+		if( pSource == CardSources.DISCARD_PILE )
 		{
+			assert !aDiscard.isEmpty() && aDiscard.peek() == pCard;
 			aDiscard.pop();
+			return new Card[]{pCard};
 		}
-		else if( aWorkingStacks.isInStacks(pCard))
+		else if( pSource instanceof SuitStackIndex )
 		{
-			aWorkingStacks.pop(pCard);
+			assert !aSuitStacks.isEmpty((SuitStackIndex)pSource) && 
+				aSuitStacks.peek((SuitStackIndex)pSource) == pCard;
+			aSuitStacks.pop((SuitStackIndex)pSource);
+			return new Card[]{pCard};
 		}
-		else 
+		else
 		{
-			for( SuitStackIndex index : SuitStackIndex.values())
-			{
-				if( !aSuitStacks.isEmpty(index) && aSuitStacks.peek(index) == pCard )
-				{
-					aSuitStacks.pop(index);
-				}
-			}
+			assert pSource instanceof StackIndex && 
+				aWorkingStacks.contains(pCard, (StackIndex)pSource);
+			return aWorkingStacks.removeSequence(pCard, (StackIndex)pSource);
 		}
-		aWorkingStacks.push(pCard, pIndex);
 	}
 	
-	/**
-	 * @param pIndex The position of the stack to return.
-	 * @return A copy of the stack at position pIndex
-	 */
+	@Override
 	public CardView[] getStack(StackIndex pIndex)
 	{
 		return aWorkingStacks.getStack(pIndex); 
@@ -319,4 +311,20 @@ public final class GameModel
 		return aWorkingStacks.getSequence(pCard, pIndex);
 	}
 
+	@Override
+	public boolean isLegalMove(Card pCard, Location pDestination )
+	{ 
+		if( pDestination instanceof SuitStackIndex )
+		{
+			return aSuitStacks.canMoveTo(pCard, (SuitStackIndex) pDestination);
+		}
+		else if( pDestination instanceof StackIndex )
+		{
+			return aWorkingStacks.canMoveTo(pCard, (StackIndex) pDestination);
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

@@ -108,11 +108,42 @@ class WorkingStackManager
 		return lReturn.toArray(new Card[lReturn.size()]);
 	}
 	
-	boolean isInStacks(Card pCard )
+	/**
+	 * Removes and returns a sequence of cards starting at 
+	 * pCard and running until the top of the stack.
+	 * @param pCard The card to start the sequence at.
+	 * @param pIndex The stack index.
+	 * @return The first card was further from the bottom
+	 * of the stack.
+	 */
+	Card[] removeSequence(Card pCard, StackIndex pIndex)
 	{
-		for( Stack<CardView> cardView : aStacks.values() )
+		Stack<CardView> stack = aStacks.get(pIndex);
+		List<Card> lReturn = new ArrayList<>();
+		boolean aSeen = false;
+		for( CardView card : stack )
 		{
-			if(!cardView.isEmpty() && cardView.peek().getCard() == pCard )
+			if( card.getCard() == pCard )
+			{
+				aSeen = true;
+			}
+			if( aSeen )
+			{
+				lReturn.add(card.getCard());
+			}
+		}
+		for( int i = 0; i < lReturn.size(); i++ )
+		{
+			pop(pIndex);
+		}
+		return lReturn.toArray(new Card[lReturn.size()]);
+	}
+	
+	boolean contains(Card pCard, StackIndex pIndex)
+	{
+		for( CardView card : aStacks.get(pIndex))
+		{
+			if( card.getCard() == pCard )
 			{
 				return true;
 			}
@@ -120,18 +151,13 @@ class WorkingStackManager
 		return false;
 	}
 	
-	void pop(Card pCard)
+	void pop(StackIndex pIndex)
 	{
-		for( Stack<CardView> cardView : aStacks.values() )
+		assert !aStacks.get(pIndex).isEmpty();
+		aStacks.get(pIndex).pop();
+		if( !aStacks.get(pIndex).isEmpty())
 		{
-			if(!cardView.isEmpty() && cardView.peek().getCard() == pCard )
-			{
-				cardView.pop();
-				if( !cardView.isEmpty() )
-				{
-					cardView.peek().makeVisible();
-				}
-			}
+			aStacks.get(pIndex).peek().makeVisible();
 		}
 	}
 	
@@ -141,6 +167,4 @@ class WorkingStackManager
 		cardView.makeVisible();
 		aStacks.get(pIndex).push(cardView);
 	}
-	
-	
 }

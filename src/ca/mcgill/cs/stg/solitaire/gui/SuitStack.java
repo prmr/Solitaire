@@ -93,7 +93,7 @@ public class SuitStack extends StackPane implements GameModelListener
     	    	if(pEvent.getGestureSource() != pView && pEvent.getDragboard().hasString())
     	    	{
     	    		CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
-    	    		if( transfer.size() == 1 && GameModel.instance().canMoveToSuitStack(transfer.getTop(), aIndex) )
+    	    		if( transfer.size() == 1 && GameModel.instance().isLegalMove(transfer.getTop(), aIndex) )
     	    		{
     	    			pEvent.acceptTransferModes(TransferMode.MOVE);
     	    		}
@@ -111,7 +111,7 @@ public class SuitStack extends StackPane implements GameModelListener
     		public void handle(DragEvent pEvent) 
     		{
     			CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
-	    		if( transfer.size() == 1 && GameModel.instance().canMoveToSuitStack(transfer.getTop(), aIndex) )
+	    		if( transfer.size() == 1 && GameModel.instance().isLegalMove(transfer.getTop(), aIndex) )
     			{
     				setStyle(BORDER_STYLE_DRAGGED);
     			}
@@ -143,7 +143,7 @@ public class SuitStack extends StackPane implements GameModelListener
     			if(db.hasString()) 
     			{
     				CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
-    				GameModel.instance().moveToSuitStack(transfer.getTop(), aIndex);
+    				GameModel.instance().move(transfer.getTop(), aIndex);
     				success = true;
     			}
     			pEvent.setDropCompleted(success);

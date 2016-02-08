@@ -45,6 +45,19 @@ class SuitStackManager
 	}
 	
 	/**
+	 * @return The number of cards in the suit stacks.
+	 */
+	int getScore()
+	{
+		int total = 0;
+		for( Stack<Card> stack : aStacks.values())
+		{
+			total += stack.size();
+		}
+		return total;
+	}
+	
+	/**
 	 * Initialize the internal data structures.
 	 */
 	void initialize()
@@ -65,19 +78,23 @@ class SuitStackManager
 	}
 	
 	/**
-	 * @return True if all cards are in their proper
-	 * suit stack.
+	 * @param pCard The card to test
+	 * @param pIndex The suitstack to test
+	 * @return True if pCard can be moved to the top of its suit stack.
+	 * This is only possible if its rank is immediately superior
+	 * to that of the card currently on top of the suit stack.
 	 */
-	boolean isCompleted()
+	boolean canMoveTo(Card pCard, SuitStackIndex pIndex )
 	{
-		for( Stack<Card> stack : aStacks.values())
+		assert pCard != null && pIndex != null;
+		if( isEmpty(pIndex))
 		{
-			if( stack.size() < Rank.values().length )
-			{
-				return false;
-			}
+			return pCard.getRank() == Rank.ACE;
 		}
-		return true;
+		else
+		{
+			return pCard.getSuit() == peek(pIndex).getSuit() && pCard.getRank().ordinal() == peek(pIndex).getRank().ordinal()+1;
+		}
 	}
 	
 	/**

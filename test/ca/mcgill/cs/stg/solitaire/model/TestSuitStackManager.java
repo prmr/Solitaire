@@ -20,12 +20,11 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.model;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
@@ -72,16 +71,11 @@ public class TestSuitStackManager
 	}
 	
 	@Test
-	public void testIsCompleted()
+	public void testGetScore()
 	{
-		assertFalse( aSuitStackManager.isCompleted() );
-		for( Rank rank : Rank.values() )
-		{
-			for( Suit suit : Suit.values() )
-			{
-				aSuitStackManager.push(Card.get(rank, suit), SuitStackIndex.values()[suit.ordinal()]);
-			}
-		}
-		assertTrue( aSuitStackManager.isCompleted() );
+		assertEquals(0, aSuitStackManager.getScore());
+		aSuitStackManager.push(CAC, SuitStackIndex.FIRST);
+		aSuitStackManager.push(CAD, SuitStackIndex.SECOND);
+		assertEquals(2, aSuitStackManager.getScore());
 	}
 }
