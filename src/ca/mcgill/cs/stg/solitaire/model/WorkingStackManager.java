@@ -106,7 +106,7 @@ class WorkingStackManager
 		{
 			return false;
 		}
-		return aVisible.contains(aStacks.get(pIndex).get(indexOf));
+		return !aVisible.contains(aStacks.get(pIndex).get(indexOf-1));
 	}
 	
 	/*
