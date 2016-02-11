@@ -74,6 +74,36 @@ public class TestWorkingStackManager
 	}
 	
 	@Test
+	public void testRevealsTop()
+	{
+		Deck deck = new Deck();
+		aWorkingStackManager.initialize(deck);
+		Card[] stack = aWorkingStackManager.getStack(StackIndex.FIRST);
+		assertFalse(aWorkingStackManager.revealsTop(stack[0], StackIndex.FIRST));
+		aWorkingStackManager.pop(StackIndex.FIRST);
+		assertFalse(aWorkingStackManager.revealsTop(stack[0], StackIndex.FIRST));
+		assertFalse(aWorkingStackManager.revealsTop(deck.draw(), StackIndex.FIRST));
+		assertFalse(aWorkingStackManager.revealsTop(deck.draw(), StackIndex.SECOND));
+		stack = aWorkingStackManager.getStack(StackIndex.SECOND);
+		assertFalse(aWorkingStackManager.revealsTop(stack[0], StackIndex.SECOND));
+		assertTrue(aWorkingStackManager.revealsTop(stack[1], StackIndex.SECOND));
+		
+		stack = aWorkingStackManager.getStack(StackIndex.THIRD);
+		assertFalse(aWorkingStackManager.revealsTop(stack[0], StackIndex.THIRD));
+		assertFalse(aWorkingStackManager.revealsTop(stack[1], StackIndex.THIRD));
+		assertTrue(aWorkingStackManager.revealsTop(stack[2], StackIndex.THIRD));
+		
+		stack = aWorkingStackManager.getStack(StackIndex.FOURTH);
+		assertFalse(aWorkingStackManager.revealsTop(stack[0], StackIndex.FOURTH));
+		assertFalse(aWorkingStackManager.revealsTop(stack[1], StackIndex.FOURTH));
+		assertFalse(aWorkingStackManager.revealsTop(stack[2], StackIndex.FOURTH));
+		assertTrue(aWorkingStackManager.revealsTop(stack[3], StackIndex.FOURTH));
+		Card card = deck.draw();
+		aWorkingStackManager.push(card, StackIndex.FOURTH);
+		assertFalse(aWorkingStackManager.revealsTop(card, StackIndex.FOURTH));
+	}
+	
+	@Test
 	public void testContains()
 	{
 		assertFalse(aWorkingStackManager.contains(CAC, StackIndex.FIRST));

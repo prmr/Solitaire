@@ -95,9 +95,10 @@ class WorkingStackManager
 	
 	/**
 	 * Returns true if moving pCard away reveals the top of the card.
-	 * @param pCard
-	 * @param pIndex
-	 * @return
+	 * @param pCard The card to test
+	 * @param pIndex The index of the stack.
+	 * @return true if the card above pCard is not visible and pCard
+	 * is visible.
 	 */
 	boolean revealsTop(Card pCard, StackIndex pIndex)
 	{
@@ -106,7 +107,7 @@ class WorkingStackManager
 		{
 			return false;
 		}
-		return !aVisible.contains(aStacks.get(pIndex).get(indexOf-1));
+		return aVisible.contains(pCard) && !aVisible.contains(aStacks.get(pIndex).get(indexOf-1));
 	}
 	
 	/*
