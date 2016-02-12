@@ -170,4 +170,62 @@ public class TestWorkingStackManager
 		assertEquals(stack4b[3], stack2c[1]);
 		assertEquals(stack4b[4], stack2c[2]);
 	}
+	
+	@Test
+	public void testContains2()
+	{
+		Deck deck = new Deck();
+		aWorkingStackManager.initialize(deck);
+		while( deck.size() > 0 )
+		{
+			assertFalse(aWorkingStackManager.contains(deck.draw()));
+		}
+		for( StackIndex index : StackIndex.values())
+		{
+			for( Card card : aWorkingStackManager.getStack(index) )
+			{
+				assertTrue( aWorkingStackManager.contains(card));
+			}
+		}
+	}
+	
+	@Test
+	public void testVisibility()
+	{
+		Deck deck = new Deck();
+		aWorkingStackManager.initialize(deck);
+		for( StackIndex index : StackIndex.values())
+		{
+			Card[] cards = aWorkingStackManager.getStack(index);
+			for( int i = 0; i < cards.length-1; i++ )
+			{
+				assertFalse(aWorkingStackManager.isVisible(cards[i]));
+			}
+			assertTrue(aWorkingStackManager.isVisible(cards[cards.length-1]));
+		}
+		aWorkingStackManager.push(deck.draw(), StackIndex.SECOND);
+		Card[] stack = aWorkingStackManager.getStack(StackIndex.SECOND);
+		assertFalse(aWorkingStackManager.isVisible(stack[0]));
+		assertTrue(aWorkingStackManager.isVisible(stack[1]));
+		assertTrue(aWorkingStackManager.isVisible(stack[2]));
+	}
+	
+	@Test
+	public void testShowHideTop()
+	{
+		aWorkingStackManager.initialize(new Deck());
+		Card[] one = aWorkingStackManager.getStack(StackIndex.FIRST); 
+		Card[] two = aWorkingStackManager.getStack(StackIndex.SECOND); 
+		assertTrue(aWorkingStackManager.isVisible(one[0]));
+		aWorkingStackManager.hideTop(StackIndex.FIRST);
+		assertFalse(aWorkingStackManager.isVisible(one[0]));
+		aWorkingStackManager.showTop(StackIndex.FIRST);
+		assertTrue(aWorkingStackManager.isVisible(one[0]));
+		
+		assertTrue(aWorkingStackManager.isVisible(two[1]));
+		aWorkingStackManager.hideTop(StackIndex.SECOND);
+		assertFalse(aWorkingStackManager.isVisible(two[1]));
+		aWorkingStackManager.showTop(StackIndex.SECOND);
+		assertTrue(aWorkingStackManager.isVisible(two[1]));
+	}
 }
