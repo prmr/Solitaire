@@ -131,7 +131,7 @@ public class TestGameModel
 	public void testMoves()
 	{
 		GameModel model = GameModel.instance();
-		assertTrue(model.isEmptySuitStack(SuitStackIndex.FIRST)); // Clusts on first
+		assertTrue(model.isEmptySuitStack(SuitStackIndex.FIRST)); 
 		assertFalse(model.isLegalMove(Card.get(Rank.THREE, Suit.CLUBS), SuitStackIndex.SECOND));
 		assertFalse(model.isLegalMove(Card.get(Rank.THREE, Suit.CLUBS), SuitStackIndex.FIRST));
 		assertFalse(model.isLegalMove(Card.get(Rank.TWO, Suit.CLUBS), SuitStackIndex.FIRST));
@@ -224,5 +224,43 @@ public class TestGameModel
 		model.getCardMove(model.getSubStack(Card.get(Rank.JACK, Suit.CLUBS), StackIndex.FIFTH)[0], StackIndex.SEVENTH).perform();
 		assertEquals(5, model.getStack(StackIndex.FIFTH).length);
 		assertEquals(8, model.getStack(StackIndex.SEVENTH).length);
+	}
+	
+	@Test
+	public void testNullMove()
+	{
+		GameModel model = GameModel.instance();
+		Move nullMove = model.getNullMove();
+		assertTrue(nullMove.isNull());
+		// Only really tests that nothing crashes
+		nullMove.perform();
+		nullMove.undo();
+	}
+	
+	@Test
+	public void testUndo1()
+	{
+		// Tests undoing discard moves
+		GameModel model = GameModel.instance();
+		assertTrue(model.isEmptyDiscardPile());
+		assertFalse(model.canUndo());
+		Move discard = model.getDiscardMove();
+		assertFalse(discard.isNull());
+		discard.perform();
+		assertTrue(model.canUndo());
+		Card card = model.peekDiscardPile();
+		model.undoLast();
+		assertFalse(model.canUndo());
+		assertTrue(model.isEmptyDiscardPile());
+		model.getDiscardMove().perform();
+		assertEquals(card, model.peekDiscardPile());
+	}
+	
+	@Test
+	public void testGetScore()
+	{
+		GameModel model = GameModel.instance();
+		assertEquals( 0, model.getScore());
+		assertFalse(model.isCompleted());
 	}
 }

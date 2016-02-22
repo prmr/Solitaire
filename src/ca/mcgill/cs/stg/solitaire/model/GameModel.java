@@ -304,7 +304,7 @@ public final class GameModel implements GameModelView
 		}
 		else if( pLocation instanceof SuitStackIndex )
 		{
-			assert aSuitStacks.isEmpty((SuitStackIndex)pLocation);
+			assert !aSuitStacks.isEmpty((SuitStackIndex)pLocation);
 			aSuitStacks.pop((SuitStackIndex)pLocation);
 		}
 		else
