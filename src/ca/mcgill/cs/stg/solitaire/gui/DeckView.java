@@ -23,17 +23,22 @@ package ca.mcgill.cs.stg.solitaire.gui;
 import ca.mcgill.cs.stg.solitaire.cards.CardImages;
 import ca.mcgill.cs.stg.solitaire.model.GameModel;
 import ca.mcgill.cs.stg.solitaire.model.GameModelListener;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 
 /**
  * Component that shows the deck and allows clicking
@@ -46,10 +51,45 @@ class DeckView extends HBox implements GameModelListener
     private static final String BUTTON_STYLE_PRESSED = "-fx-background-color: transparent; -fx-padding: 6 4 4 6;";
     private static final int IMAGE_NEW_LINE_WIDTH = 10;
     private static final int IMAGE_FONT_SIZE = 15;
+    private static final ColorAdjust ADJUST = new ColorAdjust();
+    
+    static 
+    {
+    	ADJUST.setBrightness(0.5);
+    }
+    
+    private final Timeline aTimeLine;
 	
 	DeckView()
 	{
         final Button button = new Button();
+        
+        aTimeLine = new Timeline(
+    		    new KeyFrame(
+    		      Duration.ZERO,
+    		      new EventHandler<ActionEvent>(){
+    		    	  
+    		    	  private boolean aOn = true;
+    				@Override
+    				public void handle(ActionEvent pEvent)
+    				{
+    					if(aOn)
+    					{
+    						aOn = false;
+    						button.getGraphic().setEffect(ADJUST);
+    					}
+    					else
+    					{
+    						aOn = true;
+    						button.getGraphic().setEffect(null);
+    					}
+    				}
+    				}
+    		    ),
+    		    new KeyFrame(Duration.seconds(0.6)
+    		    )
+    		);
+    	aTimeLine.setCycleCount(Timeline.INDEFINITE);
         button.setGraphic(new ImageView(CardImages.getBack()));
         button.setStyle(BUTTON_STYLE_NORMAL);
 
@@ -81,6 +121,18 @@ class DeckView extends HBox implements GameModelListener
         
         getChildren().add(button);
     	GameModel.instance().addListener(this);
+	}
+	
+	public void animate(boolean pOn)
+	{
+		if( pOn )
+		{
+			aTimeLine.play();
+		}
+		else
+		{
+			aTimeLine.pause();
+		}
 	}
 	
 	private Canvas createNewGameImage()

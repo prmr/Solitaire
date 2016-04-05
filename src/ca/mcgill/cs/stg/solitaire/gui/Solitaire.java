@@ -20,17 +20,26 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.gui;
 
+import java.io.File;
+import java.net.URL;
+
 import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
 import ca.mcgill.cs.stg.solitaire.model.GameModel;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * Application class for Solitaire. The responsibility
@@ -51,6 +60,7 @@ public class Solitaire extends Application
     private DiscardPileView aDiscardPileView = new DiscardPileView();
     private SuitStack[] aSuitStacks = new SuitStack[Suit.values().length];
     private CardStack[] aStacks = new CardStack[StackIndex.values().length];
+    private static MediaPlayer player = null;
     
 	/**
 	 * Launches the application.
@@ -87,19 +97,58 @@ public class Solitaire extends Application
         	root.add(aStacks[index.ordinal()], index.ordinal(), 1);
         }
         
+        final Timeline timeline = new Timeline(
+			    new KeyFrame(
+			      Duration.ZERO,
+			      new EventHandler<ActionEvent>(){
+					@Override
+					public void handle(ActionEvent pEvent)
+					{
+						GameModel.instance().tryToAutoPlay();
+					}
+					}
+			    ),
+			    new KeyFrame(Duration.seconds(2)
+			    )
+			);
+		timeline.setCycleCount(Timeline.INDEFINITE);
+        
         root.setOnKeyTyped(new EventHandler<KeyEvent>()
 		{
-
+        	
 			@Override
 			public void handle(final KeyEvent pEvent)
 			{
 				if( pEvent.getCharacter().equals("\r"))
 				{
+					System.out.println("Enter" + Thread.currentThread().getName());
 					GameModel.instance().tryToAutoPlay();
 				}
 				else if( pEvent.getCharacter().equals("\b"))
 				{
 					GameModel.instance().undoLast();
+				}
+				else if( pEvent.getCharacter().equals("a"))
+				{
+					if( timeline.getCurrentRate() == 0 )
+					{
+						timeline.play();
+						aDeckView.animate(true);
+						if( player == null )
+						{
+							play();
+						}
+						else
+						{
+							player.play();
+						}
+					}
+					else
+					{
+						timeline.pause();
+						aDeckView.animate(false);
+						player.pause();
+					}
 				}
 				pEvent.consume();
 			}
@@ -109,6 +158,22 @@ public class Solitaire extends Application
         pPrimaryStage.setResizable(false);
         pPrimaryStage.setScene(new Scene(root, WIDTH, HEIGHT));
         pPrimaryStage.show();
+    }
+    
+    public static void play()
+    {
+    	try
+    	{
+    		URL thing = new File("C:\\temp\\georgia.mp3").toURI().toURL();
+    		Media audioFile = new Media( thing.toString() ); 
+    		player = new MediaPlayer(audioFile);
+            player.play();   
+    	}
+    	catch( Exception e)
+    	{
+    		e.printStackTrace();
+    		System.exit(0);
+    	}
     }
 }
 

@@ -34,6 +34,8 @@ public final class Driver
 	
 	private Driver() {}
 	
+	public void foo() {}
+	
 	/**
 	 * @param pArgs Not used.
 	 */
