@@ -20,6 +20,7 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -32,7 +33,7 @@ import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
  * Manages the state of the four stacks where completed
  * suits are accumulated.
  */
-class SuitStackManager
+class SuitStackManager implements Serializable
 {
 	private Map<SuitStackIndex, Stack<Card>> aStacks = new HashMap<>();
 	

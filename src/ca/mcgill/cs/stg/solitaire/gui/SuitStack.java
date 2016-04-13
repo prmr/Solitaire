@@ -65,6 +65,7 @@ public class SuitStack extends StackPane implements GameModelListener
     	setOnDragExited(createOnDragExitedHandler());
     	setOnDragDropped(createOnDragDroppedHandler());
     	GameModel.instance().addListener(this);
+    	gameStateChanged();
 	}
 	
 	@Override

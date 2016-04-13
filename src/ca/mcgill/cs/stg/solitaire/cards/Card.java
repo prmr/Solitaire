@@ -20,6 +20,8 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.cards;
 
+import java.io.Serializable;
+
 /**
  * An immutable description of a playing card. This abstraction
  * is designed to be independent of game logic, so it does
@@ -34,7 +36,7 @@ package ca.mcgill.cs.stg.solitaire.cards;
  * to that of the equals method when two card arguments are 
  * provided.
  */
-public final class Card
+public final class Card implements Serializable
 {
 	// Indexed by suit, then rank
 	private static final Card[][] CARDS = new Card[Suit.values().length][];
@@ -134,6 +136,31 @@ public final class Card
 	public String getIDString()
 	{
 		return Integer.toString(getSuit().ordinal() * Rank.values().length + getRank().ordinal());
+	}
+	
+	@Override
+	public boolean equals(Object pCard)
+	{
+		if( pCard == this )
+		{
+			return true;
+		}
+		else if( pCard == null )
+		{
+			return false;
+		}
+		else if( pCard.getClass() != getClass() )
+		{
+			return false;
+		}
+		Card card = (Card)pCard;
+		return card.getRank() == getRank() && card.getSuit() == getSuit();
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return getIDString().hashCode();
 	}
 	
 	/**

@@ -20,6 +20,7 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.cards;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Stack;
 
@@ -29,7 +30,7 @@ import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
 /**
  * Models a deck of 52 cards.
  */
-public class Deck 
+public class Deck implements Serializable
 {
 	private Stack<Card> aCards;
 	

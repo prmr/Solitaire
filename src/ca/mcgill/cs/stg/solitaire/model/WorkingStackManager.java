@@ -20,6 +20,7 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,7 +38,7 @@ import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
  * Manages the state of the bottom stacks where partial
  * suits are accumulated.
  */
-class WorkingStackManager
+class WorkingStackManager implements Serializable
 {
 	private static final int NUMBER_OF_CARDS_NEEDED = 24;
 	private Map<StackIndex, Stack<Card>> aStacks = new HashMap<>();
@@ -151,7 +152,7 @@ class WorkingStackManager
 		Stack<Card> temp = new Stack<>();
 		Card card = aStacks.get(pOrigin).pop();
 		temp.push(card);
-		while( card != pCard )
+		while( !card.equals(pCard ))
 		{
 			card = aStacks.get(pOrigin).pop();
 			temp.push(card);
@@ -178,7 +179,7 @@ class WorkingStackManager
 		boolean aSeen = false;
 		for( Card card : stack )
 		{
-			if( card == pCard )
+			if( card.equals(pCard ))
 			{
 				aSeen = true;
 			}
@@ -223,7 +224,7 @@ class WorkingStackManager
 		assert pCard != null && pIndex != null;
 		for( Card card : aStacks.get(pIndex))
 		{
-			if( card == pCard )
+			if( card.equals(pCard ))
 			{
 				return true;
 			}

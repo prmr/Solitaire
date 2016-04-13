@@ -81,6 +81,7 @@ class DeckView extends HBox implements GameModelListener
         
         getChildren().add(button);
     	GameModel.instance().addListener(this);
+    	gameStateChanged();
 	}
 	
 	private Canvas createNewGameImage()

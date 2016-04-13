@@ -31,6 +31,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Application class for Solitaire. The responsibility
@@ -104,6 +105,15 @@ public class Solitaire extends Application
 				pEvent.consume();
 			}
         	
+		});
+        
+        pPrimaryStage.setOnCloseRequest(new EventHandler<WindowEvent>()
+		{
+			@Override
+			public void handle(WindowEvent pEvent)
+			{
+				GameModel.instance().save();
+			}
 		});
         
         pPrimaryStage.setResizable(false);

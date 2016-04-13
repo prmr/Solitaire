@@ -20,10 +20,12 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.model;
 
+import java.io.Serializable;
+
 /**
  * Represents one possible action in the game.
  */
-public interface Move
+public interface Move extends Serializable
 {
 	/**
 	 * Performs the move. 

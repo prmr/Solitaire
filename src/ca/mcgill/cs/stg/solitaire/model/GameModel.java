@@ -20,6 +20,13 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.model;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -47,9 +54,36 @@ import ca.mcgill.cs.stg.solitaire.cards.Deck;
  * in charge of managing the state. However, these manager classes
  * are not responsible for notifying observers.
  */
-public final class GameModel implements GameModelView
+public final class GameModel implements GameModelView, Serializable
 {
-	private static final GameModel INSTANCE = new GameModel();
+	private static final String FILE_NAME = "C:\\temp\\solitaire.dat";
+	
+	private static final GameModel INSTANCE;
+	
+	static
+	{
+		GameModel temp = null;
+		File data = new File(FILE_NAME);
+		if( data.exists() )
+		{
+			try(ObjectInputStream in = new ObjectInputStream(new FileInputStream(data)))
+			{
+				temp = (GameModel) in.readObject();
+				temp.aListeners = new ArrayList<>();
+				temp.aPlayingStrategy = new GreedyPlayingStrategy();
+			}
+			catch(IOException | ClassNotFoundException e)
+			{
+				// Ignore any problem, this will be handled by the creation of a fresh instance
+			}
+		}
+		if( temp == null )
+		{
+			temp = new GameModel();
+		}
+		INSTANCE = temp;
+	}
+	
 	
 	private static final Move NULL_MOVE = new Move()
 	{
@@ -99,14 +133,14 @@ public final class GameModel implements GameModelView
 	private Stack<Card> aDiscard = new Stack<>();
 	private SuitStackManager aSuitStacks = new SuitStackManager();
 	private WorkingStackManager aWorkingStacks = new WorkingStackManager();
-	private List<GameModelListener> aListeners = new ArrayList<>();
-	private PlayingStrategy aPlayingStrategy = new GreedyPlayingStrategy();
+	private transient List<GameModelListener> aListeners = new ArrayList<>();
+	private transient PlayingStrategy aPlayingStrategy = new GreedyPlayingStrategy();
 	
 	/**
 	 * Represents anywhere a card can be placed in 
 	 * Solitaire.
 	 */
-	public interface Location 
+	public interface Location extends Serializable 
 	{}
 	
 	/**
@@ -126,7 +160,7 @@ public final class GameModel implements GameModelView
 	 * Represents the different stacks where completed
 	 * suits can be accumulated.
 	 */
-	public enum SuitStackIndex implements Location
+	public enum SuitStackIndex implements Location, Serializable
 	{
 		FIRST, SECOND, THIRD, FOURTH;
 	}
@@ -135,6 +169,22 @@ public final class GameModel implements GameModelView
 	{
 		reset();
 	}
+	
+	/**
+	 * 
+	 */
+	public void save()
+	{
+		try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_NAME)))
+		{
+			out.writeObject(this);
+		}
+		catch( IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	
 	/**
 	 * @return The number of cards in the suit stacks.
@@ -250,13 +300,13 @@ public final class GameModel implements GameModelView
 	 */
 	private Location find(Card pCard)
 	{
-		if( !aDiscard.isEmpty() && aDiscard.peek() == pCard )
+		if( !aDiscard.isEmpty() && aDiscard.peek().equals(pCard ))
 		{
 			return CardSources.DISCARD_PILE;
 		}
 		for( SuitStackIndex index : SuitStackIndex.values() )
 		{
-			if( !aSuitStacks.isEmpty(index) && aSuitStacks.peek(index) == pCard )
+			if( !aSuitStacks.isEmpty(index) && aSuitStacks.peek(index).equals(pCard) )
 			{
 				return index;
 			}

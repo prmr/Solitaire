@@ -46,6 +46,7 @@ class DiscardPileView extends HBox implements GameModelListener
     	aDragHandler = new CardDragHandler(image);
     	image.setOnDragDetected(aDragHandler);
     	GameModel.instance().addListener(this);
+    	gameStateChanged();
 	}
 	
 	@Override
