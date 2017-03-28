@@ -47,6 +47,8 @@ import javafx.util.Duration;
  */
 class DeckView extends HBox implements GameModelListener
 {
+	private static final double BRIGHTNESS_DAMPING = 0.5;
+	private static final double FRAME_DURATION = 0.6;
 	private static final String BUTTON_STYLE_NORMAL = "-fx-background-color: transparent; -fx-padding: 5, 5, 5, 5;";
     private static final String BUTTON_STYLE_PRESSED = "-fx-background-color: transparent; -fx-padding: 6 4 4 6;";
     private static final int IMAGE_NEW_LINE_WIDTH = 10;
@@ -55,7 +57,7 @@ class DeckView extends HBox implements GameModelListener
     
     static 
     {
-    	ADJUST.setBrightness(0.5);
+    	ADJUST.setBrightness(BRIGHTNESS_DAMPING);
     }
     
     private final Timeline aTimeLine;
@@ -67,27 +69,24 @@ class DeckView extends HBox implements GameModelListener
         aTimeLine = new Timeline(
     		    new KeyFrame(
     		      Duration.ZERO,
-    		      new EventHandler<ActionEvent>(){
-    		    	  
+    		      new EventHandler<ActionEvent>()
+    		      {
     		    	  private boolean aOn = true;
-    				@Override
-    				public void handle(ActionEvent pEvent)
-    				{
-    					if(aOn)
-    					{
-    						aOn = false;
-    						button.getGraphic().setEffect(ADJUST);
-    					}
-    					else
-    					{
-    						aOn = true;
-    						button.getGraphic().setEffect(null);
-    					}
-    				}
-    				}
-    		    ),
-    		    new KeyFrame(Duration.seconds(0.6)
-    		    )
+    		    	  @Override
+    		    	  public void handle(ActionEvent pEvent)
+    		    	  {
+    		    		  if(aOn)
+    		    		  {
+    		    			  aOn = false;
+    		    			  button.getGraphic().setEffect(ADJUST);
+    		    		  }
+    		    		  else
+    		    		  {
+    		    			  aOn = true;
+    		    			  button.getGraphic().setEffect(null);
+    		    		  }
+    		    	  }
+    		      }), new KeyFrame(Duration.seconds(FRAME_DURATION))
     		);
     	aTimeLine.setCycleCount(Timeline.INDEFINITE);
         button.setGraphic(new ImageView(CardImages.getBack()));

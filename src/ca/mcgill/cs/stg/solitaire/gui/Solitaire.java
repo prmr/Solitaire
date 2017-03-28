@@ -21,6 +21,7 @@
 package ca.mcgill.cs.stg.solitaire.gui;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
@@ -50,6 +51,8 @@ import javafx.util.Duration;
  */
 public class Solitaire extends Application
 {
+    private static MediaPlayer player = null;
+
 	private static final int WIDTH = 680;
 	private static final int HEIGHT = 500;
 	private static final int MARGIN_OUTER = 10;
@@ -60,7 +63,6 @@ public class Solitaire extends Application
     private DiscardPileView aDiscardPileView = new DiscardPileView();
     private SuitStack[] aSuitStacks = new SuitStack[Suit.values().length];
     private CardStack[] aStacks = new CardStack[StackIndex.values().length];
-    private static MediaPlayer player = null;
     
 	/**
 	 * Launches the application.
@@ -100,7 +102,8 @@ public class Solitaire extends Application
         final Timeline timeline = new Timeline(
 			    new KeyFrame(
 			      Duration.ZERO,
-			      new EventHandler<ActionEvent>(){
+			      new EventHandler<ActionEvent>()
+			      {
 					@Override
 					public void handle(ActionEvent pEvent)
 					{
@@ -160,6 +163,9 @@ public class Solitaire extends Application
         pPrimaryStage.show();
     }
     
+    /**
+     * Starts playing the music.
+     */
     public static void play()
     {
     	try
@@ -169,7 +175,7 @@ public class Solitaire extends Application
     		player = new MediaPlayer(audioFile);
             player.play();   
     	}
-    	catch( Exception e)
+    	catch( MalformedURLException e )
     	{
     		e.printStackTrace();
     		System.exit(0);
