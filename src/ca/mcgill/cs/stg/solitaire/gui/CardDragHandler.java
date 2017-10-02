@@ -33,6 +33,8 @@ import javafx.scene.input.TransferMode;
  */
 public class CardDragHandler implements EventHandler<MouseEvent>
 {
+	private static final ClipboardContent CLIPBOARD_CONTENT = new ClipboardContent();
+	
 	private Card aCard;
 	private ImageView aImageView;
 	
@@ -50,9 +52,8 @@ public class CardDragHandler implements EventHandler<MouseEvent>
 	public void handle(MouseEvent pMouseEvent)
 	{
 		Dragboard db = aImageView.startDragAndDrop(TransferMode.ANY);
-        ClipboardContent content = new ClipboardContent();
-        content.putString(aCard.getIDString());
-        db.setContent(content);
+        CLIPBOARD_CONTENT.putString(aCard.getIDString());
+        db.setContent(CLIPBOARD_CONTENT);
         pMouseEvent.consume();
 	}
 }
