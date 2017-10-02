@@ -60,7 +60,7 @@ public class CardTransfer
 		String lReturn = pCards[0].getIDString();
 		for( int i = 1; i < pCards.length; i++ )
 		{
-			lReturn += ";" + pCards[i].getIDString();
+			lReturn += SEPARATOR + pCards[i].getIDString();
 		}
 		return lReturn;
 	}
