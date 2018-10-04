@@ -5,20 +5,21 @@
     This configuration file was written by the eclipse-cs plugin configuration editor
 -->
 <!--
-    Checkstyle-Configuration: COMP 303 Checks
+    Checkstyle-Configuration: JetUML
     Description: none
 -->
 <module name="Checker">
   <property name="severity" value="warning"/>
   <module name="TreeWalker">
     <property name="tabWidth" value="4"/>
-    <module name="FileContentsHolder"/>
     <module name="JavadocMethod">
       <property name="scope" value="protected"/>
       <property name="allowUndeclaredRTE" value="true"/>
       <property name="suppressLoadErrors" value="true"/>
     </module>
-    <module name="JavadocType"/>
+    <module name="JavadocType">
+      <property name="scope" value="package"/>
+    </module>
     <module name="JavadocVariable">
       <property name="severity" value="ignore"/>
       <property name="scope" value="protected"/>
@@ -108,7 +109,8 @@
     <module name="IllegalInstantiation"/>
     <module name="InnerAssignment"/>
     <module name="MagicNumber">
-      <property name="ignoreNumbers" value="-1, 0, 1, 2,3,4"/>
+      <property name="ignoreNumbers" value="-1, 0, 1, 2,3,4,0.5"/>
+      <property name="constantWaiverParentToken" value="TYPECAST,METHOD_CALL,EXPR,ARRAY_INIT,UNARY_MINUS,UNARY_PLUS,ELIST,STAR,ASSIGN,PLUS,MINUS,DIV,LITERAL_NEW"/>
     </module>
     <module name="MissingSwitchDefault"/>
     <module name="SimplifyBooleanExpression"/>
@@ -116,7 +118,9 @@
     <module name="FinalClass"/>
     <module name="HideUtilityClassConstructor"/>
     <module name="InterfaceIsType"/>
-    <module name="VisibilityModifier"/>
+    <module name="VisibilityModifier">
+      <property name="protectedAllowed" value="true"/>
+    </module>
     <module name="ArrayTypeStyle"/>
     <module name="FinalParameters">
       <property name="severity" value="ignore"/>
@@ -146,9 +150,12 @@
     <module name="NestedTryDepth"/>
     <module name="SuperClone"/>
     <module name="SuperFinalize"/>
-    <module name="IllegalCatch"/>
+    <module name="IllegalCatch">
+      <property name="illegalClassNames" value="java.lang.Throwable, java.lang.RuntimeException"/>
+    </module>
     <module name="ReturnCount">
       <property name="max" value="5"/>
+      <property name="maxForVoid" value="3"/>
     </module>
     <module name="DeclarationOrder"/>
     <module name="ParameterAssignment"/>
@@ -162,6 +169,10 @@
       <property name="severity" value="ignore"/>
       <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
+    <module name="SuppressionCommentFilter">
+      <property name="offCommentFormat" value="CSOFF\:"/>
+      <property name="onCommentFormat" value="CSON\:"/>
+    </module>
   </module>
   <module name="FileTabCharacter">
     <property name="severity" value="ignore"/>
@@ -172,8 +183,4 @@
     <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
   </module>
   <module name="Translation"/>
-  <module name="SuppressionCommentFilter">
-    <property name="offCommentFormat" value="CSOFF:"/>
-    <property name="onCommentFormat" value="CSON:"/>
-  </module>
 </module>
