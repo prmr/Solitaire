@@ -123,6 +123,7 @@ public class CardStack extends StackPane implements GameModelListener
 	{
 		return new EventHandler<DragEvent>()
 		{
+			@Override
 			public void handle(DragEvent pEvent) 
 			{
 				if(pEvent.getGestureSource() != pImageView && pEvent.getDragboard().hasString())
@@ -142,6 +143,7 @@ public class CardStack extends StackPane implements GameModelListener
 	{
 		return new EventHandler<DragEvent>()
 		{
+			@Override
 			public void handle(DragEvent pEvent)
 			{
 				CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
@@ -158,6 +160,7 @@ public class CardStack extends StackPane implements GameModelListener
 	{
 		return new EventHandler<DragEvent>()
 		{
+			@Override
 			public void handle(DragEvent pEvent)
 			{
 				pImageView.setEffect(null);
@@ -170,6 +173,7 @@ public class CardStack extends StackPane implements GameModelListener
 	{
 		return new EventHandler<DragEvent>() 
 		{
+			@Override
 			public void handle(DragEvent pEvent)
 			{
 				Dragboard db = pEvent.getDragboard();
