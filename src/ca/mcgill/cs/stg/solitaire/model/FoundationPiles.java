@@ -22,35 +22,35 @@ package ca.mcgill.cs.stg.solitaire.model;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
+import ca.mcgill.cs.stg.solitaire.cards.CardStack;
 import ca.mcgill.cs.stg.solitaire.cards.Rank;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
 
 /**
- * Manages the state of the four stacks where completed
- * suits are accumulated.
+ * Represents the four piles that must be completed to win the game, with the ace
+ * at the bottom, face up, and all cards of the same suit on top, in sequence.
  */
-class SuitStackManager
+class FoundationPiles
 {
-	private Map<SuitStackIndex, Stack<Card>> aStacks = new HashMap<>();
+	private final Map<SuitStackIndex, CardStack> aPiles = new HashMap<>();
 	
 	/**
-	 * Creates an initialized suit stack manager.
+	 * Creates an initialized FoundationPiles object that consists of four empty piles.
 	 */
-	SuitStackManager()
+	FoundationPiles()
 	{
 		initialize();
 	}
 	
 	/**
-	 * @return The number of cards in the suit stacks.
+	 * @return The total number of cards in all the foundation piles.
 	 */
-	int getScore()
+	int getTotalSize()
 	{
 		int total = 0;
-		for( Stack<Card> stack : aStacks.values())
+		for( CardStack stack : aPiles.values())
 		{
 			total += stack.size();
 		}
@@ -58,23 +58,23 @@ class SuitStackManager
 	}
 	
 	/**
-	 * Initialize the internal data structures.
+	 * Initializes the FoundationPiles object to reset it to four empty piles.
 	 */
 	void initialize()
 	{
 		for( SuitStackIndex index : SuitStackIndex.values() )
 		{
-			aStacks.put(index, new Stack<Card>());
+			aPiles.put(index, new CardStack());
 		}
 	}
 	
 	/**
-	 * @param pSuit
-	 * @return True if the stack at index pIndex is empty
+	 * @param pIndex The index of the pile to check.
+	 * @return True if the pile at index pIndex is empty
 	 */
 	boolean isEmpty(SuitStackIndex pIndex)
 	{
-		return aStacks.get(pIndex).isEmpty();
+		return aPiles.get(pIndex).isEmpty();
 	}
 	
 	/**
@@ -103,8 +103,8 @@ class SuitStackManager
 	 */
 	Card peek(SuitStackIndex pIndex)
 	{
-		assert !aStacks.get(pIndex).isEmpty();
-		return aStacks.get(pIndex).peek();
+		assert !aPiles.get(pIndex).isEmpty();
+		return aPiles.get(pIndex).peek();
 	}
 	
 	/**
@@ -115,7 +115,7 @@ class SuitStackManager
 	 */
 	void push(Card pCard, SuitStackIndex pIndex)
 	{
-		aStacks.get(pIndex).push(pCard);
+		aPiles.get(pIndex).push(pCard);
 	}
 	
 	/**
@@ -126,6 +126,6 @@ class SuitStackManager
 	Card pop(SuitStackIndex pIndex)
 	{
 		assert !isEmpty(pIndex);
-		return aStacks.get(pIndex).pop();
+		return aPiles.get(pIndex).pop();
 	}
 }

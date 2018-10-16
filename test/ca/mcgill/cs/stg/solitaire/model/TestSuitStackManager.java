@@ -33,7 +33,7 @@ import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
 
 public class TestSuitStackManager
 {
-	private SuitStackManager aSuitStackManager;
+	private FoundationPiles aSuitStackManager;
 	private static final Card CAC = Card.get(Rank.ACE, Suit.CLUBS);
 	private static final Card CAD = Card.get(Rank.ACE, Suit.DIAMONDS);
 	private static final Card C3D = Card.get(Rank.THREE, Suit.DIAMONDS);
@@ -41,7 +41,7 @@ public class TestSuitStackManager
 	@Before
 	public void setup()
 	{
-		aSuitStackManager = new SuitStackManager();
+		aSuitStackManager = new FoundationPiles();
 	}
 	
 	@Test
@@ -73,9 +73,9 @@ public class TestSuitStackManager
 	@Test
 	public void testGetScore()
 	{
-		assertEquals(0, aSuitStackManager.getScore());
+		assertEquals(0, aSuitStackManager.getTotalSize());
 		aSuitStackManager.push(CAC, SuitStackIndex.FIRST);
 		aSuitStackManager.push(CAD, SuitStackIndex.SECOND);
-		assertEquals(2, aSuitStackManager.getScore());
+		assertEquals(2, aSuitStackManager.getTotalSize());
 	}
 }

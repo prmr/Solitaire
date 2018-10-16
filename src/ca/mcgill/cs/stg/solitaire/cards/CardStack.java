@@ -48,6 +48,14 @@ public class CardStack
 	}
 	
 	/**
+	 * @return The number of cards in the stack.
+	 */
+	public int size()
+	{
+		return aCards.size();
+	}
+	
+	/**
 	 * Removes all the cards in the stack.
 	 */
 	public void clear()

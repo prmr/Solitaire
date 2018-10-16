@@ -97,7 +97,7 @@ public final class GameModel implements GameModelView
 	private Deck aDeck = new Deck();
 	private Stack<Move> aMoves = new Stack<>();
 	private Stack<Card> aDiscard = new Stack<>();
-	private SuitStackManager aSuitStacks = new SuitStackManager();
+	private FoundationPiles aSuitStacks = new FoundationPiles();
 	private WorkingStackManager aWorkingStacks = new WorkingStackManager();
 	private List<GameModelListener> aListeners = new ArrayList<>();
 	private PlayingStrategy aPlayingStrategy = new GreedyPlayingStrategy();
@@ -141,7 +141,7 @@ public final class GameModel implements GameModelView
 	 */
 	public int getScore()
 	{
-		return aSuitStacks.getScore();
+		return aSuitStacks.getTotalSize();
 	}
 	
 	/**
@@ -202,7 +202,7 @@ public final class GameModel implements GameModelView
 	 */
 	public boolean isCompleted()
 	{
-		return aSuitStacks.getScore() == Rank.values().length * Suit.values().length;
+		return aSuitStacks.getTotalSize() == Rank.values().length * Suit.values().length;
 	}
 	
 	@Override
