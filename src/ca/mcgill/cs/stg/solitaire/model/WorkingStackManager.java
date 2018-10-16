@@ -25,10 +25,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
+import ca.mcgill.cs.stg.solitaire.cards.CardStack;
 import ca.mcgill.cs.stg.solitaire.cards.Deck;
 import ca.mcgill.cs.stg.solitaire.cards.Rank;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
@@ -39,8 +41,7 @@ import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
  */
 class WorkingStackManager
 {
-	private static final int NUMBER_OF_CARDS_NEEDED = 24;
-	private Map<StackIndex, Stack<Card>> aStacks = new HashMap<>();
+	private Map<StackIndex, CardStack> aStacks = new HashMap<>();
 	private Set<Card> aVisible = new HashSet<>();
 	
 	/**
@@ -50,7 +51,7 @@ class WorkingStackManager
 	{
 		for( StackIndex index : StackIndex.values() )
 		{
-			aStacks.put(index, new Stack<Card>());
+			aStacks.put(index, new CardStack());
 		}
 	}
 	
@@ -93,7 +94,7 @@ class WorkingStackManager
 	boolean canMoveTo(Card pCard, StackIndex pIndex )
 	{
 		assert pCard != null && pIndex != null;
-		Stack<Card> stack = aStacks.get(pIndex);
+		CardStack stack = aStacks.get(pIndex);
 		if( stack.isEmpty() )
 		{
 			return pCard.getRank() == Rank.KING;
@@ -115,7 +116,17 @@ class WorkingStackManager
 	Card[] getStack(StackIndex pIndex)
 	{
 		assert pIndex != null;
-		return aStacks.get(pIndex).toArray(new Card[aStacks.get(pIndex).size()]);
+		return toArray(aStacks.get(pIndex));
+	}
+	
+	private static Card[] toArray(CardStack pStack)
+	{
+		List<Card> result = new ArrayList<>();
+		for( Card card : pStack)
+		{
+			result.add(card);
+		}
+		return result.toArray(new Card[result.size()]);
 	}
 	
 	/**
@@ -129,15 +140,30 @@ class WorkingStackManager
 	boolean revealsTop(Card pCard, StackIndex pIndex)
 	{
 		assert pCard != null && pIndex != null;
-		int indexOf = aStacks.get(pIndex).indexOf(pCard);
-		if( indexOf < 1 )
+		Optional<Card> previous = getPreviousCard(pCard, pIndex);
+		if( !previous.isPresent() )
 		{
 			return false;
 		}
-		return aVisible.contains(pCard) && !aVisible.contains(aStacks.get(pIndex).get(indexOf-1));
+		return aVisible.contains(pCard) && !aVisible.contains(previous.get());
 	}
 	
-	/**
+	Optional<Card> getPreviousCard(Card pCard, StackIndex pIndex)
+	{
+		Optional<Card> previous = Optional.empty();
+		for( Card card : aStacks.get(pIndex))
+		{
+			if( card == pCard )
+			{
+				return previous;
+			}
+			previous = Optional.of(card);
+		}
+		return Optional.empty();
+	}
+	
+	
+ 	/**
 	 * Move pCard and all the cards below to pDestination.
 	 * @param pCard The card to move, possibly including all the cards on top of it.
 	 * @param pOrigin The location of the card before the move.
@@ -174,7 +200,7 @@ class WorkingStackManager
 	 */
 	public Card[] getSequence(Card pCard, StackIndex pIndex)
 	{
-		Stack<Card> stack = aStacks.get(pIndex);
+		CardStack stack = aStacks.get(pIndex);
 		List<Card> lReturn = new ArrayList<>();
 		boolean aSeen = false;
 		for( Card card : stack )

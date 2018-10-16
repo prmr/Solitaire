@@ -2,13 +2,14 @@ package ca.mcgill.cs.stg.solitaire.cards;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Represents a general-purpose stack of cards. New CardStack
  * instances are initially empty.
  */
-public class CardStack
+public class CardStack implements Iterable<Card>
 {
 	private final List<Card> aCards = new ArrayList<>();
 	
@@ -77,5 +78,11 @@ public class CardStack
 	public boolean isEmpty()
 	{
 		return aCards.size() == 0;
+	}
+
+	@Override
+	public Iterator<Card> iterator()
+	{
+		return aCards.iterator();
 	}
 }

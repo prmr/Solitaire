@@ -4,6 +4,9 @@
   <local-check-config name="COMP 303 Checks" location="style/Style.xml" type="project" description="">
     <additional-data name="protect-config-file" value="false"/>
   </local-check-config>
+  <local-check-config name="Solitaire Checks" location="style/Style.xml" type="project" description="">
+    <additional-data name="protect-config-file" value="false"/>
+  </local-check-config>
   <fileset name="all" enabled="true" check-config-name="COMP 303 Checks" local="true">
     <file-match-pattern match-pattern="." include-pattern="true"/>
   </fileset>
