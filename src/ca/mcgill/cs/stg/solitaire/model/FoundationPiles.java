@@ -26,7 +26,6 @@ import java.util.Map;
 import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.CardStack;
 import ca.mcgill.cs.stg.solitaire.cards.Rank;
-import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
 
 /**
  * Represents the four piles that must be completed to win the game, with the ace
@@ -34,7 +33,7 @@ import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
  */
 class FoundationPiles
 {
-	private final Map<SuitStackIndex, CardStack> aPiles = new HashMap<>();
+	private final Map<FoundationPile, CardStack> aPiles = new HashMap<>();
 	
 	/**
 	 * Creates an initialized FoundationPiles object that consists of four empty piles.
@@ -62,19 +61,19 @@ class FoundationPiles
 	 */
 	void initialize()
 	{
-		for( SuitStackIndex index : SuitStackIndex.values() )
+		for( FoundationPile index : FoundationPile.values() )
 		{
 			aPiles.put(index, new CardStack());
 		}
 	}
 	
 	/**
-	 * @param pIndex The index of the pile to check.
-	 * @return True if the pile at index pIndex is empty
+	 * @param pLocation The location of the pile to check.
+	 * @return True if the pile at pLocation is empty
 	 */
-	boolean isEmpty(SuitStackIndex pIndex)
+	boolean isEmpty(FoundationPile pLocation)
 	{
-		return aPiles.get(pIndex).isEmpty();
+		return aPiles.get(pLocation).isEmpty();
 	}
 	
 	/**
@@ -84,7 +83,7 @@ class FoundationPiles
 	 * This is only possible if its rank is immediately superior
 	 * to that of the card currently on top of the suit stack.
 	 */
-	boolean canMoveTo(Card pCard, SuitStackIndex pIndex )
+	boolean canMoveTo(Card pCard, FoundationPile pIndex )
 	{
 		assert pCard != null && pIndex != null;
 		if( isEmpty(pIndex))
@@ -101,7 +100,7 @@ class FoundationPiles
 	 * @param pIndex The index of the stack to peek
 	 * @return The card on top of the stack at index pIndex
 	 */
-	Card peek(SuitStackIndex pIndex)
+	Card peek(FoundationPile pIndex)
 	{
 		assert !aPiles.get(pIndex).isEmpty();
 		return aPiles.get(pIndex).peek();
@@ -113,7 +112,7 @@ class FoundationPiles
 	 * @param pCard The card to push.
 	 * @param pIndex The index where to push the card.
 	 */
-	void push(Card pCard, SuitStackIndex pIndex)
+	void push(Card pCard, FoundationPile pIndex)
 	{
 		aPiles.get(pIndex).push(pCard);
 	}
@@ -123,7 +122,7 @@ class FoundationPiles
 	 * @param pIndex the index of the stack to pop
 	 * @pre !isEmpty(pSuit)
 	 */
-	Card pop(SuitStackIndex pIndex)
+	Card pop(FoundationPile pIndex)
 	{
 		assert !isEmpty(pIndex);
 		return aPiles.get(pIndex).pop();

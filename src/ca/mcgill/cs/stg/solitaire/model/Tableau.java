@@ -33,31 +33,31 @@ import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.CardStack;
 import ca.mcgill.cs.stg.solitaire.cards.Deck;
 import ca.mcgill.cs.stg.solitaire.cards.Rank;
-import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
 
 /**
- * Manages the state of the bottom stacks where partial
- * suits are accumulated.
+ * Represents seven piles of cards that fan downwards, where cards
+ * must be stacked in alternating suit colors, and where cards can 
+ * be moved from pile to pile.
  */
-class WorkingStackManager
+class Tableau
 {
-	private Map<StackIndex, CardStack> aStacks = new HashMap<>();
+	private Map<TableauPile, CardStack> aPiles = new HashMap<>();
 	private Set<Card> aVisible = new HashSet<>();
 	
 	/**
-	 * Creates working stacks with no cards in them.
+	 * Creates an empty tableau.
 	 */
-	WorkingStackManager()
+	Tableau()
 	{
-		for( StackIndex index : StackIndex.values() )
+		for( TableauPile index : TableauPile.values() )
 		{
-			aStacks.put(index, new CardStack());
+			aPiles.put(index, new CardStack());
 		}
 	}
 	
 	/**
-	 * Fills the working stacks by drawing cards from the deck.
-	 * @param pDeck a deck of card to use to fill the stacks initially.
+	 * Fills the tableau by drawing cards from the deck.
+	 * @param pDeck a deck of card to use to fill the piles initially.
 	 * @pre pDeck != null
 	 * 
 	 */
@@ -65,13 +65,13 @@ class WorkingStackManager
 	{   
 		assert pDeck != null; 
 		aVisible.clear();
-		for( int i = 0; i < StackIndex.values().length; i++ )
+		for( int i = 0; i < TableauPile.values().length; i++ )
 		{
-			aStacks.get(StackIndex.values()[i]).clear();
+			aPiles.get(TableauPile.values()[i]).clear();
 			for( int j = 0; j < i+1; j++ )
 			{
 				Card card = pDeck.draw();
-				aStacks.get(StackIndex.values()[i]).push(card);
+				aPiles.get(TableauPile.values()[i]).push(card);
 				if( j == i )
 				{
 					aVisible.add(card);
@@ -83,18 +83,18 @@ class WorkingStackManager
 	
 	/**
 	 * Determines if it is legal to move pCard on top of
-	 * stack pIndex, i.e. if a king is moved to an empty
-	 * stack or any other rank on a card of immediately greater
+	 * pile pIndex, i.e. if a king is moved to an empty
+	 * pile or any other rank on a card of immediately greater
 	 * rank but of a different color.
 	 * @param pCard The card to move
-	 * @param pIndex The destination stack.
+	 * @param pIndex The destination pile.
 	 * @return True if the move is legal.
 	 * @pre pCard != null, pIndex != null
 	 */
-	boolean canMoveTo(Card pCard, StackIndex pIndex )
+	boolean canMoveTo(Card pCard, TableauPile pIndex )
 	{
 		assert pCard != null && pIndex != null;
-		CardStack stack = aStacks.get(pIndex);
+		CardStack stack = aPiles.get(pIndex);
 		if( stack.isEmpty() )
 		{
 			return pCard.getRank() == Rank.KING;
@@ -107,16 +107,16 @@ class WorkingStackManager
 	}
 	
 	/**
-	 * @param pIndex The index of the stack to obtain.
-	 * @return An array of cards in the stack at pIndex, where element [0] is the 
+	 * @param pIndex The index of the pile to obtain.
+	 * @return An array of cards in the pile at pIndex, where element [0] is the 
 	 * bottom of the stack. Modifying the array has no impact on the state of the 
 	 * object.
 	 * @pre pIndex != null
 	 */
-	Card[] getStack(StackIndex pIndex)
+	Card[] getStack(TableauPile pIndex)
 	{
 		assert pIndex != null;
-		return toArray(aStacks.get(pIndex));
+		return toArray(aPiles.get(pIndex));
 	}
 	
 	private static Card[] toArray(CardStack pStack)
@@ -132,12 +132,12 @@ class WorkingStackManager
 	/**
 	 * Returns true if moving pCard away reveals the top of the card.
 	 * @param pCard The card to test
-	 * @param pIndex The index of the stack.
+	 * @param pIndex The index of the pile.
 	 * @return true if the card above pCard is not visible and pCard
 	 * is visible.
 	 * @pre pCard != null && pIndex != null
 	 */
-	boolean revealsTop(Card pCard, StackIndex pIndex)
+	boolean revealsTop(Card pCard, TableauPile pIndex)
 	{
 		assert pCard != null && pIndex != null;
 		Optional<Card> previous = getPreviousCard(pCard, pIndex);
@@ -148,10 +148,10 @@ class WorkingStackManager
 		return aVisible.contains(pCard) && !aVisible.contains(previous.get());
 	}
 	
-	Optional<Card> getPreviousCard(Card pCard, StackIndex pIndex)
+	private Optional<Card> getPreviousCard(Card pCard, TableauPile pIndex)
 	{
 		Optional<Card> previous = Optional.empty();
-		for( Card card : aStacks.get(pIndex))
+		for( Card card : aPiles.get(pIndex))
 		{
 			if( card == pCard )
 			{
@@ -170,37 +170,36 @@ class WorkingStackManager
 	 * @param pDestination The intended destination of the card.
      * @pre this is a legal move
 	 */
-	void moveWithin(Card pCard, StackIndex pOrigin, StackIndex pDestination )
+	void moveWithin(Card pCard, TableauPile pOrigin, TableauPile pDestination )
 	{
 		assert pCard != null && pOrigin != null && pDestination != null;
 		assert contains(pCard, pOrigin);
 		assert isVisible(pCard);
 		Stack<Card> temp = new Stack<>();
-		Card card = aStacks.get(pOrigin).pop();
+		Card card = aPiles.get(pOrigin).pop();
 		temp.push(card);
 		while( card != pCard )
 		{
-			card = aStacks.get(pOrigin).pop();
+			card = aPiles.get(pOrigin).pop();
 			temp.push(card);
 		}
 		while( !temp.isEmpty() )
 		{
-			aStacks.get(pDestination).push(temp.pop());
+			aPiles.get(pDestination).push(temp.pop());
 		}
-		
 	}
 	
 	/**
 	 * Returns a sequence of cards starting at pCard and including
 	 * all cards on top of it.
-	 * @param pCard The bottom card in the stack
-	 * @param pIndex The index of the stack.
-	 * @return An array of cards in the stack. Element 0 is the bottom.
+	 * @param pCard The bottom card in the pile
+	 * @param pIndex The index of the pile.
+	 * @return An array of cards in the pile. Element 0 is the bottom.
 	 * @pre pCard != null && pIndex != null
 	 */
-	public Card[] getSequence(Card pCard, StackIndex pIndex)
+	public Card[] getSequence(Card pCard, TableauPile pIndex)
 	{
-		CardStack stack = aStacks.get(pIndex);
+		CardStack stack = aPiles.get(pIndex);
 		List<Card> lReturn = new ArrayList<>();
 		boolean aSeen = false;
 		for( Card card : stack )
@@ -218,37 +217,37 @@ class WorkingStackManager
 	}
 	
 	/**
-	 * Make the top card of a stack visible.
-	 * @param pIndex The index of the requested stack.
+	 * Make the top card of a pile visible.
+	 * @param pIndex The index of the requested pile.
 	 * @pre pIndex != null && !isEmpty(pIndex)
 	 */
-	void showTop(StackIndex pIndex)
+	void showTop(TableauPile pIndex)
 	{
-		assert !aStacks.get(pIndex).isEmpty();
-		aVisible.add(aStacks.get(pIndex).peek());
+		assert !aPiles.get(pIndex).isEmpty();
+		aVisible.add(aPiles.get(pIndex).peek());
 	}
 	
 	/**
-	 * Make the top card of a stack not visible.
+	 * Make the top card of a pile not visible.
 	 * @param pIndex The index of the requested stack.
 	 * @pre pIndex != null && !isEmpty(pIndex)
 	 */
-	void hideTop(StackIndex pIndex)
+	void hideTop(TableauPile pIndex)
 	{
-		assert !aStacks.get(pIndex).isEmpty();
-		aVisible.remove(aStacks.get(pIndex).peek());
+		assert !aPiles.get(pIndex).isEmpty();
+		aVisible.remove(aPiles.get(pIndex).peek());
 	}
 	
 	/**
 	 * @param pCard The card to check
-	 * @param pIndex The index of the stack to check
+	 * @param pIndex The index of the pile to check
 	 * @return True if pIndex contains pCard
 	 * @pre pCard != null && pIndex != null
 	 */
-	boolean contains(Card pCard, StackIndex pIndex)
+	boolean contains(Card pCard, TableauPile pIndex)
 	{
 		assert pCard != null && pIndex != null;
-		for( Card card : aStacks.get(pIndex))
+		for( Card card : aPiles.get(pIndex))
 		{
 			if( card == pCard )
 			{
@@ -266,7 +265,7 @@ class WorkingStackManager
 	boolean contains(Card pCard)
 	{
 		assert pCard != null;
-		for( StackIndex index : StackIndex.values())
+		for( TableauPile index : TableauPile.values())
 		{
 			if( contains(pCard, index))
 			{
@@ -278,7 +277,7 @@ class WorkingStackManager
 	
 	/**
 	 * @param pCard The card to check.
-	 * @return true if pCard is visible in the stacks.
+	 * @return true if pCard is visible in the piles.
 	 * @pre contains(pCard)
 	 */
 	boolean isVisible(Card pCard)
@@ -288,27 +287,27 @@ class WorkingStackManager
 	}
 	
 	/**
-	 * Removes the top card from the stack at pIndex.
-	 * @param pIndex The index of the stack to pop.
+	 * Removes the top card from the pile at pIndex.
+	 * @param pIndex The index of the pile to pop.
 	 * @pre !isEmpty(pIndex)
 	 */
-	void pop(StackIndex pIndex)
+	void pop(TableauPile pIndex)
 	{
-		assert !aStacks.get(pIndex).isEmpty();
-		aVisible.remove(aStacks.get(pIndex).pop());
+		assert !aPiles.get(pIndex).isEmpty();
+		aVisible.remove(aPiles.get(pIndex).pop());
 	}
 	
 	/**
-	 * Places a card on top of the stack at pIndex. The
+	 * Places a card on top of the pile at pIndex. The
 	 * card will be visible by default.
 	 * @param pCard The card to push.
 	 * @param pIndex The index of the destination stack.
 	 * @pre pCard != null && pIndex != null;
 	 */
-	void push(Card pCard, StackIndex pIndex)
+	void push(Card pCard, TableauPile pIndex)
 	{
 		assert pCard != null && pIndex != null;
-		aStacks.get(pIndex).push(pCard);
+		aPiles.get(pIndex).push(pCard);
 		aVisible.add(pCard);
 	}
 }

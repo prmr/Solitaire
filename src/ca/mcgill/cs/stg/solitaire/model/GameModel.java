@@ -98,38 +98,9 @@ public final class GameModel implements GameModelView
 	private Stack<Move> aMoves = new Stack<>();
 	private Stack<Card> aDiscard = new Stack<>();
 	private FoundationPiles aSuitStacks = new FoundationPiles();
-	private WorkingStackManager aWorkingStacks = new WorkingStackManager();
+	private Tableau aWorkingStacks = new Tableau();
 	private List<GameModelListener> aListeners = new ArrayList<>();
 	private PlayingStrategy aPlayingStrategy = new GreedyPlayingStrategy();
-	
-	/**
-	 * Represents anywhere a card can be placed in 
-	 * Solitaire.
-	 */
-	public interface Location 
-	{}
-	
-	/**
-	 * Places where a card can be obtained.
-	 */
-	public enum CardSources implements Location
-	{ DISCARD_PILE  }
-	
-	/**
-	 * Represents the different stacks where cards
-	 * can be accumulated.
-	 */
-	public enum StackIndex implements Location
-	{ FIRST, SECOND, THIRD, FOURTH, FIFTH, SIXTH, SEVENTH }
-	
-	/**
-	 * Represents the different stacks where completed
-	 * suits can be accumulated.
-	 */
-	public enum SuitStackIndex implements Location
-	{
-		FIRST, SECOND, THIRD, FOURTH;
-	}
 	
 	private GameModel()
 	{
@@ -218,7 +189,7 @@ public final class GameModel implements GameModelView
 	}
 	
 	@Override
-	public boolean isEmptySuitStack(SuitStackIndex pIndex)
+	public boolean isEmptySuitStack(FoundationPile pIndex)
 	{
 		return aSuitStacks.isEmpty(pIndex);
 	}
@@ -230,7 +201,7 @@ public final class GameModel implements GameModelView
 	 * @return The card on top of the stack.
 	 * @pre !isEmptySuitStack(pIndex)
 	 */
-	public Card peekSuitStack(SuitStackIndex pIndex)
+	public Card peekSuitStack(FoundationPile pIndex)
 	{
 		assert !isEmptySuitStack(pIndex);
 		return aSuitStacks.peek(pIndex);
@@ -252,16 +223,16 @@ public final class GameModel implements GameModelView
 	{
 		if( !aDiscard.isEmpty() && aDiscard.peek() == pCard )
 		{
-			return CardSources.DISCARD_PILE;
+			return OtherLocation.DISCARD_PILE;
 		}
-		for( SuitStackIndex index : SuitStackIndex.values() )
+		for( FoundationPile index : FoundationPile.values() )
 		{
 			if( !aSuitStacks.isEmpty(index) && aSuitStacks.peek(index) == pCard )
 			{
 				return index;
 			}
 		}
-		for( StackIndex index : StackIndex.values() )
+		for( TableauPile index : TableauPile.values() )
 		{
 			if( aWorkingStacks.contains(pCard, index))
 			{
@@ -297,52 +268,52 @@ public final class GameModel implements GameModelView
 	 */
 	private void absorbCard(Location pLocation)
 	{
-		if( pLocation == CardSources.DISCARD_PILE )
+		if( pLocation == OtherLocation.DISCARD_PILE )
 		{
 			assert !aDiscard.isEmpty();
 			aDiscard.pop();
 		}
-		else if( pLocation instanceof SuitStackIndex )
+		else if( pLocation instanceof FoundationPile )
 		{
-			assert !aSuitStacks.isEmpty((SuitStackIndex)pLocation);
-			aSuitStacks.pop((SuitStackIndex)pLocation);
+			assert !aSuitStacks.isEmpty((FoundationPile)pLocation);
+			aSuitStacks.pop((FoundationPile)pLocation);
 		}
 		else
 		{
-			assert pLocation instanceof StackIndex;
-			aWorkingStacks.pop((StackIndex)pLocation);
+			assert pLocation instanceof TableauPile;
+			aWorkingStacks.pop((TableauPile)pLocation);
 		}
 	}
 	
 	private void move(Card pCard, Location pDestination)
 	{
 		Location source = find(pCard);
-		if( source instanceof StackIndex && pDestination instanceof StackIndex )
+		if( source instanceof TableauPile && pDestination instanceof TableauPile )
 		{
-			aWorkingStacks.moveWithin(pCard, (StackIndex)source, (StackIndex) pDestination);
+			aWorkingStacks.moveWithin(pCard, (TableauPile)source, (TableauPile) pDestination);
 		}
 		else
 		{
 			absorbCard(source);
-			if( pDestination instanceof SuitStackIndex )
+			if( pDestination instanceof FoundationPile )
 			{
-				aSuitStacks.push(pCard, (SuitStackIndex)pDestination);
+				aSuitStacks.push(pCard, (FoundationPile)pDestination);
 			}
-			else if( pDestination == CardSources.DISCARD_PILE )
+			else if( pDestination == OtherLocation.DISCARD_PILE )
 			{
 				aDiscard.push(pCard);
 			}
 			else
 			{
-				assert pDestination instanceof StackIndex;
-				aWorkingStacks.push(pCard, (StackIndex)pDestination);
+				assert pDestination instanceof TableauPile;
+				aWorkingStacks.push(pCard, (TableauPile)pDestination);
 			}
 		}
 		notifyListeners();
 	}
 	
 	@Override
-	public Card[] getStack(StackIndex pIndex)
+	public Card[] getStack(TableauPile pIndex)
 	{
 		return aWorkingStacks.getStack(pIndex); 
 	}
@@ -361,7 +332,7 @@ public final class GameModel implements GameModelView
 	 * @return A non-empty sequence of cards.
 	 * @pre pCard is in stack pIndex
 	 */
-	public Card[] getSubStack(Card pCard, StackIndex pIndex)
+	public Card[] getSubStack(Card pCard, TableauPile pIndex)
 	{
 		return aWorkingStacks.getSequence(pCard, pIndex);
 	}
@@ -369,13 +340,13 @@ public final class GameModel implements GameModelView
 	@Override
 	public boolean isLegalMove(Card pCard, Location pDestination )
 	{ 
-		if( pDestination instanceof SuitStackIndex )
+		if( pDestination instanceof FoundationPile )
 		{
-			return aSuitStacks.canMoveTo(pCard, (SuitStackIndex) pDestination);
+			return aSuitStacks.canMoveTo(pCard, (FoundationPile) pDestination);
 		}
-		else if( pDestination instanceof StackIndex )
+		else if( pDestination instanceof TableauPile )
 		{
-			return aWorkingStacks.canMoveTo(pCard, (StackIndex) pDestination);
+			return aWorkingStacks.canMoveTo(pCard, (TableauPile) pDestination);
 		}
 		else
 		{
@@ -399,9 +370,9 @@ public final class GameModel implements GameModelView
 	public Move getCardMove(Card pCard, Location pDestination)
 	{
 		Location source = find( pCard );
-		if( source instanceof StackIndex  && aWorkingStacks.revealsTop(pCard, (StackIndex)source))
+		if( source instanceof TableauPile  && aWorkingStacks.revealsTop(pCard, (TableauPile)source))
 		{
-			return new CompositeMove(new CardMove(pCard, pDestination), new RevealTopMove((StackIndex)source) );
+			return new CompositeMove(new CardMove(pCard, pDestination), new RevealTopMove((TableauPile)source) );
 		}
 		return new CardMove(pCard, pDestination);
 	} 
@@ -451,9 +422,9 @@ public final class GameModel implements GameModelView
 	 */
 	private class RevealTopMove implements Move
 	{
-		private final StackIndex aIndex;
+		private final TableauPile aIndex;
 		
-		RevealTopMove(StackIndex pIndex)
+		RevealTopMove(TableauPile pIndex)
 		{
 			aIndex = pIndex;
 		}

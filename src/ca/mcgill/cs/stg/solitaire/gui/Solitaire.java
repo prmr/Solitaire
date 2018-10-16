@@ -22,8 +22,8 @@ package ca.mcgill.cs.stg.solitaire.gui;
 
 import ca.mcgill.cs.stg.solitaire.cards.Suit;
 import ca.mcgill.cs.stg.solitaire.model.GameModel;
-import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
-import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
+import ca.mcgill.cs.stg.solitaire.model.FoundationPile;
+import ca.mcgill.cs.stg.solitaire.model.TableauPile;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -50,7 +50,7 @@ public class Solitaire extends Application
     private DeckView aDeckView = new DeckView();
     private DiscardPileView aDiscardPileView = new DiscardPileView();
     private SuitStack[] aSuitStacks = new SuitStack[Suit.values().length];
-    private CardStack[] aStacks = new CardStack[StackIndex.values().length];
+    private CardPileView[] aStacks = new CardPileView[TableauPile.values().length];
     
 	/**
 	 * Launches the application.
@@ -75,15 +75,15 @@ public class Solitaire extends Application
         root.add(aDeckView, 0, 0);
         root.add(aDiscardPileView, 1, 0);
                 
-        for( SuitStackIndex index : SuitStackIndex.values() )
+        for( FoundationPile index : FoundationPile.values() )
         {
         	aSuitStacks[index.ordinal()] = new SuitStack(index);
         	root.add(aSuitStacks[index.ordinal()], 3+index.ordinal(), 0);
         }
       
-        for( StackIndex index : StackIndex.values() )
+        for( TableauPile index : TableauPile.values() )
         {
-        	aStacks[index.ordinal()] = new CardStack(index);
+        	aStacks[index.ordinal()] = new CardPileView(index);
         	root.add(aStacks[index.ordinal()], index.ordinal(), 1);
         }
         

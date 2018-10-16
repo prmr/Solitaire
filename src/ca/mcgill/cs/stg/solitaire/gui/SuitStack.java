@@ -23,8 +23,8 @@ package ca.mcgill.cs.stg.solitaire.gui;
 import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.CardImages;
 import ca.mcgill.cs.stg.solitaire.model.GameModel;
-import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
 import ca.mcgill.cs.stg.solitaire.model.GameModelListener;
+import ca.mcgill.cs.stg.solitaire.model.FoundationPile;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.image.ImageView;
@@ -48,9 +48,9 @@ public class SuitStack extends StackPane implements GameModelListener
 			+ "-fx-border-width: 3;" + " -fx-border-radius: 10.0";
 	
 	private CardDragHandler aDragHandler;
-	private SuitStackIndex aIndex;
+	private FoundationPile aIndex;
 	
-	SuitStack(SuitStackIndex pIndex)
+	SuitStack(FoundationPile pIndex)
 	{
 		aIndex = pIndex;
 		setPadding(new Insets(PADDING));

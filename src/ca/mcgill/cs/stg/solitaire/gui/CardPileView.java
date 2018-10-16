@@ -23,8 +23,8 @@ package ca.mcgill.cs.stg.solitaire.gui;
 import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.CardImages;
 import ca.mcgill.cs.stg.solitaire.model.GameModel;
-import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
 import ca.mcgill.cs.stg.solitaire.model.GameModelListener;
+import ca.mcgill.cs.stg.solitaire.model.TableauPile;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -42,14 +42,14 @@ import javafx.scene.layout.StackPane;
  * Component that shows a stack of cards in 
  * the bottom stacks.
  */
-public class CardStack extends StackPane implements GameModelListener
+public class CardPileView extends StackPane implements GameModelListener
 {
 	private static final int PADDING = 5;
 	private static final int Y_OFFSET = 17;
 	
-	private StackIndex aIndex;
+	private TableauPile aIndex;
 	
-	CardStack(StackIndex pIndex)
+	CardPileView(TableauPile pIndex)
 	{
 		aIndex = pIndex;
 		setPadding(new Insets(PADDING));

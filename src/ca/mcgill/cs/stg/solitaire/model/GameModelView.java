@@ -21,9 +21,6 @@
 package ca.mcgill.cs.stg.solitaire.model;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
-import ca.mcgill.cs.stg.solitaire.model.GameModel.Location;
-import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
-import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
 
 /**
  * A read-only version of a game model.
@@ -44,7 +41,7 @@ public interface GameModelView
 	 * @param pIndex The suit stack to check
 	 * @return True if the suit stack for pSuit is empty
 	 */
-	boolean isEmptySuitStack(SuitStackIndex pIndex);
+	boolean isEmptySuitStack(FoundationPile pIndex);
 	
 	/**
 	 * @return The card on top of the discard pile.
@@ -56,7 +53,7 @@ public interface GameModelView
 	 * @param pIndex The position of the stack to return.
 	 * @return A copy of the stack at position pIndex
 	 */
-	Card[] getStack(StackIndex pIndex);
+	Card[] getStack(TableauPile pIndex);
 	
 	/**
 	 * @param pCard A card to test for visibility.

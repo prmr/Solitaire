@@ -24,10 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
-import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
-import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
 import ca.mcgill.cs.stg.solitaire.model.GameModelView;
 import ca.mcgill.cs.stg.solitaire.model.Move;
+import ca.mcgill.cs.stg.solitaire.model.FoundationPile;
+import ca.mcgill.cs.stg.solitaire.model.TableauPile;
 
 /**
  * Makes the first possible move in this order: 
@@ -90,7 +90,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 		ArrayList<Move> moves = new ArrayList<>();
 		if( !pModel.isEmptyDiscardPile())
 		{
-			for(SuitStackIndex index : SuitStackIndex.values())
+			for(FoundationPile index : FoundationPile.values())
 			{
 				if( pModel.isLegalMove(pModel.peekDiscardPile(), index))
 				{
@@ -100,7 +100,8 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 						break; // we take the first possible blank space
 					}
 				}
-		}}
+			}
+		}
 		return moves;
 	}
 	
@@ -109,7 +110,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 		ArrayList<Move> moves = new ArrayList<>();
 		if( !pModel.isEmptyDiscardPile() )
 		{
-			for(StackIndex index : StackIndex.values())
+			for(TableauPile index : TableauPile.values())
 			{
 				if( pModel.isLegalMove(pModel.peekDiscardPile(), index))
 				{
@@ -123,13 +124,13 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 	private List<Move> movesFromWorkingStacksToSuitStacks(GameModelView pModel)
 	{
 		ArrayList<Move> moves = new ArrayList<>();
-		for(StackIndex index : StackIndex.values())
+		for(TableauPile index : TableauPile.values())
 		{
 			Card[] stack = pModel.getStack(index);
 			if( stack.length > 0 )
 			{
 				Card card = stack[stack.length-1];
-				for(SuitStackIndex index2 : SuitStackIndex.values())
+				for(FoundationPile index2 : FoundationPile.values())
 				{
 					if( pModel.isLegalMove(card, index2))
 					{
@@ -148,14 +149,14 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 	private List<Move> movesFromWorkingStacksRevealsCard(GameModelView pModel)
 	{
 		ArrayList<Move> moves = new ArrayList<>();
-		for(StackIndex index : StackIndex.values())
+		for(TableauPile index : TableauPile.values())
 		{
 			Card[] stack = pModel.getStack(index);
 			for(int i = 0; i < stack.length; i++ )
 			{
 				if( pModel.isVisibleInWorkingStack(stack[i]) && i > 0 && !pModel.isVisibleInWorkingStack(stack[i-1]) )
 				{
-					for( StackIndex index2 : StackIndex.values() )
+					for( TableauPile index2 : TableauPile.values() )
 					{
 						if( pModel.isLegalMove(stack[i], index2))
 						{
@@ -165,7 +166,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 				}
 				else if( pModel.isVisibleInWorkingStack(stack[i]) && i == 0 )
 				{
-					for( StackIndex index2 : StackIndex.values() )
+					for( TableauPile index2 : TableauPile.values() )
 					{
 						// we don't want to just move a card around
 						if( pModel.isLegalMove(stack[i], index2) && pModel.getStack(index2).length > 0) 
