@@ -60,7 +60,6 @@ public class TestWorkingStackManager
 		assertEquals(5,aWorkingStackManager.getStack(StackIndex.FIFTH).length);
 		assertEquals(6,aWorkingStackManager.getStack(StackIndex.SIXTH).length);
 		assertEquals(7,aWorkingStackManager.getStack(StackIndex.SEVENTH).length);
-		assertEquals(24, deck.size());
 		deck.shuffle();
 		aWorkingStackManager.initialize(deck);
 		assertEquals(1,aWorkingStackManager.getStack(StackIndex.FIRST).length);
@@ -70,7 +69,6 @@ public class TestWorkingStackManager
 		assertEquals(5,aWorkingStackManager.getStack(StackIndex.FIFTH).length);
 		assertEquals(6,aWorkingStackManager.getStack(StackIndex.SIXTH).length);
 		assertEquals(7,aWorkingStackManager.getStack(StackIndex.SEVENTH).length);
-		assertEquals(24, deck.size());
 	}
 	
 	@Test
@@ -176,7 +174,7 @@ public class TestWorkingStackManager
 	{
 		Deck deck = new Deck();
 		aWorkingStackManager.initialize(deck);
-		while( deck.size() > 0 )
+		while( !deck.isEmpty() )
 		{
 			assertFalse(aWorkingStackManager.contains(deck.draw()));
 		}

@@ -20,45 +20,40 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.cards;
 
-import java.util.Collections;
-import java.util.Stack;
-
 /**
  * Models a deck of 52 cards.
  */
 public class Deck 
 {
-	private Stack<Card> aCards;
+	private final CardStack aCards = new CardStack();
 	
 	/**
 	 * Creates a new deck of 52 cards, shuffled.
 	 */
 	public Deck()
 	{
-		aCards = new Stack<Card>();
-		reset();
 		shuffle();
 	}
 	
 	private void reset()
 	{
 		aCards.clear();
-		for( Suit lSuit : Suit.values() )
+		for( Suit suit : Suit.values() )
 		{
-            for( Rank lRank : Rank.values() )
+            for( Rank rank : Rank.values() )
             {
-                aCards.add( Card.get( lRank, lSuit ));
+                aCards.push( Card.get( rank, suit ));
             }
 		}
 	}
 
 	/**
-	 * Shuffles the deck.
+	 * Reinitializes the deck with all 52 cards, and shuffles them.
 	 */
 	public void shuffle()
 	{
 		reset();
-		Collections.shuffle( aCards );
+		aCards.shuffle();
 	}
 	
 	/**
@@ -76,20 +71,19 @@ public class Deck
 	/**
 	 * Draws a card from the deck and removes the card from the deck.
 	 * @return The card drawn.
-	 * @pre initial.size() > 0
-	 * @post final.size() == initial.size() - 1
+	 * @pre !isEmpty()
 	 */
 	public Card draw()
 	{
-		assert size() > 0;
+		assert !isEmpty();
 		return aCards.pop();
 	}
 	
 	/**
-	 * @return The number of cards in the deck.
+	 * @return True iff there are no cards in the deck.
 	 */
-	public int size()
+	public boolean isEmpty()
 	{
-		return aCards.size();
+		return aCards.isEmpty();
 	}
 }

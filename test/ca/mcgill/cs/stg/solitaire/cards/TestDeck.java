@@ -20,8 +20,8 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.cards;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,8 +41,7 @@ public class TestDeck
 			Card lCard = lDeck.draw();
 			assertFalse( lCards.contains(lCard));
 			lCards.add( lCard );
-			assertEquals( i, 51 - lDeck.size() );
 		}
-		assertEquals( 0, lDeck.size() );
+		assertTrue( lDeck.isEmpty() );
 	}
 }

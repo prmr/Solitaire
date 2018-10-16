@@ -208,7 +208,7 @@ public final class GameModel implements GameModelView
 	@Override
 	public boolean isEmptyDeck()
 	{
-		return aDeck.size() == 0;
+		return aDeck.isEmpty();
 	}
 	
 	@Override

@@ -57,11 +57,12 @@ class WorkingStackManager
 	/**
 	 * Fills the working stacks by drawing cards from the deck.
 	 * @param pDeck a deck of card to use to fill the stacks initially.
-	 * @pre pDeck != null && pDeck.size() >= 24
+	 * @pre pDeck != null
+	 * 
 	 */
 	void initialize(Deck pDeck)
 	{   
-		assert pDeck != null && pDeck.size() >= NUMBER_OF_CARDS_NEEDED; 
+		assert pDeck != null; 
 		aVisible.clear();
 		for( int i = 0; i < StackIndex.values().length; i++ )
 		{
