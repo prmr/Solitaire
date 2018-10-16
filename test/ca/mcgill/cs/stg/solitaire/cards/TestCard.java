@@ -21,14 +21,8 @@
 package ca.mcgill.cs.stg.solitaire.cards;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-
 
 import org.junit.Test;
-
-import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
-import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
 
 public class TestCard
 {
@@ -69,26 +63,5 @@ public class TestCard
 		assertEquals("ACE of SPADES", Card.get(Rank.ACE, Suit.SPADES).toString());
 		assertEquals("TWO of SPADES", Card.get(Rank.TWO, Suit.SPADES).toString());
 		assertEquals("KING of SPADES", Card.get(Rank.KING, Suit.SPADES).toString());
-	}
-	
-	@Test
-	public void testSameColor()
-	{
-		assertTrue(Card.get(Rank.ACE, Suit.CLUBS).sameColorAs(Card.get(Rank.ACE, Suit.CLUBS)));
-		assertTrue(Card.get(Rank.ACE, Suit.CLUBS).sameColorAs(Card.get(Rank.ACE, Suit.SPADES)));
-		assertTrue(Card.get(Rank.ACE, Suit.CLUBS).sameColorAs(Card.get(Rank.KING, Suit.SPADES)));
-		assertTrue(Card.get(Rank.ACE, Suit.SPADES).sameColorAs(Card.get(Rank.KING, Suit.SPADES)));
-		assertTrue(Card.get(Rank.ACE, Suit.SPADES).sameColorAs(Card.get(Rank.KING, Suit.CLUBS)));
-		assertTrue(Card.get(Rank.ACE, Suit.DIAMONDS).sameColorAs(Card.get(Rank.ACE, Suit.DIAMONDS)));
-		assertTrue(Card.get(Rank.ACE, Suit.DIAMONDS).sameColorAs(Card.get(Rank.ACE, Suit.HEARTS)));
-		assertTrue(Card.get(Rank.ACE, Suit.DIAMONDS).sameColorAs(Card.get(Rank.KING, Suit.HEARTS)));
-		assertTrue(Card.get(Rank.ACE, Suit.HEARTS).sameColorAs(Card.get(Rank.KING, Suit.HEARTS)));
-		assertTrue(Card.get(Rank.ACE, Suit.HEARTS).sameColorAs(Card.get(Rank.KING, Suit.DIAMONDS)));
-		
-		assertFalse(Card.get(Rank.ACE, Suit.CLUBS).sameColorAs(Card.get(Rank.ACE, Suit.DIAMONDS)));
-		assertFalse(Card.get(Rank.ACE, Suit.CLUBS).sameColorAs(Card.get(Rank.ACE, Suit.HEARTS)));
-		assertFalse(Card.get(Rank.ACE, Suit.SPADES).sameColorAs(Card.get(Rank.ACE, Suit.DIAMONDS)));
-		assertFalse(Card.get(Rank.ACE, Suit.SPADES).sameColorAs(Card.get(Rank.ACE, Suit.HEARTS)));
-		assertFalse(Card.get(Rank.ACE, Suit.DIAMONDS).sameColorAs(Card.get(Rank.ACE, Suit.SPADES)));
 	}
 }

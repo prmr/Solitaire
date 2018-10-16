@@ -52,19 +52,6 @@ public final class Card
 		}
 	}
 	
-	/**
-	 * Represents the rank of the card.
-	 */
-	public enum Rank 
-	{ ACE, TWO, THREE, FOUR, FIVE, SIX,
-		SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING }
-	
-	/**
-	 * Represents the suit of the card.
-	 */
-	public enum Suit 
-	{ CLUBS, DIAMONDS, HEARTS, SPADES }
-	
 	private final Rank aRank;
 	private final Suit aSuit;
 	
@@ -108,23 +95,23 @@ public final class Card
 		return aRank;
 	}
 	
-	/**
-	 * @param pCard The card to compare against
-	 * @return True if and only if pCard's suit is of the same color as 
-	 * this card.
-	 */
-	public boolean sameColorAs(Card pCard)
-	{
-		assert pCard != null;
-		if( getSuit() == Suit.DIAMONDS || getSuit() == Suit.HEARTS )
-		{
-			return pCard.getSuit() == Suit.DIAMONDS || pCard.getSuit() == Suit.HEARTS;
-		}
-		else
-		{
-			return pCard.getSuit() == Suit.CLUBS || pCard.getSuit() == Suit.SPADES;
-		}
-	}
+//	/**
+//	 * @param pCard The card to compare against
+//	 * @return True if and only if pCard's suit is of the same color as 
+//	 * this card.
+//	 */
+//	public boolean sameColorAs(Card pCard)
+//	{
+//		assert pCard != null;
+//		if( getSuit() == Suit.DIAMONDS || getSuit() == Suit.HEARTS )
+//		{
+//			return pCard.getSuit() == Suit.DIAMONDS || pCard.getSuit() == Suit.HEARTS;
+//		}
+//		else
+//		{
+//			return pCard.getSuit() == Suit.CLUBS || pCard.getSuit() == Suit.SPADES;
+//		}
+//	}
 	
 	/**
 	 * @return A string uniquely representing this card. The string

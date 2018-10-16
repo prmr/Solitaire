@@ -27,9 +27,9 @@ import java.util.Stack;
 import ca.mcgill.cs.stg.solitaire.ai.GreedyPlayingStrategy;
 import ca.mcgill.cs.stg.solitaire.ai.PlayingStrategy;
 import ca.mcgill.cs.stg.solitaire.cards.Card;
-import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
-import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
 import ca.mcgill.cs.stg.solitaire.cards.Deck;
+import ca.mcgill.cs.stg.solitaire.cards.Rank;
+import ca.mcgill.cs.stg.solitaire.cards.Suit;
 
 /**
  * Keeps track of the current state of the game and provides

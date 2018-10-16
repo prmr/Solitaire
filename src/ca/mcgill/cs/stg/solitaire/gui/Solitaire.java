@@ -20,7 +20,7 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.gui;
 
-import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
+import ca.mcgill.cs.stg.solitaire.cards.Suit;
 import ca.mcgill.cs.stg.solitaire.model.GameModel;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;

@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Stack;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
-import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
+import ca.mcgill.cs.stg.solitaire.cards.Rank;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.SuitStackIndex;
 
 /**

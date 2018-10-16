@@ -27,9 +27,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
-import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
-import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
 import ca.mcgill.cs.stg.solitaire.cards.Deck;
+import ca.mcgill.cs.stg.solitaire.cards.Rank;
+import ca.mcgill.cs.stg.solitaire.cards.Suit;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
 
 public class TestWorkingStackManager

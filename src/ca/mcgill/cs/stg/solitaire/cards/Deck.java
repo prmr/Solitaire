@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  *
- * Copyright (C) 2016 by Martin P. Robillard
+ * Copyright (C) 2016-2018 by Martin P. Robillard
  *
  * See: https://github.com/prmr/Solitaire
  *
@@ -22,9 +22,6 @@ package ca.mcgill.cs.stg.solitaire.cards;
 
 import java.util.Collections;
 import java.util.Stack;
-
-import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
-import ca.mcgill.cs.stg.solitaire.cards.Card.Suit;
 
 /**
  * Models a deck of 52 cards.

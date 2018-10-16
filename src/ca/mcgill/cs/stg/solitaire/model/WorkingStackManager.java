@@ -29,8 +29,8 @@ import java.util.Set;
 import java.util.Stack;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
-import ca.mcgill.cs.stg.solitaire.cards.Card.Rank;
 import ca.mcgill.cs.stg.solitaire.cards.Deck;
+import ca.mcgill.cs.stg.solitaire.cards.Rank;
 import ca.mcgill.cs.stg.solitaire.model.GameModel.StackIndex;
 
 /**
@@ -100,7 +100,7 @@ class WorkingStackManager
 		else
 		{ 
 			return pCard.getRank().ordinal() == stack.peek().getRank().ordinal()-1 && 
-					!pCard.sameColorAs(stack.peek());
+					!pCard.getSuit().sameColorAs(stack.peek().getSuit());
 		}
 	}
 	
