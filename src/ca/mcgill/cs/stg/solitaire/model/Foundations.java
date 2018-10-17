@@ -31,14 +31,14 @@ import ca.mcgill.cs.stg.solitaire.cards.Rank;
  * Represents the four piles that must be completed to win the game, with the ace
  * at the bottom, face up, and all cards of the same suit on top, in sequence.
  */
-class FoundationPiles
+class Foundations
 {
 	private final Map<FoundationPile, CardStack> aPiles = new HashMap<>();
 	
 	/**
 	 * Creates an initialized FoundationPiles object that consists of four empty piles.
 	 */
-	FoundationPiles()
+	Foundations()
 	{
 		initialize();
 	}

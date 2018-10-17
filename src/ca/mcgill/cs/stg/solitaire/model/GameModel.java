@@ -97,7 +97,7 @@ public final class GameModel implements GameModelView
 	private Deck aDeck = new Deck();
 	private Stack<Move> aMoves = new Stack<>();
 	private Stack<Card> aDiscard = new Stack<>();
-	private FoundationPiles aSuitStacks = new FoundationPiles();
+	private Foundations aSuitStacks = new Foundations();
 	private Tableau aWorkingStacks = new Tableau();
 	private List<GameModelListener> aListeners = new ArrayList<>();
 	private PlayingStrategy aPlayingStrategy = new GreedyPlayingStrategy();

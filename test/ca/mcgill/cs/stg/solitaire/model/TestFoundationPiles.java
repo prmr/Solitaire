@@ -33,7 +33,7 @@ import ca.mcgill.cs.stg.solitaire.cards.Suit;
 
 public class TestFoundationPiles
 {
-	private FoundationPiles aFoundationPiles;
+	private Foundations aFoundationPiles;
 	private static final Card CAC = Card.get(Rank.ACE, Suit.CLUBS);
 	private static final Card CAD = Card.get(Rank.ACE, Suit.DIAMONDS);
 	private static final Card C3D = Card.get(Rank.THREE, Suit.DIAMONDS);
@@ -41,7 +41,7 @@ public class TestFoundationPiles
 	@Before
 	public void setup()
 	{
-		aFoundationPiles = new FoundationPiles();
+		aFoundationPiles = new Foundations();
 	}
 	
 	@Test
