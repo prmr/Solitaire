@@ -37,16 +37,9 @@ import ca.mcgill.cs.stg.solitaire.cards.Suit;
  * a facade to it. Implements the Singleton design pattern.
  * 
  * The game state can logically be separated into four distinct 
- * conceptual elements: the deck, the discard pile, the four
- * "suit stacks" where completed suits are accumulated, and the
- * seven "working stacks" where cards can be accumulated in sequences
- * of alternating suit colors.
- * 
- * To prevent
- * this class from degenerating into a God class, responsibilities
- * are separated into package-private "manager" classes 
- * in charge of managing the state. However, these manager classes
- * are not responsible for notifying observers.
+ * conceptual elements: the deck, the discard pile, the foundations
+ * where completed suits are accumulated, and the tableau, which consists of
+ * seven piles where cards fan down in sequences of alternating suit colors.
  */
 public final class GameModel implements GameModelView
 {
@@ -95,13 +88,13 @@ public final class GameModel implements GameModelView
 		}
 	};
 	
-	private Deck aDeck = new Deck();
-	private Stack<Move> aMoves = new Stack<>();
-	private Stack<Card> aDiscard = new Stack<>();
-	private Foundations aSuitStacks = new Foundations();
-	private Tableau aWorkingStacks = new Tableau();
-	private List<GameModelListener> aListeners = new ArrayList<>();
-	private PlayingStrategy aPlayingStrategy = new GreedyPlayingStrategy();
+	private final Deck aDeck = new Deck();
+	private final Stack<Move> aMoves = new Stack<>();
+	private final CardStack aDiscard = new CardStack();
+	private final Foundations aSuitStacks = new Foundations();
+	private final Tableau aWorkingStacks = new Tableau();
+	private final List<GameModelListener> aListeners = new ArrayList<>();
+	private final PlayingStrategy aPlayingStrategy = new GreedyPlayingStrategy();
 	
 	private GameModel()
 	{
@@ -109,7 +102,7 @@ public final class GameModel implements GameModelView
 	}
 	
 	/**
-	 * @return The number of cards in the suit stacks.
+	 * @return The number of cards in the foundations.
 	 */
 	public int getScore()
 	{
