@@ -22,6 +22,7 @@ package ca.mcgill.cs.stg.solitaire.gui;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.CardImages;
+import ca.mcgill.cs.stg.solitaire.cards.CardStack;
 import ca.mcgill.cs.stg.solitaire.model.GameModel;
 import ca.mcgill.cs.stg.solitaire.model.GameModelListener;
 import ca.mcgill.cs.stg.solitaire.model.TableauPile;
@@ -75,8 +76,8 @@ public class CardPileView extends StackPane implements GameModelListener
 		getChildren().clear();
 		
 		int offset = 0;
-		Card[] stack = GameModel.instance().getStack(aIndex);
-		if( stack.length == 0 ) // this essentially acts as a spacer
+		CardStack stack = GameModel.instance().getStack(aIndex);
+		if( stack.isEmpty() ) // this essentially acts as a spacer
 		{
 			ImageView image = new ImageView(CardImages.getBack());
 			image.setVisible(false);

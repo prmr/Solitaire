@@ -106,26 +106,16 @@ class Tableau
 	}
 	
 	/**
+	 * Returns a copy of the entire pile at the specified position in the tableau.
+	 * 
 	 * @param pPile The pile to obtain.
-	 * @return An array of cards in pPile, where element [0] is the 
-	 * bottom of the stack. Modifying the array has no impact on the state of the 
-	 * object.
+	 * @return A copy of the at pPile.
 	 * @pre pPile != null
 	 */
-	Card[] getStack(TableauPile pPile)
+	CardStack getPile(TableauPile pPile)
 	{
 		assert pPile != null;
-		return toArray(aPiles.get(pPile));
-	}
-	
-	private static Card[] toArray(CardStack pStack)
-	{
-		List<Card> result = new ArrayList<>();
-		for( Card card : pStack)
-		{
-			result.add(card);
-		}
-		return result.toArray(new Card[result.size()]);
+		return new CardStack(aPiles.get(pPile));
 	}
 	
 	/**

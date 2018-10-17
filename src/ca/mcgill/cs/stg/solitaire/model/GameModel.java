@@ -27,6 +27,7 @@ import java.util.Stack;
 import ca.mcgill.cs.stg.solitaire.ai.GreedyPlayingStrategy;
 import ca.mcgill.cs.stg.solitaire.ai.PlayingStrategy;
 import ca.mcgill.cs.stg.solitaire.cards.Card;
+import ca.mcgill.cs.stg.solitaire.cards.CardStack;
 import ca.mcgill.cs.stg.solitaire.cards.Deck;
 import ca.mcgill.cs.stg.solitaire.cards.Rank;
 import ca.mcgill.cs.stg.solitaire.cards.Suit;
@@ -313,9 +314,9 @@ public final class GameModel implements GameModelView
 	}
 	
 	@Override
-	public Card[] getStack(TableauPile pIndex)
+	public CardStack getStack(TableauPile pIndex)
 	{
-		return aWorkingStacks.getStack(pIndex); 
+		return aWorkingStacks.getPile(pIndex); 
 	}
 	
 	@Override

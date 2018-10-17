@@ -23,6 +23,7 @@ package ca.mcgill.cs.stg.solitaire.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotSame;
 
 import java.lang.reflect.Field;
 
@@ -30,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
+import ca.mcgill.cs.stg.solitaire.cards.CardStack;
 import ca.mcgill.cs.stg.solitaire.cards.Rank;
 import ca.mcgill.cs.stg.solitaire.cards.Suit;
 
@@ -90,18 +92,17 @@ public class TestGameModel
 	public void testGetStack()
 	{
 		GameModel model = GameModel.instance();
-		Card[] stack = model.getStack(TableauPile.FIRST);
-		assertEquals(Card.get(Rank.KING, Suit.SPADES), stack[0]);
-		assertEquals(1, stack.length);
-		// Test that the method returns a clone
-		stack[0] =Card.get(Rank.QUEEN, Suit.CLUBS);
-		stack = model.getStack(TableauPile.FIRST);
-		assertEquals(Card.get(Rank.KING, Suit.SPADES), stack[0]);
-		assertEquals(1, stack.length);
+		CardStack stack = model.getStack(TableauPile.FIRST);
+		assertEquals(Card.get(Rank.KING, Suit.SPADES), stack.peek(0));
+		assertEquals(1, stack.size());
+		// Test that the method returns a clones
+		CardStack stack2 = model.getStack(TableauPile.FIRST);
+		assertNotSame(stack, stack2);
+		
 		stack = model.getStack(TableauPile.SECOND);
-		assertEquals(2, stack.length);
-		assertEquals(Card.get(Rank.QUEEN, Suit.SPADES), stack[0]);
-		assertEquals(Card.get(Rank.JACK, Suit.SPADES), stack[1]);
+		assertEquals(2, stack.size());
+		assertEquals(Card.get(Rank.QUEEN, Suit.SPADES), stack.peek(0));
+		assertEquals(Card.get(Rank.JACK, Suit.SPADES), stack.peek(1));
 	}
 	
 	@Test
@@ -200,12 +201,12 @@ public class TestGameModel
 		assertEquals(Card.get(Rank.TEN, Suit.DIAMONDS), stack[1]);
 		assertEquals(Card.get(Rank.NINE, Suit.CLUBS), stack[2]);
 		model.getCardMove(stack[0], TableauPile.SEVENTH).perform();
-		assertEquals(1, model.getStack(TableauPile.SECOND).length);
+		assertEquals(1, model.getStack(TableauPile.SECOND).size());
 		stack = model.getSubStack(Card.get(Rank.JACK, Suit.SPADES), TableauPile.SEVENTH);
-		assertEquals(10, model.getStack(TableauPile.SEVENTH).length);
+		assertEquals(10, model.getStack(TableauPile.SEVENTH).size());
 		model.getCardMove(model.getSubStack(Card.get(Rank.QUEEN, Suit.DIAMONDS), TableauPile.SEVENTH)[0], TableauPile.FIRST).perform();
-		Card[] stack2 = model.getStack(TableauPile.FIRST);
-		assertEquals(5, stack2.length);
+		CardStack stack2 = model.getStack(TableauPile.FIRST);
+		assertEquals(5, stack2.size());
 	}
 	
 	@Test 
@@ -218,10 +219,10 @@ public class TestGameModel
 		}
 		assertEquals(Card.get(Rank.JACK, Suit.CLUBS), model.peekDiscardPile());
 		model.getCardMove(model.peekDiscardPile(), TableauPile.FIFTH).perform();
-		assertEquals(6, model.getStack(TableauPile.FIFTH).length);
+		assertEquals(6, model.getStack(TableauPile.FIFTH).size());
 		model.getCardMove(model.getSubStack(Card.get(Rank.JACK, Suit.CLUBS), TableauPile.FIFTH)[0], TableauPile.SEVENTH).perform();
-		assertEquals(5, model.getStack(TableauPile.FIFTH).length);
-		assertEquals(8, model.getStack(TableauPile.SEVENTH).length);
+		assertEquals(5, model.getStack(TableauPile.FIFTH).size());
+		assertEquals(8, model.getStack(TableauPile.SEVENTH).size());
 	}
 	
 	@Test
