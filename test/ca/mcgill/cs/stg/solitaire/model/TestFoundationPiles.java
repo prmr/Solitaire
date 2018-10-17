@@ -22,6 +22,7 @@ package ca.mcgill.cs.stg.solitaire.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -76,5 +77,36 @@ public class TestFoundationPiles
 		aFoundationPiles.push(CAC, FoundationPile.FIRST);
 		aFoundationPiles.push(CAD, FoundationPile.SECOND);
 		assertEquals(2, aFoundationPiles.getTotalSize());
+	}
+	
+	@Test
+	public void testCanMoveTo_Empty()
+	{
+		assertTrue(aFoundationPiles.canMoveTo(CAC, FoundationPile.FIRST));
+		assertFalse(aFoundationPiles.canMoveTo(C3D, FoundationPile.SECOND));
+	}
+	
+	@Test
+	public void testCanMoveTo_NotEmpty_NotSameSuit()
+	{
+		aFoundationPiles.push(Card.get(Rank.ACE, Suit.CLUBS), FoundationPile.FIRST);
+		aFoundationPiles.push(Card.get(Rank.TWO, Suit.CLUBS), FoundationPile.FIRST);
+		assertFalse(aFoundationPiles.canMoveTo(Card.get(Rank.THREE, Suit.DIAMONDS), FoundationPile.FIRST));
+	}
+	
+	@Test
+	public void testCanMoveTo_NotEmpty_SameSuit_NotInSequence()
+	{
+		aFoundationPiles.push(Card.get(Rank.ACE, Suit.CLUBS), FoundationPile.FIRST);
+		aFoundationPiles.push(Card.get(Rank.TWO, Suit.CLUBS), FoundationPile.FIRST);
+		assertFalse(aFoundationPiles.canMoveTo(Card.get(Rank.FOUR, Suit.CLUBS), FoundationPile.FIRST));
+	}
+	
+	@Test
+	public void testCanMoveTo_NotEmpty_SameSuit_InSequence()
+	{
+		aFoundationPiles.push(Card.get(Rank.ACE, Suit.CLUBS), FoundationPile.FIRST);
+		aFoundationPiles.push(Card.get(Rank.TWO, Suit.CLUBS), FoundationPile.FIRST);
+		assertTrue(aFoundationPiles.canMoveTo(Card.get(Rank.THREE, Suit.CLUBS), FoundationPile.FIRST));
 	}
 }
