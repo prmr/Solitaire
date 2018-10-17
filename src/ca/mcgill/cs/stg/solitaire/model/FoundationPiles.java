@@ -70,61 +70,71 @@ class FoundationPiles
 	/**
 	 * @param pLocation The location of the pile to check.
 	 * @return True if the pile at pLocation is empty
+	 * @pre pLocation != null
 	 */
 	boolean isEmpty(FoundationPile pLocation)
 	{
+		assert pLocation != null;
 		return aPiles.get(pLocation).isEmpty();
 	}
 	
 	/**
-	 * @param pCard The card to test
-	 * @param pIndex The suitstack to test
-	 * @return True if pCard can be moved to the top of its suit stack.
+	 * @param pCard The card we wish to move
+	 * @param pLocation The desired location for pCard
+	 * @return True if pCard can be moved to the top of pLocation.
 	 * This is only possible if its rank is immediately superior
-	 * to that of the card currently on top of the suit stack.
+	 * to that of the card currently on top of the pile or, in
+	 * the case of an ace, if the location is empty.
+	 * @pre pCard != null && pLocation != null
 	 */
-	boolean canMoveTo(Card pCard, FoundationPile pIndex )
+	boolean canMoveTo(Card pCard, FoundationPile pLocation )
 	{
-		assert pCard != null && pIndex != null;
-		if( isEmpty(pIndex))
+		assert pCard != null && pLocation != null;
+		if( isEmpty(pLocation))
 		{
 			return pCard.getRank() == Rank.ACE;
 		}
 		else
 		{
-			return pCard.getSuit() == peek(pIndex).getSuit() && pCard.getRank().ordinal() == peek(pIndex).getRank().ordinal()+1;
+			return pCard.getSuit() == peek(pLocation).getSuit() && 
+					pCard.getRank().ordinal() == peek(pLocation).getRank().ordinal()+1;
 		}
 	}
 	
 	/**
-	 * @param pIndex The index of the stack to peek
-	 * @return The card on top of the stack at index pIndex
+	 * @param pLocation The location of the pile to peek at
+	 * @return The card on top of the pile at pLocation
+	 * @pre pLocation != null & !aPiles.get(pLocation).isEmpty();
 	 */
-	Card peek(FoundationPile pIndex)
+	Card peek(FoundationPile pLocation)
 	{
-		assert !aPiles.get(pIndex).isEmpty();
-		return aPiles.get(pIndex).peek();
+		assert pLocation != null && !aPiles.get(pLocation).isEmpty();
+		return aPiles.get(pLocation).peek();
 	}
 	
 	/**
-	 * Push pCard onto the stack corresponding to its
-	 * index.
-	 * @param pCard The card to push.
-	 * @param pIndex The index where to push the card.
+	 * Place pCard onto the pile at the desired location.
+	 * 
+	 * @param pCard The card to place.
+	 * @param pLocation The location where to place the card.
+	 * @pre pCard != null && pLocation != null
 	 */
-	void push(Card pCard, FoundationPile pIndex)
+	void push(Card pCard, FoundationPile pLocation)
 	{
-		aPiles.get(pIndex).push(pCard);
+		assert pCard != null && pLocation != null;
+		aPiles.get(pLocation).push(pCard);
 	}
 	
 	/**
-	 * Pop the top card of the stack.
-	 * @param pIndex the index of the stack to pop
-	 * @pre !isEmpty(pSuit)
+	 * Remove the card at the top of the pile at pLocation,
+	 * and returns it.
+	 * 
+	 * @param pLocation The location where to obtain the card.
+	 * @pre pLocation != null && !isEmpty(pLocation)
 	 */
-	Card pop(FoundationPile pIndex)
+	Card pop(FoundationPile pLocation)
 	{
-		assert !isEmpty(pIndex);
-		return aPiles.get(pIndex).pop();
+		assert pLocation != null && !isEmpty(pLocation);
+		return aPiles.get(pLocation).pop();
 	}
 }

@@ -30,9 +30,9 @@ import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.Rank;
 import ca.mcgill.cs.stg.solitaire.cards.Suit;
 
-public class TestSuitStackManager
+public class TestFoundationPiles
 {
-	private FoundationPiles aSuitStackManager;
+	private FoundationPiles aFoundationPiles;
 	private static final Card CAC = Card.get(Rank.ACE, Suit.CLUBS);
 	private static final Card CAD = Card.get(Rank.ACE, Suit.DIAMONDS);
 	private static final Card C3D = Card.get(Rank.THREE, Suit.DIAMONDS);
@@ -40,41 +40,41 @@ public class TestSuitStackManager
 	@Before
 	public void setup()
 	{
-		aSuitStackManager = new FoundationPiles();
+		aFoundationPiles = new FoundationPiles();
 	}
 	
 	@Test
 	public void testInitialize()
 	{
-		assertTrue( aSuitStackManager.isEmpty(FoundationPile.FIRST));
-		assertTrue( aSuitStackManager.isEmpty(FoundationPile.SECOND));
-		assertTrue( aSuitStackManager.isEmpty(FoundationPile.THIRD));
-		assertTrue( aSuitStackManager.isEmpty(FoundationPile.FOURTH));
+		assertTrue( aFoundationPiles.isEmpty(FoundationPile.FIRST));
+		assertTrue( aFoundationPiles.isEmpty(FoundationPile.SECOND));
+		assertTrue( aFoundationPiles.isEmpty(FoundationPile.THIRD));
+		assertTrue( aFoundationPiles.isEmpty(FoundationPile.FOURTH));
 	}
 	
 	@Test
 	public void testPushPop()
 	{
-		aSuitStackManager.push(CAC, FoundationPile.FIRST);
-		assertTrue( aSuitStackManager.isEmpty(FoundationPile.SECOND));
-		assertTrue( aSuitStackManager.isEmpty(FoundationPile.THIRD));
-		assertTrue( aSuitStackManager.isEmpty(FoundationPile.FOURTH));
-		aSuitStackManager.push(CAD, FoundationPile.SECOND);
-		assertEquals(CAD, aSuitStackManager.peek(FoundationPile.SECOND));
-		aSuitStackManager.push(C3D, FoundationPile.SECOND);
-		assertEquals(C3D, aSuitStackManager.peek(FoundationPile.SECOND));
-		aSuitStackManager.pop(FoundationPile.SECOND);
-		assertEquals(CAD, aSuitStackManager.peek(FoundationPile.SECOND));
-		aSuitStackManager.pop(FoundationPile.SECOND);
-		assertTrue( aSuitStackManager.isEmpty(FoundationPile.SECOND));
+		aFoundationPiles.push(CAC, FoundationPile.FIRST);
+		assertTrue( aFoundationPiles.isEmpty(FoundationPile.SECOND));
+		assertTrue( aFoundationPiles.isEmpty(FoundationPile.THIRD));
+		assertTrue( aFoundationPiles.isEmpty(FoundationPile.FOURTH));
+		aFoundationPiles.push(CAD, FoundationPile.SECOND);
+		assertEquals(CAD, aFoundationPiles.peek(FoundationPile.SECOND));
+		aFoundationPiles.push(C3D, FoundationPile.SECOND);
+		assertEquals(C3D, aFoundationPiles.peek(FoundationPile.SECOND));
+		aFoundationPiles.pop(FoundationPile.SECOND);
+		assertEquals(CAD, aFoundationPiles.peek(FoundationPile.SECOND));
+		aFoundationPiles.pop(FoundationPile.SECOND);
+		assertTrue( aFoundationPiles.isEmpty(FoundationPile.SECOND));
 	}
 	
 	@Test
 	public void testGetScore()
 	{
-		assertEquals(0, aSuitStackManager.getTotalSize());
-		aSuitStackManager.push(CAC, FoundationPile.FIRST);
-		aSuitStackManager.push(CAD, FoundationPile.SECOND);
-		assertEquals(2, aSuitStackManager.getTotalSize());
+		assertEquals(0, aFoundationPiles.getTotalSize());
+		aFoundationPiles.push(CAC, FoundationPile.FIRST);
+		aFoundationPiles.push(CAD, FoundationPile.SECOND);
+		assertEquals(2, aFoundationPiles.getTotalSize());
 	}
 }
