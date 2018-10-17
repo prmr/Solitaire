@@ -91,13 +91,4 @@ public class TestCardStack
 		assertSame(TWO_OF_CLUBS, aStack.peek());
 		assertEquals(2, aStack.size());
 	}
-	
-	@Test
-	public void testShuffle()
-	{
-		/* Tests that the size does not change */ 
-		aStack.push(ACE_OF_CLUBS);
-		aStack.push(TWO_OF_CLUBS);
-		assertEquals(2, aStack.size());
-	}
 }
