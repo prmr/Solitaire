@@ -20,9 +20,17 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.model;
 
-import java.lang.reflect.Method;
+import static org.junit.Assert.fail;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
+import ca.mcgill.cs.stg.solitaire.cards.Card;
+import ca.mcgill.cs.stg.solitaire.cards.CardStack;
 import ca.mcgill.cs.stg.solitaire.cards.Deck;
+import ca.mcgill.cs.stg.solitaire.cards.Rank;
+import ca.mcgill.cs.stg.solitaire.cards.Suit;
 
 /**
  * Models a deck of 52 cards that is not 
@@ -39,13 +47,21 @@ public class TestDeck extends Deck
 	{
 		try
 		{
-			Method reset = Deck.class.getDeclaredMethod("reset");
-			reset.setAccessible(true);
-			reset.invoke(this, new Object[0]);
+			List<Card> cards = new ArrayList<>();
+			for( Suit suit : Suit.values() )
+			{
+				for( Rank rank : Rank.values() )
+				{
+					cards.add( Card.get( rank, suit ));
+				}
+			}
+			Field cardsField = Deck.class.getDeclaredField("aCards");
+			cardsField.setAccessible(true);
+			cardsField.set(this, new CardStack(cards));
 		}
-		catch( Exception pException )
+		catch( ReflectiveOperationException exception )
 		{
-			pException.printStackTrace();
+			fail();
 		}
 	}
 }

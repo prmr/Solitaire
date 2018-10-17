@@ -41,8 +41,8 @@ import ca.mcgill.cs.stg.solitaire.cards.Rank;
  */
 class Tableau
 {
-	private Map<TableauPile, CardStack> aPiles = new HashMap<>();
-	private Set<Card> aVisible = new HashSet<>();
+	private final Map<TableauPile, CardStack> aPiles = new HashMap<>();
+	private final Set<Card> aVisible = new HashSet<>();
 	
 	/**
 	 * Creates an empty tableau.
@@ -82,41 +82,40 @@ class Tableau
 	
 	
 	/**
-	 * Determines if it is legal to move pCard on top of
-	 * pile pIndex, i.e. if a king is moved to an empty
-	 * pile or any other rank on a card of immediately greater
-	 * rank but of a different color.
-	 * @param pCard The card to move
-	 * @param pIndex The destination pile.
-	 * @return True if the move is legal.
-	 * @pre pCard != null, pIndex != null
+	 * Determines if it is legal to move pCard on top of pPile, 
+	 * i.e. if a king is moved to an empty pile or any other rank on 
+	 * a card of immediately greater rank but of a different color.
+	 * @param pCard The card we wish to move
+	 * @param pPile The desired destination pile
+	 * @return True if the move is legal
+	 * @pre pCard != null && pPile != null
 	 */
-	boolean canMoveTo(Card pCard, TableauPile pIndex )
+	boolean canMoveTo(Card pCard, TableauPile pPile )
 	{
-		assert pCard != null && pIndex != null;
-		CardStack stack = aPiles.get(pIndex);
-		if( stack.isEmpty() )
+		assert pCard != null && pPile != null;
+		CardStack pile = aPiles.get(pPile);
+		if( pile.isEmpty() )
 		{
 			return pCard.getRank() == Rank.KING;
 		}
 		else
 		{ 
-			return pCard.getRank().ordinal() == stack.peek().getRank().ordinal()-1 && 
-					!pCard.getSuit().sameColorAs(stack.peek().getSuit());
+			return pCard.getRank().ordinal() == pile.peek().getRank().ordinal()-1 && 
+					!pCard.getSuit().sameColorAs(pile.peek().getSuit());
 		}
 	}
 	
 	/**
-	 * @param pIndex The index of the pile to obtain.
-	 * @return An array of cards in the pile at pIndex, where element [0] is the 
+	 * @param pPile The pile to obtain.
+	 * @return An array of cards in pPile, where element [0] is the 
 	 * bottom of the stack. Modifying the array has no impact on the state of the 
 	 * object.
-	 * @pre pIndex != null
+	 * @pre pPile != null
 	 */
-	Card[] getStack(TableauPile pIndex)
+	Card[] getStack(TableauPile pPile)
 	{
-		assert pIndex != null;
-		return toArray(aPiles.get(pIndex));
+		assert pPile != null;
+		return toArray(aPiles.get(pPile));
 	}
 	
 	private static Card[] toArray(CardStack pStack)
@@ -197,7 +196,7 @@ class Tableau
 	 * @return An array of cards in the pile. Element 0 is the bottom.
 	 * @pre pCard != null && pIndex != null
 	 */
-	public Card[] getSequence(Card pCard, TableauPile pIndex)
+	Card[] getSequence(Card pCard, TableauPile pIndex)
 	{
 		CardStack stack = aPiles.get(pIndex);
 		List<Card> lReturn = new ArrayList<>();

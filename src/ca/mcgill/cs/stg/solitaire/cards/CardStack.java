@@ -1,7 +1,6 @@
 package ca.mcgill.cs.stg.solitaire.cards;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,7 +10,30 @@ import java.util.List;
  */
 public class CardStack implements Iterable<Card>
 {
-	private final List<Card> aCards = new ArrayList<>();
+	private final List<Card> aCards;
+	
+	/**
+	 * Creates an empty CardStack.
+	 */
+	public CardStack()
+	{
+		aCards = new ArrayList<>();
+	}
+	
+	/**
+	 * Creates a CardStack that contains all the cards
+	 * in pCard, in the iteration order, from bottom to top.
+	 * 
+	 * @param pCards The cards to initialize the stack with.
+	 */
+	public CardStack(Iterable<Card> pCards)
+	{
+		this();
+		for( Card card : pCards )
+		{
+			aCards.add(card);
+		}
+	}
 	
 	/**
 	 * Pushes pCard onto the stack.
@@ -62,14 +84,6 @@ public class CardStack implements Iterable<Card>
 	public void clear()
 	{
 		aCards.clear();
-	}
-	
-	/**
-	 * Shuffles the cards in the stack.
-	 */
-	public void shuffle()
-	{
-		Collections.shuffle(aCards);
 	}
 	
 	/**

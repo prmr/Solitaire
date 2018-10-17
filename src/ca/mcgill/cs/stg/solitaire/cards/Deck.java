@@ -20,12 +20,16 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.cards;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Models a deck of 52 cards.
  */
 public class Deck 
 {
-	private final CardStack aCards = new CardStack();
+	private CardStack aCards;
 	
 	/**
 	 * Creates a new deck of 52 cards, shuffled.
@@ -35,25 +39,21 @@ public class Deck
 		shuffle();
 	}
 	
-	private void reset()
-	{
-		aCards.clear();
-		for( Suit suit : Suit.values() )
-		{
-            for( Rank rank : Rank.values() )
-            {
-                aCards.push( Card.get( rank, suit ));
-            }
-		}
-	}
-
 	/**
 	 * Reinitializes the deck with all 52 cards, and shuffles them.
 	 */
 	public void shuffle()
 	{
-		reset();
-		aCards.shuffle();
+		List<Card> cards = new ArrayList<>();
+		for( Suit suit : Suit.values() )
+		{
+            for( Rank rank : Rank.values() )
+            {
+                cards.add( Card.get( rank, suit ));
+            }
+		}
+		Collections.shuffle(cards);
+		aCards = new CardStack(cards);
 	}
 	
 	/**

@@ -35,22 +35,6 @@ public class TestCardStack
 	
 	private final CardStack aStack = new CardStack();
 	
-	private int size()
-	{
-		int size = 0;
-		CardStack temp = new CardStack();
-		while( !aStack.isEmpty() )
-		{
-			size++;
-			temp.push(aStack.pop());
-		}
-		while( !temp.isEmpty() )
-		{
-			aStack.push(temp.pop());
-		}
-		return size;
-	}
-	
 	@Before
 	public void setUp()
 	{
@@ -76,7 +60,7 @@ public class TestCardStack
 		aStack.push(ACE_OF_CLUBS);
 		aStack.push(TWO_OF_CLUBS);
 		assertSame(TWO_OF_CLUBS, aStack.peek());
-		assertEquals(2, size());
+		assertEquals(2, aStack.size());
 	}
 	
 	@Test
@@ -85,7 +69,7 @@ public class TestCardStack
 		aStack.push(ACE_OF_CLUBS);
 		aStack.push(TWO_OF_CLUBS);
 		assertSame(TWO_OF_CLUBS, aStack.pop());
-		assertEquals(1, size());
+		assertEquals(1, aStack.size());
 	}
 	
 	@Test
@@ -93,10 +77,10 @@ public class TestCardStack
 	{
 		aStack.push(ACE_OF_CLUBS);
 		assertSame(ACE_OF_CLUBS, aStack.peek());
-		assertEquals(1, size());
+		assertEquals(1, aStack.size());
 		aStack.push(TWO_OF_CLUBS);
 		assertSame(TWO_OF_CLUBS, aStack.peek());
-		assertEquals(2, size());
+		assertEquals(2, aStack.size());
 	}
 	
 	@Test
@@ -105,7 +89,6 @@ public class TestCardStack
 		/* Tests that the size does not change */ 
 		aStack.push(ACE_OF_CLUBS);
 		aStack.push(TWO_OF_CLUBS);
-		aStack.shuffle();
-		assertEquals(2, size());
+		assertEquals(2, aStack.size());
 	}
 }
