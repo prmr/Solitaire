@@ -68,7 +68,7 @@ class DeckView extends HBox implements GameModelListener
     		public void handle(MouseEvent pEvent) 
     		{
     			((Button)pEvent.getSource()).setStyle(BUTTON_STYLE_NORMAL);
-    			if( GameModel.instance().isEmptyDeck() )
+    			if( GameModel.instance().isDeckEmpty() )
     			{
     				GameModel.instance().reset();
     			}
@@ -119,7 +119,7 @@ class DeckView extends HBox implements GameModelListener
 	@Override
 	public void gameStateChanged()
 	{
-		if( GameModel.instance().isEmptyDeck() )
+		if( GameModel.instance().isDeckEmpty() )
 		{
 			((Button)getChildren().get(0)).setGraphic(createNewGameImage());
 		}

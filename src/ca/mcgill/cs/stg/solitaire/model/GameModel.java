@@ -67,7 +67,7 @@ public final class GameModel implements GameModelView
 		@Override
 		public void perform()
 		{
-			assert !isEmptyDeck();	
+			assert !isDeckEmpty();	
 			aDiscard.push(aDeck.draw());
 			aMoves.push(this);
 			notifyListeners();
@@ -82,7 +82,7 @@ public final class GameModel implements GameModelView
 		@Override
 		public void undo()
 		{
-			assert !isEmptyDiscardPile();
+			assert !isDiscardPileEmpty();
 			aDeck.push(aDiscard.pop());
 			notifyListeners();
 		}
@@ -91,8 +91,8 @@ public final class GameModel implements GameModelView
 	private final Deck aDeck = new Deck();
 	private final Stack<Move> aMoves = new Stack<>();
 	private final CardStack aDiscard = new CardStack();
-	private final Foundations aSuitStacks = new Foundations();
-	private final Tableau aWorkingStacks = new Tableau();
+	private final Foundations aFoundations = new Foundations();
+	private final Tableau aTableau = new Tableau();
 	private final List<GameModelListener> aListeners = new ArrayList<>();
 	private final PlayingStrategy aPlayingStrategy = new GreedyPlayingStrategy();
 	
@@ -106,15 +106,13 @@ public final class GameModel implements GameModelView
 	 */
 	public int getScore()
 	{
-		return aSuitStacks.getTotalSize();
+		return aFoundations.getTotalSize();
 	}
 	
 	/**
-	 * Try to automatically make a move. 
-	 * This may result in nothing happening
-	 * if the auto-play strategy cannot make a 
-	 * decision.
-	 * @return whether a move was performed or not.
+	 * Try to automatically make a move. This may result in nothing happening
+	 * if the auto-play strategy cannot make a decision.
+	 * @return Whether a move was performed or not.
 	 */
 	public boolean tryToAutoPlay()
 	{
@@ -134,9 +132,11 @@ public final class GameModel implements GameModelView
 	/**
 	 * Registers an observer for the state of the game model.
 	 * @param pListener A listener to register.
+	 * @pre pListener != null
 	 */
 	public void addListener(GameModelListener pListener)
 	{
+		assert pListener != null;
 		aListeners.add(pListener);
 	}
 	
@@ -149,16 +149,15 @@ public final class GameModel implements GameModelView
 	}
 	
 	/**
-	 * Restores the model to the state 
-	 * corresponding to the start of a new game.
+	 * Restores the model to the state corresponding to the start of a new game.
 	 */
 	public void reset()
 	{
 		aMoves.clear();
 		aDeck.shuffle();
 		aDiscard.clear();
-		aSuitStacks.initialize();
-		aWorkingStacks.initialize(aDeck);
+		aFoundations.initialize();
+		aTableau.initialize(aDeck);
 		notifyListeners();
 	}
 	
@@ -167,38 +166,38 @@ public final class GameModel implements GameModelView
 	 */
 	public boolean isCompleted()
 	{
-		return aSuitStacks.getTotalSize() == Rank.values().length * Suit.values().length;
+		return aFoundations.getTotalSize() == Rank.values().length * Suit.values().length;
 	}
 	
 	@Override
-	public boolean isEmptyDeck()
+	public boolean isDeckEmpty()
 	{
 		return aDeck.isEmpty();
 	}
 	
 	@Override
-	public boolean isEmptyDiscardPile()
+	public boolean isDiscardPileEmpty()
 	{
-		return aDiscard.size() == 0;
+		return aDiscard.isEmpty();
 	}
 	
 	@Override
-	public boolean isEmptySuitStack(FoundationPile pIndex)
+	public boolean isFoundationPileEmpty(FoundationPile pPile)
 	{
-		return aSuitStacks.isEmpty(pIndex);
+		return aFoundations.isEmpty(pPile);
 	}
 	
 	/**
-	 * Obtain the card on top of the suit stack for
-	 * pIndex without discarding it.
-	 * @param pIndex The index of the stack to check
-	 * @return The card on top of the stack.
-	 * @pre !isEmptySuitStack(pIndex)
+	 * Obtain the card on top of the foundation pile pPile
+	 * without removing it.
+	 * @param pPile The pile to check.
+	 * @return The card on top of the pile.
+	 * @pre pPile != null && !isFoundationPileEmpty(pIndex)
 	 */
-	public Card peekSuitStack(FoundationPile pIndex)
+	public Card peekSuitStack(FoundationPile pPile)
 	{
-		assert !isEmptySuitStack(pIndex);
-		return aSuitStacks.peek(pIndex);
+		assert pPile != null && !isFoundationPileEmpty(pPile);
+		return aFoundations.peek(pPile);
 	}
 	
 	@Override
@@ -221,19 +220,18 @@ public final class GameModel implements GameModelView
 		}
 		for( FoundationPile index : FoundationPile.values() )
 		{
-			if( !aSuitStacks.isEmpty(index) && aSuitStacks.peek(index) == pCard )
+			if( !aFoundations.isEmpty(index) && aFoundations.peek(index) == pCard )
 			{
 				return index;
 			}
 		}
 		for( TableauPile index : TableauPile.values() )
 		{
-			if( aWorkingStacks.contains(pCard, index))
+			if( aTableau.contains(pCard, index))
 			{
 				return index;
 			}
 		}
-		
 		assert false; // We did not find the card: the precondition was not met.
 		return null;
 	}
@@ -269,13 +267,13 @@ public final class GameModel implements GameModelView
 		}
 		else if( pLocation instanceof FoundationPile )
 		{
-			assert !aSuitStacks.isEmpty((FoundationPile)pLocation);
-			aSuitStacks.pop((FoundationPile)pLocation);
+			assert !aFoundations.isEmpty((FoundationPile)pLocation);
+			aFoundations.pop((FoundationPile)pLocation);
 		}
 		else
 		{
 			assert pLocation instanceof TableauPile;
-			aWorkingStacks.pop((TableauPile)pLocation);
+			aTableau.pop((TableauPile)pLocation);
 		}
 	}
 	
@@ -284,14 +282,14 @@ public final class GameModel implements GameModelView
 		Location source = find(pCard);
 		if( source instanceof TableauPile && pDestination instanceof TableauPile )
 		{
-			aWorkingStacks.moveWithin(pCard, (TableauPile)source, (TableauPile) pDestination);
+			aTableau.moveWithin(pCard, (TableauPile)source, (TableauPile) pDestination);
 		}
 		else
 		{
 			absorbCard(source);
 			if( pDestination instanceof FoundationPile )
 			{
-				aSuitStacks.push(pCard, (FoundationPile)pDestination);
+				aFoundations.push(pCard, (FoundationPile)pDestination);
 			}
 			else if( pDestination == OtherLocation.DISCARD_PILE )
 			{
@@ -300,22 +298,22 @@ public final class GameModel implements GameModelView
 			else
 			{
 				assert pDestination instanceof TableauPile;
-				aWorkingStacks.push(pCard, (TableauPile)pDestination);
+				aTableau.push(pCard, (TableauPile)pDestination);
 			}
 		}
 		notifyListeners();
 	}
 	
 	@Override
-	public CardStack getStack(TableauPile pIndex)
+	public CardStack getTableauPile(TableauPile pIndex)
 	{
-		return aWorkingStacks.getPile(pIndex); 
+		return aTableau.getPile(pIndex); 
 	}
 	
 	@Override
-	public boolean isVisibleInWorkingStack(Card pCard)
+	public boolean isVisibleInTableau(Card pCard)
 	{
-		return aWorkingStacks.contains(pCard) && aWorkingStacks.isVisible(pCard);
+		return aTableau.contains(pCard) && aTableau.isVisible(pCard);
 	}
 	
 	/**
@@ -324,11 +322,12 @@ public final class GameModel implements GameModelView
 	 * @param pCard The top card of the sequence
 	 * @param pPile The requested pile
 	 * @return A non-empty sequence of cards.
-	 * @pre pCard is in stack pIndex
+	 * @pre pCard != null and is in pile pPile
 	 */
 	public CardStack getSubStack(Card pCard, TableauPile pPile)
 	{
-		return aWorkingStacks.getSequence(pCard, pPile);
+		assert pCard != null && pPile != null && find(pCard) == pPile;
+		return aTableau.getSequence(pCard, pPile);
 	}
 
 	@Override
@@ -336,11 +335,11 @@ public final class GameModel implements GameModelView
 	{ 
 		if( pDestination instanceof FoundationPile )
 		{
-			return aSuitStacks.canMoveTo(pCard, (FoundationPile) pDestination);
+			return aFoundations.canMoveTo(pCard, (FoundationPile) pDestination);
 		}
 		else if( pDestination instanceof TableauPile )
 		{
-			return aWorkingStacks.canMoveTo(pCard, (TableauPile) pDestination);
+			return aTableau.canMoveTo(pCard, (TableauPile) pDestination);
 		}
 		else
 		{
@@ -364,7 +363,7 @@ public final class GameModel implements GameModelView
 	public Move getCardMove(Card pCard, Location pDestination)
 	{
 		Location source = find( pCard );
-		if( source instanceof TableauPile  && aWorkingStacks.revealsTop(pCard, (TableauPile)source))
+		if( source instanceof TableauPile  && aTableau.revealsTop(pCard, (TableauPile)source))
 		{
 			return new CompositeMove(new CardMove(pCard, pDestination), new RevealTopMove((TableauPile)source) );
 		}
@@ -426,7 +425,7 @@ public final class GameModel implements GameModelView
 		@Override
 		public void perform()
 		{
-			aWorkingStacks.showTop(aIndex);
+			aTableau.showTop(aIndex);
 			aMoves.push(this);
 			notifyListeners();
 		}
@@ -440,7 +439,7 @@ public final class GameModel implements GameModelView
 		@Override
 		public void undo()
 		{
-			aWorkingStacks.hideTop(aIndex);
+			aTableau.hideTop(aIndex);
 			aMoves.pop().undo();
 			notifyListeners();
 		}

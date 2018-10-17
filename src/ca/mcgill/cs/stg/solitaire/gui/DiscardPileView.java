@@ -51,7 +51,7 @@ class DiscardPileView extends HBox implements GameModelListener
 	@Override
 	public void gameStateChanged()
 	{
-		if( GameModel.instance().isEmptyDiscardPile())
+		if( GameModel.instance().isDiscardPileEmpty())
 		{
 			getChildren().get(0).setVisible(false);
 		}

@@ -70,7 +70,7 @@ public class SuitStack extends StackPane implements GameModelListener
 	@Override
 	public void gameStateChanged()
 	{
-		if( GameModel.instance().isEmptySuitStack(aIndex))
+		if( GameModel.instance().isFoundationPileEmpty(aIndex))
 		{
 			getChildren().get(0).setVisible(false);
 		}

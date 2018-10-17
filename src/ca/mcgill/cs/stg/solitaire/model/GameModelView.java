@@ -31,18 +31,18 @@ public interface GameModelView
 	/**
 	 * @return True if the discard pile has no card in it.
 	 */
-	boolean isEmptyDiscardPile();
+	boolean isDiscardPileEmpty();
 	
 	/**
 	 * @return True if the deck has no card left in it.
 	 */
-	boolean isEmptyDeck();
+	boolean isDeckEmpty();
 	
 	/**
 	 * @param pIndex The suit stack to check
 	 * @return True if the suit stack for pSuit is empty
 	 */
-	boolean isEmptySuitStack(FoundationPile pIndex);
+	boolean isFoundationPileEmpty(FoundationPile pIndex);
 	
 	/**
 	 * @return The card on top of the discard pile.
@@ -54,14 +54,14 @@ public interface GameModelView
 	 * @param pIndex The position of the stack to return.
 	 * @return A copy of the stack at position pIndex
 	 */
-	CardStack getStack(TableauPile pIndex);
+	CardStack getTableauPile(TableauPile pIndex);
 	
 	/**
 	 * @param pCard A card to test for visibility.
 	 * @return True if the card's value is visible in
 	 * a working stack.
 	 */
-	boolean isVisibleInWorkingStack(Card pCard);
+	boolean isVisibleInTableau(Card pCard);
 	
 	/**
 	 * Determines if pCard can be moved to pLocation

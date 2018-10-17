@@ -61,7 +61,7 @@ public class CardPileView extends StackPane implements GameModelListener
 	
 	private static Image getImage(Card pCard)
 	{
-		if( GameModel.instance().isVisibleInWorkingStack(pCard) )
+		if( GameModel.instance().isVisibleInTableau(pCard) )
 		{
 			return CardImages.getCard(pCard);
 		}
@@ -76,7 +76,7 @@ public class CardPileView extends StackPane implements GameModelListener
 		getChildren().clear();
 		
 		int offset = 0;
-		CardStack stack = GameModel.instance().getStack(aIndex);
+		CardStack stack = GameModel.instance().getTableauPile(aIndex);
 		if( stack.isEmpty() ) // this essentially acts as a spacer
 		{
 			ImageView image = new ImageView(CardImages.getBack());
@@ -97,7 +97,7 @@ public class CardPileView extends StackPane implements GameModelListener
     		setOnDragExited(createDragExitedHandler(image, cardView));
     		setOnDragDropped(createDragDroppedHandler(image, cardView));
     		
-        	if( GameModel.instance().isVisibleInWorkingStack(cardView))
+        	if( GameModel.instance().isVisibleInTableau(cardView))
         	{
         		image.setOnDragDetected(createDragDetectedHandler(image, cardView));
         	}

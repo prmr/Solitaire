@@ -68,11 +68,11 @@ public class TestGameModel
 	@Test
 	public void testDiscard()
 	{
-		assertTrue(GameModel.instance().isEmptyDiscardPile());
-		assertFalse(GameModel.instance().isEmptyDeck());// 3 of hearts
+		assertTrue(GameModel.instance().isDiscardPileEmpty());
+		assertFalse(GameModel.instance().isDeckEmpty());// 3 of hearts
 		for( int i = 0; i < 24; i++ )
 		{
-			assertFalse(GameModel.instance().isEmptyDeck());
+			assertFalse(GameModel.instance().isDeckEmpty());
 			GameModel.instance().getDiscardMove().perform();
 			// Test a few cards
 			if( i == 0 )
@@ -83,23 +83,23 @@ public class TestGameModel
 			{
 				assertEquals(Card.get(Rank.TEN, Suit.DIAMONDS), GameModel.instance().peekDiscardPile());
 			}
-			assertFalse(GameModel.instance().isEmptyDiscardPile());
+			assertFalse(GameModel.instance().isDiscardPileEmpty());
 		}
-		assertTrue(GameModel.instance().isEmptyDeck());
+		assertTrue(GameModel.instance().isDeckEmpty());
 	}
 	
 	@Test
 	public void testGetStack()
 	{
 		GameModel model = GameModel.instance();
-		CardStack stack = model.getStack(TableauPile.FIRST);
+		CardStack stack = model.getTableauPile(TableauPile.FIRST);
 		assertEquals(Card.get(Rank.KING, Suit.SPADES), stack.peek(0));
 		assertEquals(1, stack.size());
 		// Test that the method returns a clones
-		CardStack stack2 = model.getStack(TableauPile.FIRST);
+		CardStack stack2 = model.getTableauPile(TableauPile.FIRST);
 		assertNotSame(stack, stack2);
 		
-		stack = model.getStack(TableauPile.SECOND);
+		stack = model.getTableauPile(TableauPile.SECOND);
 		assertEquals(2, stack.size());
 		assertEquals(Card.get(Rank.QUEEN, Suit.SPADES), stack.peek(0));
 		assertEquals(Card.get(Rank.JACK, Suit.SPADES), stack.peek(1));
@@ -131,7 +131,7 @@ public class TestGameModel
 	public void testMoves()
 	{
 		GameModel model = GameModel.instance();
-		assertTrue(model.isEmptySuitStack(FoundationPile.FIRST)); 
+		assertTrue(model.isFoundationPileEmpty(FoundationPile.FIRST)); 
 		assertFalse(model.isLegalMove(Card.get(Rank.THREE, Suit.CLUBS), FoundationPile.SECOND));
 		assertFalse(model.isLegalMove(Card.get(Rank.THREE, Suit.CLUBS), FoundationPile.FIRST));
 		assertFalse(model.isLegalMove(Card.get(Rank.TWO, Suit.CLUBS), FoundationPile.FIRST));
@@ -202,11 +202,11 @@ public class TestGameModel
 		assertEquals(Card.get(Rank.TEN, Suit.DIAMONDS), stack.peek(1));
 		assertEquals(Card.get(Rank.NINE, Suit.CLUBS), stack.peek(2));
 		model.getCardMove(stack.peek(0), TableauPile.SEVENTH).perform();
-		assertEquals(1, model.getStack(TableauPile.SECOND).size());
+		assertEquals(1, model.getTableauPile(TableauPile.SECOND).size());
 		stack = model.getSubStack(Card.get(Rank.JACK, Suit.SPADES), TableauPile.SEVENTH);
-		assertEquals(10, model.getStack(TableauPile.SEVENTH).size());
+		assertEquals(10, model.getTableauPile(TableauPile.SEVENTH).size());
 		model.getCardMove(model.getSubStack(Card.get(Rank.QUEEN, Suit.DIAMONDS), TableauPile.SEVENTH).peek(0), TableauPile.FIRST).perform();
-		CardStack stack2 = model.getStack(TableauPile.FIRST);
+		CardStack stack2 = model.getTableauPile(TableauPile.FIRST);
 		assertEquals(5, stack2.size());
 	}
 	
@@ -220,10 +220,10 @@ public class TestGameModel
 		}
 		assertEquals(Card.get(Rank.JACK, Suit.CLUBS), model.peekDiscardPile());
 		model.getCardMove(model.peekDiscardPile(), TableauPile.FIFTH).perform();
-		assertEquals(6, model.getStack(TableauPile.FIFTH).size());
+		assertEquals(6, model.getTableauPile(TableauPile.FIFTH).size());
 		model.getCardMove(model.getSubStack(Card.get(Rank.JACK, Suit.CLUBS), TableauPile.FIFTH).peek(0), TableauPile.SEVENTH).perform();
-		assertEquals(5, model.getStack(TableauPile.FIFTH).size());
-		assertEquals(8, model.getStack(TableauPile.SEVENTH).size());
+		assertEquals(5, model.getTableauPile(TableauPile.FIFTH).size());
+		assertEquals(8, model.getTableauPile(TableauPile.SEVENTH).size());
 	}
 	
 	@Test
@@ -242,7 +242,7 @@ public class TestGameModel
 	{
 		// Tests undoing discard moves
 		GameModel model = GameModel.instance();
-		assertTrue(model.isEmptyDiscardPile());
+		assertTrue(model.isDiscardPileEmpty());
 		assertFalse(model.canUndo());
 		Move discard = model.getDiscardMove();
 		assertFalse(discard.isNull());
@@ -251,7 +251,7 @@ public class TestGameModel
 		Card card = model.peekDiscardPile();
 		model.undoLast();
 		assertFalse(model.canUndo());
-		assertTrue(model.isEmptyDiscardPile());
+		assertTrue(model.isDiscardPileEmpty());
 		model.getDiscardMove().perform();
 		assertEquals(card, model.peekDiscardPile());
 	}

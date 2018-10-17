@@ -47,7 +47,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 	@Override 
 	public Move computeNextMove(GameModelView pModel)
 	{
-		if( pModel.isEmptyDiscardPile() && !pModel.isEmptyDeck() )
+		if( pModel.isDiscardPileEmpty() && !pModel.isDeckEmpty() )
 		{
 			return pModel.getDiscardMove();
 		}
@@ -75,7 +75,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 				return moves.get(0);
 			}
 			
-			if( !pModel.isEmptyDeck() )
+			if( !pModel.isDeckEmpty() )
 			{
 				return pModel.getDiscardMove();
 			}
@@ -89,14 +89,14 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 	private List<Move> movesFromDiscardPileToSuitStack(GameModelView pModel)
 	{
 		ArrayList<Move> moves = new ArrayList<>();
-		if( !pModel.isEmptyDiscardPile())
+		if( !pModel.isDiscardPileEmpty())
 		{
 			for(FoundationPile index : FoundationPile.values())
 			{
 				if( pModel.isLegalMove(pModel.peekDiscardPile(), index))
 				{
 					moves.add(pModel.getCardMove(pModel.peekDiscardPile(), index));
-					if( pModel.isEmptySuitStack(index))
+					if( pModel.isFoundationPileEmpty(index))
 					{
 						break; // we take the first possible blank space
 					}
@@ -109,7 +109,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 	private List<Move> movesFromDiscardPileToWorkingStacks(GameModelView pModel)
 	{
 		ArrayList<Move> moves = new ArrayList<>();
-		if( !pModel.isEmptyDiscardPile() )
+		if( !pModel.isDiscardPileEmpty() )
 		{
 			for(TableauPile index : TableauPile.values())
 			{
@@ -127,7 +127,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 		ArrayList<Move> moves = new ArrayList<>();
 		for(TableauPile index : TableauPile.values())
 		{
-			CardStack stack = pModel.getStack(index);
+			CardStack stack = pModel.getTableauPile(index);
 			if( !stack.isEmpty() )
 			{
 				Card card = stack.peek();
@@ -136,7 +136,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 					if( pModel.isLegalMove(card, index2))
 					{
 						moves.add(pModel.getCardMove(card, index2));
-						if( pModel.isEmptySuitStack(index2))
+						if( pModel.isFoundationPileEmpty(index2))
 						{
 							break; // we take the first possible blank space
 						}
@@ -152,10 +152,10 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 		ArrayList<Move> moves = new ArrayList<>();
 		for(TableauPile index : TableauPile.values())
 		{
-			CardStack stack = pModel.getStack(index);
+			CardStack stack = pModel.getTableauPile(index);
 			for(int i = 0; i < stack.size(); i++ )
 			{
-				if( pModel.isVisibleInWorkingStack(stack.peek(i)) && i > 0 && !pModel.isVisibleInWorkingStack(stack.peek(1-1))) 
+				if( pModel.isVisibleInTableau(stack.peek(i)) && i > 0 && !pModel.isVisibleInTableau(stack.peek(1-1))) 
 				{
 					for( TableauPile index2 : TableauPile.values() )
 					{
@@ -165,12 +165,12 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 						}
 					}
 				}
-				else if( pModel.isVisibleInWorkingStack(stack.peek(i)) && i == 0 )
+				else if( pModel.isVisibleInTableau(stack.peek(i)) && i == 0 )
 				{
 					for( TableauPile index2 : TableauPile.values() )
 					{
 						// we don't want to just move a card around
-						if( pModel.isLegalMove(stack.peek(i), index2) && pModel.getStack(index2).size() > 0) 
+						if( pModel.isLegalMove(stack.peek(i), index2) && pModel.getTableauPile(index2).size() > 0) 
 						{
 							moves.add(pModel.getCardMove(stack.peek(i), index2));
 						}
