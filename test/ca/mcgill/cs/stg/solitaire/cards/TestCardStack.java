@@ -64,6 +64,15 @@ public class TestCardStack
 	}
 	
 	@Test
+	public void testPeek_int()
+	{
+		aStack.push(ACE_OF_CLUBS);
+		aStack.push(TWO_OF_CLUBS);
+		assertSame(ACE_OF_CLUBS, aStack.peek(0));
+		assertSame(TWO_OF_CLUBS, aStack.peek(1));
+	}
+	
+	@Test
 	public void testPop()
 	{
 		aStack.push(ACE_OF_CLUBS);

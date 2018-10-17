@@ -71,6 +71,17 @@ public class CardStack implements Iterable<Card>
 	}
 	
 	/**
+	 * @param pIndex The index to peek in the stack.
+	 * @return The card at the position indicated by pIndex
+	 * @pre pIndex >= 0 && pIndex < size();
+	 */
+	public Card peek(int pIndex)
+	{
+		assert pIndex >= 0 && pIndex < size();
+		return aCards.get(pIndex);
+	}
+	
+	/**
 	 * @return The number of cards in the stack.
 	 */
 	public int size()
