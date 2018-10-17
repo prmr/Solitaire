@@ -21,6 +21,7 @@
 package ca.mcgill.cs.stg.solitaire.gui;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
+import ca.mcgill.cs.stg.solitaire.cards.CardStack;
 
 /**
  * An immutable utility object to facilitate the transfer of card 
@@ -55,14 +56,18 @@ public class CardTransfer
 	 * @param pCards The array of cards with high-ranking cards first.
 	 * @return The id string.
 	 */
-	public static String serialize(Card[] pCards)
+	public static String serialize(CardStack pCards)
 	{
-		String lReturn = pCards[0].getIDString();
-		for( int i = 1; i < pCards.length; i++ )
+		String result = "";
+		for(Card card : pCards)
 		{
-			lReturn += SEPARATOR + pCards[i].getIDString();
+			result += card.getIDString() + SEPARATOR;
 		}
-		return lReturn;
+		if( result.length() > 0)
+		{
+			result = result.substring(0, result.length()-1);
+		}
+		return result;
 	}
 	
 	/**

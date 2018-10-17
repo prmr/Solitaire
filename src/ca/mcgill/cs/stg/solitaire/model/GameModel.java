@@ -326,16 +326,16 @@ public final class GameModel implements GameModelView
 	}
 	
 	/**
-	 * Get the sub-stack consisting of pCard and all 
-	 * the other cards below it.
-	 * @param pCard The top card of the sub-stack
-	 * @param pIndex The position of the stack to return.
+	 * Get the sequence consisting of pCard and all 
+	 * the other cards below it, from the tableau.
+	 * @param pCard The top card of the sequence
+	 * @param pPile The requested pile
 	 * @return A non-empty sequence of cards.
 	 * @pre pCard is in stack pIndex
 	 */
-	public Card[] getSubStack(Card pCard, TableauPile pIndex)
+	public CardStack getSubStack(Card pCard, TableauPile pPile)
 	{
-		return aWorkingStacks.getSequence(pCard, pIndex);
+		return aWorkingStacks.getSequence(pCard, pPile);
 	}
 
 	@Override

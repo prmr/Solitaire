@@ -129,17 +129,17 @@ public class TestTableau
 	public void testGetSequence()
 	{
 		aTableau.push(C5D, TableauPile.SECOND);
-		Card[] sequence = aTableau.getSequence(C5D, TableauPile.SECOND);
-		assertEquals(1, sequence.length);
-		assertEquals(C5D, sequence[0]);
+		CardStack sequence = aTableau.getSequence(C5D, TableauPile.SECOND);
+		assertEquals(1, sequence.size());
+		assertEquals(C5D, sequence.peek(0));
 		aTableau.push(C4C, TableauPile.SECOND);
 		sequence = aTableau.getSequence(C5D, TableauPile.SECOND);
-		assertEquals(2, sequence.length);
-		assertEquals(C5D, sequence[0]);
-		assertEquals(C4C, sequence[1]);
+		assertEquals(2, sequence.size());
+		assertEquals(C5D, sequence.peek(0));
+		assertEquals(C4C, sequence.peek(1));
 		sequence = aTableau.getSequence(C4C, TableauPile.SECOND);
-		assertEquals(1, sequence.length);
-		assertEquals(C4C, sequence[0]);
+		assertEquals(1, sequence.size());
+		assertEquals(C4C, sequence.peek(0));
 	}
 	
 	@Test 

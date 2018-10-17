@@ -181,14 +181,15 @@ class Tableau
 	/**
 	 * Returns a sequence of cards starting at pCard and including
 	 * all cards on top of it.
-	 * @param pCard The bottom card in the pile
-	 * @param pIndex The index of the pile.
-	 * @return An array of cards in the pile. Element 0 is the bottom.
-	 * @pre pCard != null && pIndex != null
+	 * @param pCard The bottom card in the sequence
+	 * @param pPile The target pile
+	 * @return A copy of the requested sequence.
+	 * @pre pCard != null && pPile != null
 	 */
-	Card[] getSequence(Card pCard, TableauPile pIndex)
+	CardStack getSequence(Card pCard, TableauPile pPile)
 	{
-		CardStack stack = aPiles.get(pIndex);
+		assert pCard != null && pPile != null;
+		CardStack stack = aPiles.get(pPile);
 		List<Card> lReturn = new ArrayList<>();
 		boolean aSeen = false;
 		for( Card card : stack )
@@ -202,7 +203,7 @@ class Tableau
 				lReturn.add(card);
 			}
 		}
-		return lReturn.toArray(new Card[lReturn.size()]);
+		return new CardStack(lReturn);
 	}
 	
 	/**
