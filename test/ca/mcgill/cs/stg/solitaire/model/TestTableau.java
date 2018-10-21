@@ -23,6 +23,11 @@ package ca.mcgill.cs.stg.solitaire.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+
+import java.lang.reflect.Method;
+import java.util.Optional;
 
 import org.junit.Test;
 
@@ -43,6 +48,44 @@ public class TestTableau
 	private static final Card C4S = Card.get(Rank.FOUR, Suit.SPADES);
 	private static final Card C4H = Card.get(Rank.FOUR, Suit.HEARTS);
 	private static final Card C3H = Card.get(Rank.THREE, Suit.HEARTS);
+	
+	@SuppressWarnings("unchecked")
+	private Optional<Card> getPreviousCard(Card pCard)
+	{
+		try
+		{
+			Method method = Tableau.class.getDeclaredMethod("getPreviousCard", Card.class, TableauPile.class);
+			method.setAccessible(true);
+			return (Optional<Card>) method.invoke(aTableau, pCard, TableauPile.FIRST);
+		}
+		catch( ReflectiveOperationException exception )
+		{
+			exception.printStackTrace();
+			fail();
+			return Optional.empty();
+		}
+	}
+	
+	@Test
+	public void testGetPreviousCard_empty()
+	{
+		assertFalse(getPreviousCard(Card.get(Rank.ACE, Suit.CLUBS)).isPresent());
+	}
+	
+	@Test
+	public void testGetPreviousCard_First()
+	{
+		aTableau.push(CAC, TableauPile.FIRST);
+		assertFalse(getPreviousCard(CAC).isPresent());
+	}
+	
+	@Test
+	public void testGetPreviousCard_Second()
+	{
+		aTableau.push(CAC, TableauPile.FIRST);
+		aTableau.push(C5D, TableauPile.FIRST);
+		assertSame(CAC, getPreviousCard(C5D).get());
+	}
 	
 	@Test
 	public void testInitialize()
