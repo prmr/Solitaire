@@ -59,11 +59,4 @@ public class CompositeMove implements Move
 			aMoves.get(i).undo();
 		}
 	}
-
-	@Override
-	public boolean isNull()
-	{
-		return false;
-	}
-
 }

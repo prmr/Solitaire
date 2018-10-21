@@ -53,9 +53,7 @@ public final class GameModel implements GameModelView
 
 		@Override
 		public boolean isNull()
-		{
-			return true;
-		}
+		{ return true; }
 
 		@Override
 		public void undo()
@@ -71,12 +69,6 @@ public final class GameModel implements GameModelView
 			aDiscard.push(aDeck.draw());
 			aMoves.push(this);
 			notifyListeners();
-		}
-
-		@Override
-		public boolean isNull()
-		{
-			return false;
 		}
 
 		@Override
@@ -397,12 +389,6 @@ public final class GameModel implements GameModelView
 		}
 
 		@Override
-		public boolean isNull()
-		{
-			return false;
-		}
-
-		@Override
 		public void undo()
 		{
 			move(aCard, aOrigin);
@@ -428,12 +414,6 @@ public final class GameModel implements GameModelView
 			aTableau.showTop(aIndex);
 			aMoves.push(this);
 			notifyListeners();
-		}
-
-		@Override
-		public boolean isNull()
-		{
-			return false;
 		}
 
 		@Override

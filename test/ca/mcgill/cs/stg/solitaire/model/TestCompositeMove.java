@@ -54,12 +54,6 @@ public class TestCompositeMove
 		{
 			aUndone = true;
 		}
-
-		@Override
-		public boolean isNull()
-		{
-			return false;
-		}
 	}
 	
 	@Before

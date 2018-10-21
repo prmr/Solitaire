@@ -39,7 +39,8 @@ public interface Move
 	
 	/**
 	 * @return True if the move is not a move that
-	 * advances the game.
+	 * advances the game. False by default.
 	 */
-	boolean isNull();
+	default boolean isNull()
+	{ return false; }
 }
