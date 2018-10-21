@@ -45,7 +45,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 {
 	// CSOFF:
 	@Override 
-	public Move computeNextMove(GameModelView pModel)
+	public Move getLegalMove(GameModelView pModel)
 	{
 		if( pModel.isDiscardPileEmpty() && !pModel.isDeckEmpty() )
 		{

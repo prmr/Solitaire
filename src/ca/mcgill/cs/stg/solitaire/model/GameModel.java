@@ -116,7 +116,7 @@ public final class GameModel implements GameModelView
 	 */
 	public boolean tryToAutoPlay()
 	{
-		Move move = aPlayingStrategy.computeNextMove(this);
+		Move move = aPlayingStrategy.getLegalMove(this);
 		move.perform();
 		return !move.isNull();
 	}

@@ -24,17 +24,19 @@ import ca.mcgill.cs.stg.solitaire.model.GameModelView;
 import ca.mcgill.cs.stg.solitaire.model.Move;
 
 /**
- * Defines the behavior necessary to make 
- * a decision.
+ * Game-playing behavior. Implementations of this interface
+ * are responsible for ensuring that the sequence of Move 
+ * instances returned does not put the game in and endless
+ * cycle.
  */
 public interface PlayingStrategy
 {
 	/**
-	 * If a move is both legal and supported 
-	 * by the concrete strategy, execute the move. If
-	 * not, do nothing.
+	 * Returns a legal move for the game, or the 
+	 * Null move if that is not possible.
+	 * 
 	 * @param pModel A game model to query.
-	 * @return The next move.
+	 * @return The move computed.
 	 */
-	Move computeNextMove(GameModelView pModel);
+	Move getLegalMove(GameModelView pModel);
 }
