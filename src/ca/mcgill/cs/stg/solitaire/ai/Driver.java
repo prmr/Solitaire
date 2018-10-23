@@ -23,8 +23,7 @@ package ca.mcgill.cs.stg.solitaire.ai;
 import ca.mcgill.cs.stg.solitaire.model.GameModel;
 
 /**
- * Plays 100,000 games and computes the 
- * number of wins.
+ * Plays N games and computes the number of wins.
  */
 public final class Driver
 {

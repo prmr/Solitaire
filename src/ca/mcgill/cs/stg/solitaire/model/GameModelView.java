@@ -59,9 +59,24 @@ public interface GameModelView
 	/**
 	 * @param pCard A card to test for visibility.
 	 * @return True if the card's value is visible in
-	 * a working stack.
+	 * the tableau;
 	 */
 	boolean isVisibleInTableau(Card pCard);
+	
+	/**
+	 * @param pCard The card to test
+	 * @return True if pCard is in the tableau and is 
+	 * the lowest card visible in its pile, including 
+	 * the case where it's the only card in the pile.
+	 */
+	boolean isLowestVisibleInTableau(Card pCard);
+	
+	/**
+	 * @param pCard The card to check.
+	 * @return True if pCard is a visible king located at the bottom of the pile.
+	 * @pre pCard != null && contains(pCard);
+	 */
+	boolean isBottomKing(Card pCard);
 	
 	/**
 	 * Determines if pCard can be moved to pLocation

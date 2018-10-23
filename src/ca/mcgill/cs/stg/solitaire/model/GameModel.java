@@ -308,6 +308,12 @@ public final class GameModel implements GameModelView
 		return aTableau.contains(pCard) && aTableau.isVisible(pCard);
 	}
 	
+	@Override
+	public boolean isLowestVisibleInTableau(Card pCard)
+	{
+		return aTableau.contains(pCard) && aTableau.isLowestVisible(pCard);
+	}
+	
 	/**
 	 * Get the sequence consisting of pCard and all 
 	 * the other cards below it, from the tableau.
@@ -355,12 +361,20 @@ public final class GameModel implements GameModelView
 	public Move getCardMove(Card pCard, Location pDestination)
 	{
 		Location source = find( pCard );
-		if( source instanceof TableauPile  && aTableau.revealsTop(pCard, (TableauPile)source))
+		if( source instanceof TableauPile  && aTableau.revealsTop(pCard))
 		{
 			return new CompositeMove(new CardMove(pCard, pDestination), new RevealTopMove((TableauPile)source) );
 		}
 		return new CardMove(pCard, pDestination);
 	} 
+	
+	@Override
+	public boolean isBottomKing(Card pCard)
+	{
+		assert pCard != null && aTableau.contains(pCard);
+		return aTableau.isBottomKing(pCard);
+	}
+
 	
 	/**
 	 * A move that represents the intention to move pCard

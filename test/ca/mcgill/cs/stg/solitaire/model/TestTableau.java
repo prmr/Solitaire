@@ -54,9 +54,9 @@ public class TestTableau
 	{
 		try
 		{
-			Method method = Tableau.class.getDeclaredMethod("getPreviousCard", Card.class, TableauPile.class);
+			Method method = Tableau.class.getDeclaredMethod("getPreviousCard", Card.class);
 			method.setAccessible(true);
-			return (Optional<Card>) method.invoke(aTableau, pCard, TableauPile.FIRST);
+			return (Optional<Card>) method.invoke(aTableau, pCard);
 		}
 		catch( ReflectiveOperationException exception )
 		{
@@ -64,12 +64,6 @@ public class TestTableau
 			fail();
 			return Optional.empty();
 		}
-	}
-	
-	@Test
-	public void testGetPreviousCard_empty()
-	{
-		assertFalse(getPreviousCard(Card.get(Rank.ACE, Suit.CLUBS)).isPresent());
 	}
 	
 	@Test
@@ -112,36 +106,6 @@ public class TestTableau
 		assertEquals(5,aTableau.getPile(TableauPile.FIFTH).size());
 		assertEquals(6,aTableau.getPile(TableauPile.SIXTH).size());
 		assertEquals(7,aTableau.getPile(TableauPile.SEVENTH).size());
-	}
-	
-	@Test
-	public void testRevealsTop()
-	{
-		Deck deck = new Deck();
-		aTableau.initialize(deck);
-		CardStack stack = aTableau.getPile(TableauPile.FIRST);
-		assertFalse(aTableau.revealsTop(stack.peek(0), TableauPile.FIRST));
-		aTableau.pop(TableauPile.FIRST);
-		assertFalse(aTableau.revealsTop(stack.peek(0), TableauPile.FIRST));
-		assertFalse(aTableau.revealsTop(deck.draw(), TableauPile.FIRST));
-		assertFalse(aTableau.revealsTop(deck.draw(), TableauPile.SECOND));
-		stack = aTableau.getPile(TableauPile.SECOND);
-		assertFalse(aTableau.revealsTop(stack.peek(0), TableauPile.SECOND));
-		assertTrue(aTableau.revealsTop(stack.peek(1), TableauPile.SECOND));
-		
-		stack = aTableau.getPile(TableauPile.THIRD);
-		assertFalse(aTableau.revealsTop(stack.peek(0), TableauPile.THIRD));
-		assertFalse(aTableau.revealsTop(stack.peek(1), TableauPile.THIRD));
-		assertTrue(aTableau.revealsTop(stack.peek(2), TableauPile.THIRD));
-		
-		stack = aTableau.getPile(TableauPile.FOURTH);
-		assertFalse(aTableau.revealsTop(stack.peek(0), TableauPile.FOURTH));
-		assertFalse(aTableau.revealsTop(stack.peek(1), TableauPile.FOURTH));
-		assertFalse(aTableau.revealsTop(stack.peek(2), TableauPile.FOURTH));
-		assertTrue(aTableau.revealsTop(stack.peek(3), TableauPile.FOURTH));
-		Card card = deck.draw();
-		aTableau.push(card, TableauPile.FOURTH);
-		assertFalse(aTableau.revealsTop(card, TableauPile.FOURTH));
 	}
 	
 	@Test

@@ -106,6 +106,19 @@ class Tableau
 	}
 	
 	/**
+	 * @param pCard The card to check.
+	 * @return True if pCard is a visible king located at the bottom
+	 * of the pile.
+	 * @pre pCard != null && contains(pCard);
+	 */
+	public boolean isBottomKing(Card pCard)
+	{
+		assert pCard != null && contains(pCard);
+		return pCard.getRank() == Rank.KING && aPiles.get(getPile(pCard)).peek(0) == pCard;
+	}
+
+	
+	/**
 	 * Returns a copy of the entire pile at the specified position in the tableau.
 	 * 
 	 * @param pPile The pile to obtain.
@@ -121,15 +134,14 @@ class Tableau
 	/**
 	 * Returns true if moving pCard away reveals the top of the card.
 	 * @param pCard The card to test
-	 * @param pIndex The index of the pile.
 	 * @return true if the card above pCard is not visible and pCard
 	 * is visible.
-	 * @pre pCard != null && pIndex != null
+	 * @pre pCard != null && contains(pCard)
 	 */
-	boolean revealsTop(Card pCard, TableauPile pIndex)
+	boolean revealsTop(Card pCard)
 	{
-		assert pCard != null && pIndex != null;
-		Optional<Card> previous = getPreviousCard(pCard, pIndex);
+		assert pCard != null && contains(pCard);
+		Optional<Card> previous = getPreviousCard(pCard);
 		if( !previous.isPresent() )
 		{
 			return false;
@@ -137,10 +149,24 @@ class Tableau
 		return aVisible.contains(pCard) && !aVisible.contains(previous.get());
 	}
 	
-	private Optional<Card> getPreviousCard(Card pCard, TableauPile pIndex)
+	private TableauPile getPile(Card pCard)
+	{
+		assert contains(pCard);
+		for( TableauPile pile : TableauPile.values() )
+		{
+			if( contains(pCard, pile))
+			{
+				return pile;
+			}
+		}
+		assert false;
+		return null;
+	}
+	
+	private Optional<Card> getPreviousCard(Card pCard)
 	{
 		Optional<Card> previous = Optional.empty();
-		for( Card card : aPiles.get(pIndex))
+		for( Card card : aPiles.get(getPile(pCard)))
 		{
 			if( card == pCard )
 			{
@@ -274,6 +300,27 @@ class Tableau
 	{
 		assert contains(pCard);
 		return aVisible.contains(pCard);
+	}
+	
+	/**
+	 * @param pCard The card to check.
+	 * @return True if the card is visible and there is no
+	 * visible card below it in its pile. This includes
+	 * the case where the card is at the bottom of the pile.
+	 * @pre pCard != null && contains(pCard)
+	 */
+	boolean isLowestVisible(Card pCard)
+	{
+		assert pCard != null && contains(pCard);
+		if( !isVisible(pCard ))
+		{
+			return false;
+		}
+		else
+		{
+			Optional<Card> previousCard = getPreviousCard(pCard);
+			return !previousCard.isPresent() || !isVisible(previousCard.get());
+		}
 	}
 	
 	/**
