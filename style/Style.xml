@@ -190,6 +190,24 @@
     <module name="OverloadMethodsDeclarationOrder"/>
     <module name="MissingOverride"/>
     <module name="AnnotationLocation"/>
+    <module name="JavadocMissingWhitespaceAfterAsterisk"/>
+    <module name="MissingJavadocMethod"/>
+    <module name="MissingJavadocType"/>
+    <module name="NonEmptyAtclauseDescription">
+      <property name="javadocTokens" value="PARAM_LITERAL,RETURN_LITERAL,THROWS_LITERAL,EXCEPTION_LITERAL,DEPRECATED_LITERAL"/>
+    </module>
+    <module name="JavadocTagContinuationIndentation"/>
+    <module name="SummaryJavadoc">
+      <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
+    <module name="AtclauseOrder"/>
+    <module name="InvalidJavadocPosition"/>
+    <module name="JavadocBlockTagLocation"/>
+    <module name="JavadocContentLocation"/>
+    <module name="SingleLineJavadoc">
+      <property name="violateExecutionOnNonTightHtml" value="true"/>
+    </module>
   </module>
   <module name="BeforeExecutionExclusionFileFilter">
     <property name="fileNamePattern" value="module\-info\.java$"/>

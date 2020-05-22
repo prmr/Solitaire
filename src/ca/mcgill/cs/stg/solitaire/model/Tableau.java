@@ -1,22 +1,22 @@
 /*******************************************************************************
  * Solitaire
- *
- * Copyright (C) 2016 by Martin P. Robillard
- *
- * See: https://github.com/prmr/Solitaire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  
+ *  Copyright (C) 2016 by Martin P. Robillard
+ *  
+ *  See: https://github.com/prmr/Solitaire
+ *  
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see http://www.gnu.org/licenses/.
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.model;
 
@@ -108,7 +108,7 @@ class Tableau
 	/**
 	 * @param pCard The card to check.
 	 * @return True if pCard is a visible king located at the bottom
-	 * of the pile.
+	 *     of the pile.
 	 * @pre pCard != null && contains(pCard);
 	 */
 	public boolean isBottomKing(Card pCard)
@@ -149,7 +149,7 @@ class Tableau
 	 * Returns true if moving pCard away reveals the top of the card.
 	 * @param pCard The card to test
 	 * @return true if the card above pCard is not visible and pCard
-	 * is visible.
+	 *     is visible.
 	 * @pre pCard != null && contains(pCard)
 	 */
 	boolean revealsTop(Card pCard)
@@ -305,8 +305,8 @@ class Tableau
 	/**
 	 * @param pCard The card to check.
 	 * @return True if the card is visible and there is no
-	 * visible card below it in its pile. This includes
-	 * the case where the card is at the bottom of the pile.
+	 *     visible card below it in its pile. This includes
+	 *     the case where the card is at the bottom of the pile.
 	 * @pre pCard != null && contains(pCard)
 	 */
 	boolean isLowestVisible(Card pCard)
