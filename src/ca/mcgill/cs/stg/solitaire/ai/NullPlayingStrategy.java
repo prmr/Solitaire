@@ -28,6 +28,8 @@ import ca.mcgill.cs.stg.solitaire.model.Move;
  */
 public class NullPlayingStrategy implements PlayingStrategy
 {
+	public NullPlayingStrategy() {}
+	
 	@Override
 	public Move getLegalMove(GameModelView pModel)
 	{

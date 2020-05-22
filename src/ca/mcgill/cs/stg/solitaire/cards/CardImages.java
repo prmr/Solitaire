@@ -52,6 +52,17 @@ public final class CardImages
 		return getCard( getCode( pCard ) );
 	}
 	
+	private static Image getCard( String pCode )
+	{
+		Image image = (Image) aCards.get( pCode );
+		if( image == null )
+		{
+			image = new Image(CardImages.class.getClassLoader().getResourceAsStream( IMAGE_LOCATION + pCode + IMAGE_SUFFIX ));
+			aCards.put( pCode, image );
+		}
+		return image;
+	}
+	
 	/**
 	 * Return an image of the back of a card.
 	 * @return An icon representing the back of a card.
@@ -64,16 +75,5 @@ public final class CardImages
 	private static String getCode( Card pCard )
 	{
 		return RANK_CODES[ pCard.getRank().ordinal() ] + SUIT_CODES[ pCard.getSuit().ordinal() ];		
-	}
-	
-	private static Image getCard( String pCode )
-	{
-		Image image = (Image) aCards.get( pCode );
-		if( image == null )
-		{
-			image = new Image(CardImages.class.getClassLoader().getResourceAsStream( IMAGE_LOCATION + pCode + IMAGE_SUFFIX ));
-			aCards.put( pCode, image );
-		}
-		return image;
 	}
 }

@@ -52,6 +52,8 @@ public class Solitaire extends Application
     private SuitStack[] aSuitStacks = new SuitStack[Suit.values().length];
     private CardPileView[] aStacks = new CardPileView[TableauPile.values().length];
     
+	public Solitaire() {}
+    
 	/**
 	 * Launches the application.
 	 * @param pArgs This program takes no argument.
@@ -60,7 +62,7 @@ public class Solitaire extends Application
 	{
         launch(pArgs);
     }
-    
+	    
     @Override
     public void start(Stage pPrimaryStage) 
     {

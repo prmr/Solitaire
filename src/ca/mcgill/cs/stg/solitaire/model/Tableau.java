@@ -131,6 +131,20 @@ class Tableau
 		return new CardStack(aPiles.get(pPile));
 	}
 	
+	private TableauPile getPile(Card pCard)
+	{
+		assert contains(pCard);
+		for( TableauPile pile : TableauPile.values() )
+		{
+			if( contains(pCard, pile))
+			{
+				return pile;
+			}
+		}
+		assert false;
+		return null;
+	}
+	
 	/**
 	 * Returns true if moving pCard away reveals the top of the card.
 	 * @param pCard The card to test
@@ -147,20 +161,6 @@ class Tableau
 			return false;
 		}
 		return aVisible.contains(pCard) && !aVisible.contains(previous.get());
-	}
-	
-	private TableauPile getPile(Card pCard)
-	{
-		assert contains(pCard);
-		for( TableauPile pile : TableauPile.values() )
-		{
-			if( contains(pCard, pile))
-			{
-				return pile;
-			}
-		}
-		assert false;
-		return null;
 	}
 	
 	private Optional<Card> getPreviousCard(Card pCard)

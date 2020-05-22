@@ -57,6 +57,8 @@ public class GreedyPlayingStrategy implements PlayingStrategy
 		SUBSTRATEGIES.add(GreedyPlayingStrategy::substrategyDiscard);
 	}
 	
+	public GreedyPlayingStrategy() {}
+	
 	/*
 	 * If the discard pile is empty, discard. 
 	 */
