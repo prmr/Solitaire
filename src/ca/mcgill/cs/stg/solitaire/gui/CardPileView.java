@@ -47,6 +47,8 @@ public class CardPileView extends StackPane implements GameModelListener
 {
 	private static final int PADDING = 5;
 	private static final int Y_OFFSET = 17;
+	private static final ClipboardContent CLIPBOARD_CONTENT = new ClipboardContent();
+
 	
 	private TableauPile aIndex;
 	
@@ -112,9 +114,8 @@ public class CardPileView extends StackPane implements GameModelListener
 			public void handle(MouseEvent pMouseEvent) 
 			{
 				Dragboard db = pImageView.startDragAndDrop(TransferMode.ANY);
-				ClipboardContent content = new ClipboardContent();
-				content.putString(CardTransfer.serialize(GameModel.instance().getSubStack(pCard, aIndex)));
-				db.setContent(content);
+				CLIPBOARD_CONTENT.putString(CardTransfer.serialize(GameModel.instance().getSubStack(pCard, aIndex)));
+				db.setContent(CLIPBOARD_CONTENT);
 				pMouseEvent.consume();
 			}
 		};
