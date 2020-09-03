@@ -1,22 +1,22 @@
 /*******************************************************************************
  * Solitaire
- *
- * Copyright (C) 2016 by Martin P. Robillard
- *
- * See: https://github.com/prmr/Solitaire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  
+ *  Copyright (C) 2016 by Martin P. Robillard
+ *  
+ *  See: https://github.com/prmr/Solitaire
+ *  
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see http://www.gnu.org/licenses/.
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.gui;
 
@@ -40,12 +40,14 @@ import javafx.scene.layout.StackPane;
 public class SuitStack extends StackPane implements GameModelListener
 {
 	private static final int PADDING = 5;
+	// CSOFF:
 	private static final String BORDER_STYLE = "-fx-border-color: lightgray;"
 			+ "-fx-border-width: 3;" + " -fx-border-radius: 10.0";
 	private static final String BORDER_STYLE_DRAGGED = "-fx-border-color: darkgray;"
 			+ "-fx-border-width: 3;" + " -fx-border-radius: 10.0";
 	private static final String BORDER_STYLE_NORMAL = "-fx-border-color: lightgray;"
 			+ "-fx-border-width: 3;" + " -fx-border-radius: 10.0";
+	// CSON:
 	
 	private CardDragHandler aDragHandler;
 	private FoundationPile aIndex;

@@ -1,22 +1,22 @@
 /*******************************************************************************
  * Solitaire
- *
- * Copyright (C) 2016 by Martin P. Robillard
- *
- * See: https://github.com/prmr/Solitaire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  
+ *  Copyright (C) 2016 by Martin P. Robillard
+ *  
+ *  See: https://github.com/prmr/Solitaire
+ *  
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see http://www.gnu.org/licenses/.
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.cards;
 
@@ -62,6 +62,8 @@ public final class Card
 	}
 	
 	/**
+	 * Get a flyweight Card object.
+	 * 
 	 * @param pRank The rank of the card (from ace to kind)
 	 * @param pSuit The suit of the card (clubs, diamond, spades, hearts)
 	 * @return The card object representing the card with pRank and pSuit
@@ -73,9 +75,11 @@ public final class Card
 	}
 	
 	/**
+	 * Get a flyweight card object based on its serialized form.
+	 * 
 	 * @param pId The id string for the card. This is needs to have
-	 * been produced by Card.getIDString to be considered a
-	 * valid input to this method.
+	 *     been produced by Card.getIDString to be considered a
+	 *     valid input to this method.
 	 * @return The card object with id string pId
 	 */
 	public static Card get( String pId )
@@ -95,28 +99,12 @@ public final class Card
 		return aRank;
 	}
 	
-//	/**
-//	 * @param pCard The card to compare against
-//	 * @return True if and only if pCard's suit is of the same color as 
-//	 * this card.
-//	 */
-//	public boolean sameColorAs(Card pCard)
-//	{
-//		assert pCard != null;
-//		if( getSuit() == Suit.DIAMONDS || getSuit() == Suit.HEARTS )
-//		{
-//			return pCard.getSuit() == Suit.DIAMONDS || pCard.getSuit() == Suit.HEARTS;
-//		}
-//		else
-//		{
-//			return pCard.getSuit() == Suit.CLUBS || pCard.getSuit() == Suit.SPADES;
-//		}
-//	}
-	
 	/**
+	 * Return the id string for this card.
+	 * 
 	 * @return A string uniquely representing this card. The string
-	 * format is not specified except that it is fully compatible
-	 * with the format expected by Card.get(String).
+	 *     format is not specified except that it is fully compatible
+	 *     with the format expected by Card.get(String).
 	 */
 	public String getIDString()
 	{
