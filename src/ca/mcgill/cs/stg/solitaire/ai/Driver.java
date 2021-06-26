@@ -40,7 +40,7 @@ public final class Driver
 	{
 		int total = 0;
 		int totalWon = 0;
-		GameModel model = new GameModel();
+		GameModel model = new GameModel(new GreedyPlayingStrategy());
 		for( int i = 0; i < NUMBER_OF_GAMES; i++ )
 		{
 			playGame(model);

@@ -20,6 +20,7 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.gui;
 
+import ca.mcgill.cs.stg.solitaire.ai.GreedyPlayingStrategy;
 import ca.mcgill.cs.stg.solitaire.model.FoundationPile;
 import ca.mcgill.cs.stg.solitaire.model.GameModel;
 import ca.mcgill.cs.stg.solitaire.model.TableauPile;
@@ -71,7 +72,7 @@ public class Solitaire extends Application
         root.setVgap(MARGIN_OUTER);
         root.setPadding(new Insets(MARGIN_OUTER));
         
-    	final GameModel model = new GameModel();
+    	final GameModel model = new GameModel(new GreedyPlayingStrategy());
     	DeckView deckView = new DeckView(model);
         DiscardPileView discardPileView = new DiscardPileView(model);
 

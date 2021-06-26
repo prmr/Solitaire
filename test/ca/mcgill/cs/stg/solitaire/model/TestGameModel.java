@@ -30,6 +30,7 @@ import java.lang.reflect.Field;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ca.mcgill.cs.stg.solitaire.ai.GreedyPlayingStrategy;
 import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.CardStack;
 import ca.mcgill.cs.stg.solitaire.cards.Rank;
@@ -37,7 +38,7 @@ import ca.mcgill.cs.stg.solitaire.cards.Suit;
 
 public class TestGameModel
 {
-	private final GameModel aModel = new GameModel();
+	private final GameModel aModel = new GameModel(new GreedyPlayingStrategy());
 	
 	/*
 	 * Injects a deterministic deck of card in the GameEngine

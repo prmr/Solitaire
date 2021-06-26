@@ -37,7 +37,7 @@ public final class CrashTest
 	 */
 	public static void main(String[] pArgs)
 	{
-		GameModel model = new GameModel();
+		GameModel model = new GameModel(new GreedyPlayingStrategy());
 		for( int i = 0; i < NUMBER_OF_GAMES; i++ )
 		{
 			playGame(model);

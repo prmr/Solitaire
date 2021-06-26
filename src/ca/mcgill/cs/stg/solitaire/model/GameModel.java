@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import ca.mcgill.cs.stg.solitaire.ai.GreedyPlayingStrategy;
 import ca.mcgill.cs.stg.solitaire.ai.PlayingStrategy;
 import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.CardStack;
@@ -84,13 +83,17 @@ public final class GameModel implements GameModelView
 	private final Foundations aFoundations = new Foundations();
 	private final Tableau aTableau = new Tableau();
 	private final List<GameModelListener> aListeners = new ArrayList<>();
-	private final PlayingStrategy aPlayingStrategy = new GreedyPlayingStrategy();
+	private final PlayingStrategy aPlayingStrategy;
 	
 	/**
 	 * Creates a new game model initialized to a new game.
+	 * @param pPlayingStrategy The strategy to use for auto-play. 
+	 * @pre pPlayingStrategy != null
 	 */
-	public GameModel()
+	public GameModel(PlayingStrategy pPlayingStrategy)
 	{
+		assert pPlayingStrategy != null;
+		aPlayingStrategy = pPlayingStrategy;
 		reset();
 	}
 	
