@@ -34,7 +34,7 @@ import ca.mcgill.cs.stg.solitaire.cards.Suit;
 
 /**
  * Keeps track of the current state of the game and provides
- * a facade to it. Implements the Singleton design pattern.
+ * a facade to it. 
  * 
  * The game state can logically be separated into four distinct 
  * conceptual elements: the deck, the discard pile, the foundations
@@ -43,8 +43,6 @@ import ca.mcgill.cs.stg.solitaire.cards.Suit;
  */
 public final class GameModel implements GameModelView
 {
-	private static final GameModel INSTANCE = new GameModel();
-	
 	private static final Move NULL_MOVE = new Move()
 	{
 		@Override
@@ -88,7 +86,10 @@ public final class GameModel implements GameModelView
 	private final List<GameModelListener> aListeners = new ArrayList<>();
 	private final PlayingStrategy aPlayingStrategy = new GreedyPlayingStrategy();
 	
-	private GameModel()
+	/**
+	 * Creates a new game model initialized to a new game.
+	 */
+	public GameModel()
 	{
 		reset();
 	}
@@ -111,14 +112,6 @@ public final class GameModel implements GameModelView
 		Move move = aPlayingStrategy.getLegalMove(this);
 		move.perform();
 		return !move.isNull();
-	}
-	
-	/**
-	 * @return The singleton instance for this class.
-	 */
-	public static GameModel instance()
-	{
-		return INSTANCE;
 	}
 	
 	/**

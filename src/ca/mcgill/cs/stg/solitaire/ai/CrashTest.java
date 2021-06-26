@@ -37,9 +37,10 @@ public final class CrashTest
 	 */
 	public static void main(String[] pArgs)
 	{
+		GameModel model = new GameModel();
 		for( int i = 0; i < NUMBER_OF_GAMES; i++ )
 		{
-			playGame(GameModel.instance());
+			playGame(model);
 		}
 		System.out.println("Runs completed.");
 	}

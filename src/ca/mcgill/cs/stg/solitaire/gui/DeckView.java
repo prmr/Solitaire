@@ -47,8 +47,11 @@ class DeckView extends HBox implements GameModelListener
     private static final int IMAGE_NEW_LINE_WIDTH = 10;
     private static final int IMAGE_FONT_SIZE = 15;
 	
-	DeckView()
+    private final GameModel aModel;
+    
+	DeckView(GameModel pModel)
 	{
+		aModel = pModel;
         final Button button = new Button();
         button.setGraphic(new ImageView(CardImages.getBack()));
         button.setStyle(BUTTON_STYLE_NORMAL);
@@ -68,19 +71,19 @@ class DeckView extends HBox implements GameModelListener
     		public void handle(MouseEvent pEvent) 
     		{
     			((Button)pEvent.getSource()).setStyle(BUTTON_STYLE_NORMAL);
-    			if( GameModel.instance().isDeckEmpty() )
+    			if( aModel.isDeckEmpty() )
     			{
-    				GameModel.instance().reset();
+    				aModel.reset();
     			}
     			else
     			{
-    				GameModel.instance().getDiscardMove().perform();
+    				aModel.getDiscardMove().perform();
     			}
     		}            
     	});
         
         getChildren().add(button);
-    	GameModel.instance().addListener(this);
+    	aModel.addListener(this);
 	}
 	
 	private Canvas createNewGameImage()
@@ -102,9 +105,7 @@ class DeckView extends HBox implements GameModelListener
 		context.setFill(Color.DARKKHAKI);
 		context.setFont(Font.font(Font.getDefault().getName(), IMAGE_FONT_SIZE));
 		
-		
-		
-		if( GameModel.instance().isCompleted() )
+		if( aModel.isCompleted() )
 		{
 			context.fillText("You won!", Math.round(width/2), IMAGE_FONT_SIZE);
 		}
@@ -119,7 +120,7 @@ class DeckView extends HBox implements GameModelListener
 	@Override
 	public void gameStateChanged()
 	{
-		if( GameModel.instance().isDeckEmpty() )
+		if( aModel.isDeckEmpty() )
 		{
 			((Button)getChildren().get(0)).setGraphic(createNewGameImage());
 		}

@@ -20,9 +20,8 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.gui;
 
-import ca.mcgill.cs.stg.solitaire.cards.Suit;
-import ca.mcgill.cs.stg.solitaire.model.GameModel;
 import ca.mcgill.cs.stg.solitaire.model.FoundationPile;
+import ca.mcgill.cs.stg.solitaire.model.GameModel;
 import ca.mcgill.cs.stg.solitaire.model.TableauPile;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -47,11 +46,6 @@ public class Solitaire extends Application
 	private static final String TITLE = "Solitaire";
 	private static final String VERSION = "1.0";
 
-    private DeckView aDeckView = new DeckView();
-    private DiscardPileView aDiscardPileView = new DiscardPileView();
-    private SuitStack[] aSuitStacks = new SuitStack[Suit.values().length];
-    private CardPileView[] aStacks = new CardPileView[TableauPile.values().length];
-    
 	/**
 	 * Application head.
 	 */
@@ -77,19 +71,21 @@ public class Solitaire extends Application
         root.setVgap(MARGIN_OUTER);
         root.setPadding(new Insets(MARGIN_OUTER));
         
-        root.add(aDeckView, 0, 0);
-        root.add(aDiscardPileView, 1, 0);
+    	final GameModel model = new GameModel();
+    	DeckView deckView = new DeckView(model);
+        DiscardPileView discardPileView = new DiscardPileView(model);
+
+        root.add(deckView, 0, 0);
+        root.add(discardPileView, 1, 0);
                 
         for( FoundationPile index : FoundationPile.values() )
         {
-        	aSuitStacks[index.ordinal()] = new SuitStack(index);
-        	root.add(aSuitStacks[index.ordinal()], 3+index.ordinal(), 0);
+        	root.add(new SuitStack(model, index), 3+index.ordinal(), 0);
         }
       
         for( TableauPile index : TableauPile.values() )
         {
-        	aStacks[index.ordinal()] = new CardPileView(index);
-        	root.add(aStacks[index.ordinal()], index.ordinal(), 1);
+        	root.add(new CardPileView(model, index), index.ordinal(), 1);
         }
         
         root.setOnKeyTyped(new EventHandler<KeyEvent>()
@@ -100,15 +96,14 @@ public class Solitaire extends Application
 			{
 				if( pEvent.getCharacter().equals("\r"))
 				{
-					GameModel.instance().tryToAutoPlay();
+					model.tryToAutoPlay();
 				}
 				else if( pEvent.getCharacter().equals("\b"))
 				{
-					GameModel.instance().undoLast();
+					model.undoLast();
 				}
 				pEvent.consume();
 			}
-        	
 		});
         
         pPrimaryStage.setResizable(false);

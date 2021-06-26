@@ -40,10 +40,11 @@ public final class Driver
 	{
 		int total = 0;
 		int totalWon = 0;
+		GameModel model = new GameModel();
 		for( int i = 0; i < NUMBER_OF_GAMES; i++ )
 		{
-			playGame(GameModel.instance());
-			int score = GameModel.instance().getScore();
+			playGame(model);
+			int score = model.getScore();
 			total += score;
 			if( score == ALL_CARDS )
 			{

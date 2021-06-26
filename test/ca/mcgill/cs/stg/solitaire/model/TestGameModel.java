@@ -37,13 +37,15 @@ import ca.mcgill.cs.stg.solitaire.cards.Suit;
 
 public class TestGameModel
 {
+	private final GameModel aModel = new GameModel();
+	
 	@BeforeEach
 	public void setup() throws Exception
 	{
 		Field deckField = GameModel.class.getDeclaredField("aDeck");
 		deckField.setAccessible(true);
-		deckField.set(GameModel.instance(), new TestDeck());
-		GameModel.instance().reset();
+		deckField.set(aModel, new TestDeck());
+		aModel.reset();
 	}
 	
 	@Test
@@ -59,39 +61,39 @@ public class TestGameModel
 			}
 		};
 		// Test no crash
-		GameModel.instance().getDiscardMove().perform();
-		GameModel.instance().addListener(new ListenerStub());
-		GameModel.instance().getDiscardMove().perform();
+		aModel.getDiscardMove().perform();
+		aModel.addListener(new ListenerStub());
+		aModel.getDiscardMove().perform();
 		assertTrue(test[0]);
 	}
 	
 	@Test
 	public void testDiscard()
 	{
-		assertTrue(GameModel.instance().isDiscardPileEmpty());
-		assertFalse(GameModel.instance().isDeckEmpty());// 3 of hearts
+		assertTrue(aModel.isDiscardPileEmpty());
+		assertFalse(aModel.isDeckEmpty());// 3 of hearts
 		for( int i = 0; i < 24; i++ )
 		{
-			assertFalse(GameModel.instance().isDeckEmpty());
-			GameModel.instance().getDiscardMove().perform();
+			assertFalse(aModel.isDeckEmpty());
+			aModel.getDiscardMove().perform();
 			// Test a few cards
 			if( i == 0 )
 			{
-				assertEquals(Card.get(Rank.JACK, Suit.DIAMONDS), GameModel.instance().peekDiscardPile());
+				assertEquals(Card.get(Rank.JACK, Suit.DIAMONDS), aModel.peekDiscardPile());
 			}
 			if( i == 1 )
 			{
-				assertEquals(Card.get(Rank.TEN, Suit.DIAMONDS), GameModel.instance().peekDiscardPile());
+				assertEquals(Card.get(Rank.TEN, Suit.DIAMONDS), aModel.peekDiscardPile());
 			}
-			assertFalse(GameModel.instance().isDiscardPileEmpty());
+			assertFalse(aModel.isDiscardPileEmpty());
 		}
-		assertTrue(GameModel.instance().isDeckEmpty());
+		assertTrue(aModel.isDeckEmpty());
 	}
 	
 	@Test
 	public void testGetStack()
 	{
-		GameModel model = GameModel.instance();
+		GameModel model = aModel;
 		CardStack stack = model.getTableauPile(TableauPile.FIRST);
 		assertEquals(Card.get(Rank.KING, Suit.SPADES), stack.peek(0));
 		assertEquals(1, stack.size());
@@ -108,7 +110,7 @@ public class TestGameModel
 	@Test
 	public void testGetSubStack()
 	{
-		GameModel model = GameModel.instance();
+		GameModel model = aModel;
 		CardStack stack = model.getSubStack(Card.get(Rank.KING, Suit.SPADES), TableauPile.FIRST);
 		assertEquals(Card.get(Rank.KING, Suit.SPADES), stack.peek(0));
 		assertEquals(1, stack.size());
@@ -130,7 +132,7 @@ public class TestGameModel
 	@Test 
 	public void testMoves()
 	{
-		GameModel model = GameModel.instance();
+		GameModel model = aModel;
 		assertTrue(model.isFoundationPileEmpty(FoundationPile.FIRST)); 
 		assertFalse(model.isLegalMove(Card.get(Rank.THREE, Suit.CLUBS), FoundationPile.SECOND));
 		assertFalse(model.isLegalMove(Card.get(Rank.THREE, Suit.CLUBS), FoundationPile.FIRST));
@@ -175,7 +177,7 @@ public class TestGameModel
 	@Test 
 	public void testMoves2()
 	{
-		GameModel model = GameModel.instance();
+		GameModel model = aModel;
 		model.getDiscardMove().perform();
 		model.getDiscardMove().perform(); // 10D on discard pile
 		model.getCardMove(model.peekDiscardPile(), TableauPile.SECOND).perform();
@@ -213,7 +215,7 @@ public class TestGameModel
 	@Test 
 	public void testMoves3()
 	{
-		GameModel model = GameModel.instance();
+		GameModel model = aModel;
 		for( int i = 0; i < 14; i++ )
 		{
 			model.getDiscardMove().perform();
@@ -229,7 +231,7 @@ public class TestGameModel
 	@Test
 	public void testNullMove()
 	{
-		GameModel model = GameModel.instance();
+		GameModel model = aModel;
 		Move nullMove = model.getNullMove();
 		assertTrue(nullMove.isNull());
 		// Only really tests that nothing crashes
@@ -241,7 +243,7 @@ public class TestGameModel
 	public void testUndo1()
 	{
 		// Tests undoing discard moves
-		GameModel model = GameModel.instance();
+		GameModel model = aModel;
 		assertTrue(model.isDiscardPileEmpty());
 		assertFalse(model.canUndo());
 		Move discard = model.getDiscardMove();
@@ -259,7 +261,7 @@ public class TestGameModel
 	@Test
 	public void testGetScore()
 	{
-		GameModel model = GameModel.instance();
+		GameModel model = aModel;
 		assertEquals( 0, model.getScore());
 		assertFalse(model.isCompleted());
 	}

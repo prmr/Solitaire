@@ -49,21 +49,22 @@ public class CardPileView extends StackPane implements GameModelListener
 	private static final int Y_OFFSET = 17;
 	private static final ClipboardContent CLIPBOARD_CONTENT = new ClipboardContent();
 
-	
 	private TableauPile aIndex;
+	private final GameModel aModel;
 	
-	CardPileView(TableauPile pIndex)
+	CardPileView(GameModel pModel, TableauPile pIndex)
 	{
+    	aModel = pModel;
 		aIndex = pIndex;
 		setPadding(new Insets(PADDING));
     	setAlignment(Pos.TOP_CENTER);
     	buildLayout();
-    	GameModel.instance().addListener(this);
+    	aModel.addListener(this);
 	}
 	
-	private static Image getImage(Card pCard)
+	private Image getImage(Card pCard)
 	{
-		if( GameModel.instance().isVisibleInTableau(pCard) )
+		if( aModel.isVisibleInTableau(pCard) )
 		{
 			return CardImages.getCard(pCard);
 		}
@@ -78,7 +79,7 @@ public class CardPileView extends StackPane implements GameModelListener
 		getChildren().clear();
 		
 		int offset = 0;
-		CardStack stack = GameModel.instance().getTableauPile(aIndex);
+		CardStack stack = aModel.getTableauPile(aIndex);
 		if( stack.isEmpty() ) // this essentially acts as a spacer
 		{
 			ImageView image = new ImageView(CardImages.getBack());
@@ -99,7 +100,7 @@ public class CardPileView extends StackPane implements GameModelListener
     		setOnDragExited(createDragExitedHandler(image, cardView));
     		setOnDragDropped(createDragDroppedHandler(image, cardView));
     		
-        	if( GameModel.instance().isVisibleInTableau(cardView))
+        	if( aModel.isVisibleInTableau(cardView))
         	{
         		image.setOnDragDetected(createDragDetectedHandler(image, cardView));
         	}
@@ -114,7 +115,7 @@ public class CardPileView extends StackPane implements GameModelListener
 			public void handle(MouseEvent pMouseEvent) 
 			{
 				Dragboard db = pImageView.startDragAndDrop(TransferMode.ANY);
-				CLIPBOARD_CONTENT.putString(CardTransfer.serialize(GameModel.instance().getSubStack(pCard, aIndex)));
+				CLIPBOARD_CONTENT.putString(CardTransfer.serialize(aModel.getSubStack(pCard, aIndex)));
 				db.setContent(CLIPBOARD_CONTENT);
 				pMouseEvent.consume();
 			}
@@ -131,7 +132,7 @@ public class CardPileView extends StackPane implements GameModelListener
 				if(pEvent.getGestureSource() != pImageView && pEvent.getDragboard().hasString())
 				{
 					CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
-					if( GameModel.instance().isLegalMove(transfer.getTop(), aIndex) )
+					if( aModel.isLegalMove(transfer.getTop(), aIndex) )
 					{
 						pEvent.acceptTransferModes(TransferMode.MOVE);
 					}
@@ -149,7 +150,7 @@ public class CardPileView extends StackPane implements GameModelListener
 			public void handle(DragEvent pEvent)
 			{
 				CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
-				if( GameModel.instance().isLegalMove(transfer.getTop(), aIndex) )
+				if( aModel.isLegalMove(transfer.getTop(), aIndex) )
 				{
 					pImageView.setEffect(new DropShadow());
 				}
@@ -182,12 +183,11 @@ public class CardPileView extends StackPane implements GameModelListener
 				boolean success = false;
 				if(db.hasString()) 
 				{
-					GameModel.instance().getCardMove(new CardTransfer(db.getString()).getTop(), aIndex).perform(); 
+					aModel.getCardMove(new CardTransfer(db.getString()).getTop(), aIndex).perform(); 
 					success = true;
 				}
 
 				pEvent.setDropCompleted(success);
-
 				pEvent.consume();
 			}
 		};
