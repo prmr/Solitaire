@@ -39,6 +39,9 @@ public class TestGameModel
 {
 	private final GameModel aModel = new GameModel();
 	
+	/*
+	 * Injects a deterministic deck of card in the GameEngine
+	 */
 	@BeforeEach
 	public void setup() throws Exception
 	{

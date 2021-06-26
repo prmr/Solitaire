@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
@@ -33,16 +32,10 @@ import ca.mcgill.cs.stg.solitaire.cards.Suit;
 
 public class TestFoundations
 {
-	private Foundations aFoundationPiles;
+	private Foundations aFoundationPiles = new Foundations();
 	private static final Card CAC = Card.get(Rank.ACE, Suit.CLUBS);
 	private static final Card CAD = Card.get(Rank.ACE, Suit.DIAMONDS);
 	private static final Card C3D = Card.get(Rank.THREE, Suit.DIAMONDS);
-	
-	@BeforeEach
-	public void setup()
-	{
-		aFoundationPiles = new Foundations();
-	}
 	
 	@Test
 	public void testInitialize()
