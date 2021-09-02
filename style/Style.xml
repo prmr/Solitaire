@@ -5,14 +5,14 @@
     This configuration file was written by the eclipse-cs plugin configuration editor
 -->
 <!--
-    Checkstyle-Configuration: COMP 303 Checks
+    Checkstyle-Configuration: JetUML
     Description: none
 -->
 <module name="Checker">
   <property name="severity" value="warning"/>
   <module name="TreeWalker">
     <module name="JavadocMethod">
-      <property name="scope" value="protected"/>
+      <property name="accessModifiers" value="protected"/>
     </module>
     <module name="JavadocType">
       <property name="scope" value="package"/>
@@ -41,7 +41,6 @@
     <module name="AvoidStarImport"/>
     <module name="IllegalImport"/>
     <module name="RedundantImport"/>
-    <module name="UnusedImports"/>
     <module name="MethodLength">
       <property name="severity" value="ignore"/>
       <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
@@ -174,10 +173,11 @@
     <module name="IllegalToken"/>
     <module name="IllegalTokenText"/>
     <module name="IllegalType"/>
-    <module name="MissingCtor"/>
-    <module name="MultipleStringLiterals"/>
+    <module name="MissingCtor">
+      <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
     <module name="NoArrayTrailingComma"/>
-    <module name="NoClone"/>
     <module name="NoEnumTrailingComma"/>
     <module name="NoFinalizer"/>
     <module name="PackageDeclaration"/>
@@ -186,7 +186,10 @@
     <module name="UnnecessarySemicolonInEnumeration"/>
     <module name="UnnecessarySemicolonInTryWithResources"/>
     <module name="OneStatementPerLine"/>
-    <module name="VariableDeclarationUsageDistance"/>
+    <module name="VariableDeclarationUsageDistance">
+      <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
     <module name="OverloadMethodsDeclarationOrder"/>
     <module name="MissingOverride"/>
     <module name="AnnotationLocation"/>
@@ -208,7 +211,6 @@
     <module name="SingleLineJavadoc">
       <property name="violateExecutionOnNonTightHtml" value="true"/>
     </module>
-    <module name="AbstractClassName"/>
     <module name="ClassTypeParameterName"/>
     <module name="ClassTypeParameterName"/>
     <module name="MethodTypeParameterName"/>
@@ -224,19 +226,22 @@
       <property name="severity" value="ignore"/>
       <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
-    <module name="ClassMemberImpliedModifier"/>
+    <module name="ClassMemberImpliedModifier">
+      <property name="violateImpliedStaticOnNestedEnum" value="false"/>
+      <property name="violateImpliedStaticOnNestedInterface" value="false"/>
+    </module>
     <module name="NestedForDepth">
       <property name="max" value="2"/>
     </module>
     <module name="MutableException"/>
     <module name="ThrowsCount"/>
     <module name="OneTopLevelClass"/>
-    <module name="AvoidEscapedUnicodeCharacters"/>
   </module>
   <module name="BeforeExecutionExclusionFileFilter">
     <property name="fileNamePattern" value="module\-info\.java$"/>
   </module>
   <module name="LineLength">
+    <property name="fileExtensions" value="java"/>
     <property name="ignorePattern" value="^ *\* *[^ ]+$"/>
     <property name="max" value="150"/>
   </module>
