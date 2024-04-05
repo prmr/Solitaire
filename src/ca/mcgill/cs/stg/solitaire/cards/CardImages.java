@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  *  
- *  Copyright (C) 2016 by Martin P. Robillard
+ *  Copyright (C) 2016-2024 by Martin P. Robillard
  *  
  *  See: https://github.com/prmr/Solitaire
  *  
@@ -54,7 +54,7 @@ public final class CardImages
 	
 	private static Image getCard( String pCode )
 	{
-		Image image = (Image) aCards.get( pCode );
+		Image image = aCards.get( pCode );
 		if( image == null )
 		{
 			image = new Image(CardImages.class.getClassLoader().getResourceAsStream( IMAGE_LOCATION + pCode + IMAGE_SUFFIX ));

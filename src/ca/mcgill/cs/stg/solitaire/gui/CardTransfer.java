@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  *  
- *  Copyright (C) 2016 by Martin P. Robillard
+ *  Copyright (C) 2016-2024 by Martin P. Robillard
  *  
  *  See: https://github.com/prmr/Solitaire
  *  
@@ -24,8 +24,8 @@ import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.cards.CardStack;
 
 /**
- * An immutable utility object to facilitate the transfer of card 
- * through the drag board (drag and drop space).
+ * An immutable utility object to facilitate the transfer of card through
+ * the drag board (drag and drop space).
  */
 public class CardTransfer
 {
@@ -51,8 +51,8 @@ public class CardTransfer
 	}
 	
 	/**
-	 * Converts an array of cards into an id string
-	 * that can be deserialized by the constructor.
+	 * Converts an array of cards into an id string that can be deserialized
+	 * by the constructor.
 	 * @param pCards The array of cards with high-ranking cards first.
 	 * @return The id string.
 	 */
@@ -71,7 +71,7 @@ public class CardTransfer
 	}
 	
 	/**
-	 * @return The top card in the transfer (the one with the highest rank)
+	 * @return The top card in the transfer (the one with the highest rank).
 	 */
 	public Card getTop()
 	{

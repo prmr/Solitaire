@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  *  
- *  Copyright (C) 2016 by Martin P. Robillard
+ *  Copyright (C) 2016-2024 by Martin P. Robillard
  *  
  *  See: https://github.com/prmr/Solitaire
  *  
@@ -25,8 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Represents a general-purpose stack of cards. New CardStack
- * instances are initially empty.
+ * Represents a general-purpose stack of cards.
  */
 public class CardStack implements Iterable<Card>
 {
@@ -41,8 +40,8 @@ public class CardStack implements Iterable<Card>
 	}
 	
 	/**
-	 * Creates a CardStack that contains all the cards
-	 * in pCard, in the iteration order, from bottom to top.
+	 * Creates a CardStack that contains all the cards in pCard, in the
+	 * iteration order, from bottom to top.
 	 * 
 	 * @param pCards The cards to initialize the stack with.
 	 */

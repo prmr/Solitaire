@@ -28,8 +28,9 @@ import ca.mcgill.cs.stg.solitaire.cards.CardStack;
 import ca.mcgill.cs.stg.solitaire.cards.Rank;
 
 /**
- * Represents the four piles that must be completed to win the game, with the ace
- * at the bottom, face up, and all cards of the same suit on top, in sequence.
+ * Represents the four piles that must be completed to win the game, with the 
+ * Ace at the bottom, face up, and all cards of the same suit on top, in 
+ * sequence.
  */
 class Foundations
 {
@@ -69,8 +70,8 @@ class Foundations
 	
 	/**
 	 * @param pLocation The location of the pile to check.
-	 * @return True if the pile at pLocation is empty
-	 * @pre pLocation != null
+	 * @return True if the pile at pLocation is empty.
+	 * @pre pLocation != null.
 	 */
 	boolean isEmpty(FoundationPile pLocation)
 	{
@@ -79,13 +80,13 @@ class Foundations
 	}
 	
 	/**
-	 * @param pCard The card we wish to move
-	 * @param pLocation The desired location for pCard
-	 * @return True if pCard can be moved to the top of pLocation. 
-	 *     This is only possible if its rank is immediately superior
-	 *     to that of the card currently on top of the pile or, in
-	 *     the case of an ace, if the location is empty.
-	 * @pre pCard != null && pLocation != null
+	 * @param pCard The card we wish to move.
+	 * @param pLocation The desired location for pCard.
+	 * @return True if pCard can be moved to the top of pLocation. This is 
+	 * 	   only possible if its rank is immediately superior to that of the
+	 *     card currently on top of the pile or, in the case of an Ace, if
+	 *     the location is empty.
+	 * @pre pCard != null && pLocation != null.
 	 */
 	boolean canMoveTo(Card pCard, FoundationPile pLocation )
 	{
@@ -102,8 +103,8 @@ class Foundations
 	}
 	
 	/**
-	 * @param pLocation The location of the pile to peek at
-	 * @return The card on top of the pile at pLocation
+	 * @param pLocation The location of the pile to peek at.
+	 * @return The card on top of the pile at pLocation.
 	 * @pre pLocation != null & !aPiles.get(pLocation).isEmpty();
 	 */
 	Card peek(FoundationPile pLocation)
@@ -126,11 +127,10 @@ class Foundations
 	}
 	
 	/**
-	 * Remove the card at the top of the pile at pLocation,
-	 * and returns it.
+	 * Remove the card at the top of the pile at pLocation, and returns it.
 	 * 
 	 * @param pLocation The location where to obtain the card.
-	 * @pre pLocation != null && !isEmpty(pLocation)
+	 * @pre pLocation != null && !isEmpty(pLocation).
 	 */
 	Card pop(FoundationPile pLocation)
 	{

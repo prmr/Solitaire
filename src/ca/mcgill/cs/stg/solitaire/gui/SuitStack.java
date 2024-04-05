@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  *  
- *  Copyright (C) 2016 by Martin P. Robillard
+ *  Copyright (C) 2016-2024 by Martin P. Robillard
  *  
  *  See: https://github.com/prmr/Solitaire
  *  
@@ -34,20 +34,27 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 
 /**
- * Component that shows a stack of cards in 
- * which a completed suit is accumulated.
+ * Component that shows a stack of cards in which a completed suit is
+ * accumulated.
  */
 public class SuitStack extends StackPane implements GameModelListener
 {
 	private static final int PADDING = 5;
-	// CSOFF:
-	private static final String BORDER_STYLE = "-fx-border-color: lightgray;"
-			+ "-fx-border-width: 3;" + " -fx-border-radius: 10.0";
-	private static final String BORDER_STYLE_DRAGGED = "-fx-border-color: darkgray;"
-			+ "-fx-border-width: 3;" + " -fx-border-radius: 10.0";
-	private static final String BORDER_STYLE_NORMAL = "-fx-border-color: lightgray;"
-			+ "-fx-border-width: 3;" + " -fx-border-radius: 10.0";
-	// CSON:
+
+	private static final String BORDER_STYLE = """
+			-fx-border-color: lightgray; \
+			-fx-border-width: 3; \
+			-fx-border-radius: 10.0""";
+	
+	private static final String BORDER_STYLE_DRAGGED = """
+			-fx-border-color: darkgray; \
+			-fx-border-width: 3; \
+			-fx-border-radius: 10.0""";
+	
+	private static final String BORDER_STYLE_NORMAL = """
+			-fx-border-color: lightgray; \
+			-fx-border-width: 3; 
+			-fx-border-radius: 10.0""";
 	
 	private CardDragHandler aDragHandler;
 	private FoundationPile aIndex;
@@ -92,7 +99,8 @@ public class SuitStack extends StackPane implements GameModelListener
 	{
 		return new EventHandler<DragEvent>()
     	{
-    	    public void handle(DragEvent pEvent) 
+    	    @Override
+			public void handle(DragEvent pEvent) 
     	    {
     	    	if(pEvent.getGestureSource() != pView && pEvent.getDragboard().hasString())
     	    	{
@@ -112,7 +120,8 @@ public class SuitStack extends StackPane implements GameModelListener
 	{
 		return new EventHandler<DragEvent>()
     	{
-    		public void handle(DragEvent pEvent) 
+    		@Override
+			public void handle(DragEvent pEvent) 
     		{
     			CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
 	    		if( transfer.size() == 1 && aModel.isLegalMove(transfer.getTop(), aIndex) )
@@ -128,7 +137,8 @@ public class SuitStack extends StackPane implements GameModelListener
 	{
 		return new EventHandler<DragEvent>()
     	{
-    		public void handle(DragEvent pEvent)
+    		@Override
+			public void handle(DragEvent pEvent)
     		{
     			setStyle(BORDER_STYLE_NORMAL);
     			pEvent.consume();
@@ -140,7 +150,8 @@ public class SuitStack extends StackPane implements GameModelListener
 	{
 		return new EventHandler<DragEvent>() 
     	{
-    		public void handle(DragEvent pEvent)
+    		@Override
+			public void handle(DragEvent pEvent)
     		{
     			Dragboard db = pEvent.getDragboard();
     			boolean success = false;

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  *  
- *  Copyright (C) 2016 by Martin P. Robillard
+ *  Copyright (C) 2016-2024 by Martin P. Robillard
  *  
  *  See: https://github.com/prmr/Solitaire
  *  
@@ -27,19 +27,18 @@ public interface Move
 {
 	/**
 	 * Performs the move. 
-	 * @pre The move is legal
+	 * @pre The move is legal.
 	 */
 	void perform();
 	
 	/**
-	 * Undoes the move by reversing
-	 * its effect.
+	 * Undoes the move by reversing its effect.
 	 */
 	void undo();
 	
 	/**
-	 * @return True if the move is not a move that
-	 *     advances the game. False by default.
+	 * @return True if the move is not a move that advances the game. False
+	 *     by default.
 	 */
 	default boolean isNull()
 	{ return false; }

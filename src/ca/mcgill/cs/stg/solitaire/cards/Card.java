@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  *  
- *  Copyright (C) 2016 by Martin P. Robillard
+ *  Copyright (C) 2016-2024 by Martin P. Robillard
  *  
  *  See: https://github.com/prmr/Solitaire
  *  
@@ -21,25 +21,22 @@
 package ca.mcgill.cs.stg.solitaire.cards;
 
 /**
- * An immutable description of a playing card. This abstraction
- * is designed to be independent of game logic, so it does
- * not provide any service that relies on the knowledge
- * of the rules of any particular game.
+ * An immutable description of a playing card. This abstraction is designed to
+ * be independent of game logic, so it does not provide any service that relies
+ * on the knowledge of the rules of any particular game.
  * 
- * This class implements the Flyweight design pattern: 
- * there can only ever be one instance of a card that 
- * represents a specific real-world playing card (such as ace
- * of spaces). In the absence of serialization and reflection,
- * this ensures that the behavior of the == operator is identical 
- * to that of the equals method when two card arguments are 
- * provided.
+ * This class implements the Flyweight design pattern: there can only ever be
+ * one instance of a card that represents a specific real-world playing card
+ * (such as Ace of Spades). In the absence of serialization and reflection,
+ * this ensures that the behavior of the == operator is identical to that of
+ * the equals method when two card arguments are provided.
  */
 public final class Card
 {
-	// Indexed by suit, then rank
+	// Indexed by suit, then rank.
 	private static final Card[][] CARDS = new Card[Suit.values().length][];
 	
-	// Create the flyweight objects
+	// Create the flyweight objects.
 	static
 	{
 		for( Suit suit : Suit.values() )
@@ -64,9 +61,9 @@ public final class Card
 	/**
 	 * Get a flyweight Card object.
 	 * 
-	 * @param pRank The rank of the card (from ace to kind)
-	 * @param pSuit The suit of the card (clubs, diamond, spades, hearts)
-	 * @return The card object representing the card with pRank and pSuit
+	 * @param pRank The rank of the card (from Ace to King).
+	 * @param pSuit The suit of the card (Clubs, Diamond, Spades, Hearts).
+	 * @return The card object representing the card with pRank and pSuit.
 	 */
 	public static Card get(Rank pRank, Suit pSuit)
 	{
@@ -80,7 +77,7 @@ public final class Card
 	 * @param pId The id string for the card. This is needs to have
 	 *     been produced by Card.getIDString to be considered a
 	 *     valid input to this method.
-	 * @return The card object with id string pId
+	 * @return The card object with id string pId.
 	 */
 	public static Card get( String pId )
 	{

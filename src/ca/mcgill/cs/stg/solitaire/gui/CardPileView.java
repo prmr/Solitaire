@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  *  
- *  Copyright (C) 2016 by Martin P. Robillard
+ *  Copyright (C) 2016-2024 by Martin P. Robillard
  *  
  *  See: https://github.com/prmr/Solitaire
  *  
@@ -40,8 +40,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 
 /**
- * Component that shows a stack of cards in 
- * the bottom stacks.
+ * Component that shows a stack of cards in the tableau.
  */
 public class CardPileView extends StackPane implements GameModelListener
 {

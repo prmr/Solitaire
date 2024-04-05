@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  *  
- *  Copyright (C) 2016 by Martin P. Robillard
+ *  Copyright (C) 2016-2024 by Martin P. Robillard
  *  
  *  See: https://github.com/prmr/Solitaire
  *  
@@ -29,8 +29,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 /**
- * Component that shows the state of the discard pile and allows
- * dragging cards from it.
+ * Component that shows the state of the discard pile and allows dragging
+ * cards from it.
  */
 class DiscardPileView extends HBox implements GameModelListener
 {

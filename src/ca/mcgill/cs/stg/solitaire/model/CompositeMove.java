@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  *  
- *  Copyright (C) 2016 by Martin P. Robillard
+ *  Copyright (C) 2016-2024 by Martin P. Robillard
  *  
  *  See: https://github.com/prmr/Solitaire
  *  
@@ -24,15 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of the Composite object in the composite 
- * design pattern.
+ * Implementation of the Composite object in the composite design pattern.
  */
 public class CompositeMove implements Move
 {
 	private final List<Move> aMoves = new ArrayList<>();
 	
 	/**
-	 * @param pMoves Any move to be added to this composite
+	 * @param pMoves Any move to be added to this composite.
 	 */
 	public CompositeMove( Move ... pMoves)
 	{

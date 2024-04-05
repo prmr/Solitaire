@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  *  
- *  Copyright (C) 2016 by Martin P. Robillard
+ *  Copyright (C) 2016-2024 by Martin P. Robillard
  *  
  *  See: https://github.com/prmr/Solitaire
  *  
@@ -21,8 +21,8 @@
 package ca.mcgill.cs.stg.solitaire.model;
 
 /**
- * Places where a visible card can be located, 
- * except for the foundation piles and the tableau.
+ * Places where a visible card can be located, except for the foundation piles
+ * and the tableau.
  */
 public enum OtherLocation implements Location
 { DISCARD_PILE  }

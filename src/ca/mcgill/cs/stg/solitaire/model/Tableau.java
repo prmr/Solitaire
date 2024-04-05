@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  *  
- *  Copyright (C) 2016 by Martin P. Robillard
+ *  Copyright (C) 2016-2024 by Martin P. Robillard
  *  
  *  See: https://github.com/prmr/Solitaire
  *  
@@ -35,9 +35,9 @@ import ca.mcgill.cs.stg.solitaire.cards.Deck;
 import ca.mcgill.cs.stg.solitaire.cards.Rank;
 
 /**
- * Represents seven piles of cards that fan downwards, where cards
- * must be stacked in alternating suit colors, and where cards can 
- * be moved from pile to pile.
+ * Represents seven piles of cards that fan downwards, where cards must be
+ * stacked in alternating suit colors, and where cards can be moved from
+ * pile to pile.
  */
 class Tableau
 {
@@ -82,13 +82,13 @@ class Tableau
 	
 	
 	/**
-	 * Determines if it is legal to move pCard on top of pPile, 
-	 * i.e. if a king is moved to an empty pile or any other rank on 
-	 * a card of immediately greater rank but of a different color.
-	 * @param pCard The card we wish to move
-	 * @param pPile The desired destination pile
-	 * @return True if the move is legal
-	 * @pre pCard != null && pPile != null
+	 * Determines if it is legal to move pCard on top of pPile, i.e. if a king
+	 * is moved to an empty pile or any other rank on a card of immediately
+	 * greater rank but of a different color.
+	 * @param pCard The card we wish to move.
+	 * @param pPile The desired destination pile.
+	 * @return True if the move is legal.
+	 * @pre pCard != null && pPile != null.
 	 */
 	boolean canMoveTo(Card pCard, TableauPile pPile )
 	{
@@ -107,8 +107,8 @@ class Tableau
 	
 	/**
 	 * @param pCard The card to check.
-	 * @return True if pCard is a visible king located at the bottom
-	 *     of the pile.
+	 * @return True if pCard is a visible king located at the bottom of the
+	 *     pile.
 	 * @pre pCard != null && contains(pCard);
 	 */
 	public boolean isBottomKing(Card pCard)
@@ -147,10 +147,10 @@ class Tableau
 	
 	/**
 	 * Returns true if moving pCard away reveals the top of the card.
-	 * @param pCard The card to test
-	 * @return true if the card above pCard is not visible and pCard
-	 *     is visible.
-	 * @pre pCard != null && contains(pCard)
+	 * @param pCard The card to test.
+	 * @return true if the card above pCard is not visible and pCard is
+	 *     visible.
+	 * @pre pCard != null && contains(pCard).
 	 */
 	boolean revealsTop(Card pCard)
 	{
@@ -183,7 +183,7 @@ class Tableau
 	 * @param pCard The card to move, possibly including all the cards on top of it.
 	 * @param pOrigin The location of the card before the move.
 	 * @param pDestination The intended destination of the card.
-     * @pre this is a legal move
+     * @pre this is a legal move.
 	 */
 	void moveWithin(Card pCard, TableauPile pOrigin, TableauPile pDestination )
 	{
@@ -205,12 +205,12 @@ class Tableau
 	}
 	
 	/**
-	 * Returns a sequence of cards starting at pCard and including
-	 * all cards on top of it.
-	 * @param pCard The bottom card in the sequence
-	 * @param pPile The target pile
+	 * Returns a sequence of cards starting at pCard and including all cards
+	 * on top of it.
+	 * @param pCard The bottom card in the sequence.
+	 * @param pPile The target pile.
 	 * @return A copy of the requested sequence.
-	 * @pre pCard != null && pPile != null
+	 * @pre pCard != null && pPile != null.
 	 */
 	CardStack getSequence(Card pCard, TableauPile pPile)
 	{
@@ -235,7 +235,7 @@ class Tableau
 	/**
 	 * Make the top card of a pile visible.
 	 * @param pIndex The index of the requested pile.
-	 * @pre pIndex != null && !isEmpty(pIndex)
+	 * @pre pIndex != null && !isEmpty(pIndex).
 	 */
 	void showTop(TableauPile pIndex)
 	{
@@ -246,7 +246,7 @@ class Tableau
 	/**
 	 * Make the top card of a pile not visible.
 	 * @param pIndex The index of the requested stack.
-	 * @pre pIndex != null && !isEmpty(pIndex)
+	 * @pre pIndex != null && !isEmpty(pIndex).
 	 */
 	void hideTop(TableauPile pIndex)
 	{
@@ -255,10 +255,10 @@ class Tableau
 	}
 	
 	/**
-	 * @param pCard The card to check
-	 * @param pIndex The index of the pile to check
-	 * @return True if pIndex contains pCard
-	 * @pre pCard != null && pIndex != null
+	 * @param pCard The card to check.
+	 * @param pIndex The index of the pile to check.
+	 * @return True if pIndex contains pCard.
+	 * @pre pCard != null && pIndex != null.
 	 */
 	boolean contains(Card pCard, TableauPile pIndex)
 	{
@@ -276,7 +276,7 @@ class Tableau
 	/**
 	 * @param pCard The card to check.
 	 * @return Whether pCard is contains in any stack.
-	 * @pre pCard != null;
+	 * @pre pCard != null.
 	 */
 	boolean contains(Card pCard)
 	{
@@ -294,7 +294,7 @@ class Tableau
 	/**
 	 * @param pCard The card to check.
 	 * @return true if pCard is visible in the piles.
-	 * @pre contains(pCard)
+	 * @pre contains(pCard).
 	 */
 	boolean isVisible(Card pCard)
 	{
@@ -304,10 +304,10 @@ class Tableau
 	
 	/**
 	 * @param pCard The card to check.
-	 * @return True if the card is visible and there is no
-	 *     visible card below it in its pile. This includes
-	 *     the case where the card is at the bottom of the pile.
-	 * @pre pCard != null && contains(pCard)
+	 * @return True if the card is visible and there is no visible card below
+	 *     it in its pile. This includes the case where the card is at the
+	 *     bottom of the pile.
+	 * @pre pCard != null && contains(pCard).
 	 */
 	boolean isLowestVisible(Card pCard)
 	{
@@ -326,7 +326,7 @@ class Tableau
 	/**
 	 * Removes the top card from the pile at pIndex.
 	 * @param pIndex The index of the pile to pop.
-	 * @pre !isEmpty(pIndex)
+	 * @pre !isEmpty(pIndex).
 	 */
 	void pop(TableauPile pIndex)
 	{
@@ -335,11 +335,11 @@ class Tableau
 	}
 	
 	/**
-	 * Places a card on top of the pile at pIndex. The
-	 * card will be visible by default.
+	 * Places a card on top of the pile at pIndex. The card will be visible
+	 * by default.
 	 * @param pCard The card to push.
 	 * @param pIndex The index of the destination stack.
-	 * @pre pCard != null && pIndex != null;
+	 * @pre pCard != null && pIndex != null.
 	 */
 	void push(Card pCard, TableauPile pIndex)
 	{

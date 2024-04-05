@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  *  
- *  Copyright (C) 2016 by Martin P. Robillard
+ *  Copyright (C) 2016-2024 by Martin P. Robillard
  *  
  *  See: https://github.com/prmr/Solitaire
  *  
@@ -32,13 +32,12 @@ import ca.mcgill.cs.stg.solitaire.cards.Rank;
 import ca.mcgill.cs.stg.solitaire.cards.Suit;
 
 /**
- * Keeps track of the current state of the game and provides
- * a facade to it. 
+ * Keeps track of the current state of the game and provides a facade to it. 
  * 
- * The game state can logically be separated into four distinct 
- * conceptual elements: the deck, the discard pile, the foundations
- * where completed suits are accumulated, and the tableau, which consists of
- * seven piles where cards fan down in sequences of alternating suit colors.
+ * The game state can logically be separated into four distinct conceptual
+ * elements: the deck, the discard pile, the foundations where completed
+ * suits are accumulated, and the tableau, which consists of seven piles
+ * where cards fan down in sequences of alternating suit colors.
  */
 public final class GameModel implements GameModelView
 {
@@ -120,7 +119,7 @@ public final class GameModel implements GameModelView
 	/**
 	 * Registers an observer for the state of the game model.
 	 * @param pListener A listener to register.
-	 * @pre pListener != null
+	 * @pre pListener != null.
 	 */
 	public void addListener(GameModelListener pListener)
 	{
@@ -137,7 +136,8 @@ public final class GameModel implements GameModelView
 	}
 	
 	/**
-	 * Restores the model to the state corresponding to the start of a new game.
+	 * Restores the model to the state corresponding to the start of a new
+	 * game.
 	 */
 	public void reset()
 	{
@@ -176,11 +176,10 @@ public final class GameModel implements GameModelView
 	}
 	
 	/**
-	 * Obtain the card on top of the foundation pile pPile
-	 * without removing it.
+	 * Obtain the card on top of the foundation pile pPile without removing it.
 	 * @param pPile The pile to check.
 	 * @return The card on top of the pile.
-	 * @pre pPile != null && !isFoundationPileEmpty(pIndex)
+	 * @pre pPile != null && !isFoundationPileEmpty(pIndex).
 	 */
 	public Card peekSuitStack(FoundationPile pPile)
 	{
@@ -196,7 +195,7 @@ public final class GameModel implements GameModelView
 	}
 	
 	/**
-	 * @param pCard A card to locate
+	 * @param pCard A card to locate.
 	 * @return The game location where this card currently is.
 	 * @pre the card is in a location where it can be found and moved.
 	 */
@@ -311,12 +310,12 @@ public final class GameModel implements GameModelView
 	}
 	
 	/**
-	 * Get the sequence consisting of pCard and all 
-	 * the other cards below it, from the tableau.
-	 * @param pCard The top card of the sequence
-	 * @param pPile The requested pile
+	 * Get the sequence consisting of pCard and all the other cards below it,
+	 * from the tableau.
+	 * @param pCard The top card of the sequence.
+	 * @param pPile The requested pile.
 	 * @return A non-empty sequence of cards.
-	 * @pre pCard != null and is in pile pPile
+	 * @pre pCard != null and is in pile pPile.
 	 */
 	public CardStack getSubStack(Card pCard, TableauPile pPile)
 	{
@@ -373,9 +372,9 @@ public final class GameModel implements GameModelView
 
 	
 	/**
-	 * A move that represents the intention to move pCard
-	 * to pDestination, possibly including all cards stacked
-	 * on top of pCard if pCard is in a working stack.
+	 * A move that represents the intention to move pCard to pDestination, 
+	 * possibly including all cards stacked on top of pCard if pCard is in a
+	 * working stack.
 	 */
 	private class CardMove implements Move
 	{

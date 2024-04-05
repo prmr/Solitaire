@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  *  
- *  Copyright (C) 2016 by Martin P. Robillard
+ *  Copyright (C) 2016-2024 by Martin P. Robillard
  *  
  *  See: https://github.com/prmr/Solitaire
  *  
@@ -36,9 +36,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 /**
- * Component that shows the deck and allows clicking
- * it to draw cards. Listens to game model state changes
- * and updates itself to disappear if it is empty.
+ * Component that shows the deck and allows clicking it to draw cards. Listens
+ * to game model state changes and updates itself to disappear if it is empty.
  */
 class DeckView extends HBox implements GameModelListener
 {
@@ -99,7 +98,6 @@ class DeckView extends HBox implements GameModelListener
 		context.strokeOval(width/4, height/2-width/4 + IMAGE_FONT_SIZE, width/2, width/2);
 
 		// The text
-		
 		context.setTextAlign(TextAlignment.CENTER);
 		context.setTextBaseline(VPos.CENTER);
 		context.setFill(Color.DARKKHAKI);
