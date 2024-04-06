@@ -27,14 +27,10 @@ import ca.mcgill.cs.stg.solitaire.cards.Card;
 import javafx.scene.image.Image;
 
 /**
- * A class to store and manage images of the 52 cards.
+ * A class to store and manage images of the 52 cards and the back of a card.
  */
 public final class CardImages 
 {
-	private static final String IMAGE_SUFFIX = ".gif";
-	private static final String[] RANK_CODES = {"a", "2", "3", "4", "5", "6", "7", "8", "9", "t", "j", "q", "k"};
-	private static final String[] SUIT_CODES = {"c", "d", "h", "s"};	
-	
 	private static Map<String, Image> aCards = new HashMap<String, Image>();
 	
 	private CardImages()
@@ -48,7 +44,7 @@ public final class CardImages
 	public static Image getCard( Card pCard )
 	{
 		assert pCard != null;
-		return getCard( getCode( pCard ) );
+		return getCard( getFileNameFor( pCard ) );
 	}
 	
 	private static Image getCard( String pCode )
@@ -56,7 +52,7 @@ public final class CardImages
 		Image image = aCards.get( pCode );
 		if( image == null )
 		{
-			image = new Image(CardImages.class.getClassLoader().getResourceAsStream( pCode + IMAGE_SUFFIX ));
+			image = new Image(CardImages.class.getClassLoader().getResourceAsStream( pCode ));
 			aCards.put( pCode, image );
 		}
 		return image;
@@ -68,11 +64,12 @@ public final class CardImages
 	 */
 	public static Image getBack()
 	{
-		return getCard( "b" );
+		return getCard( "back.gif" );
 	}
 	
-	private static String getCode( Card pCard )
+	private static String getFileNameFor( Card pCard )
 	{
-		return RANK_CODES[ pCard.getRank().ordinal() ] + SUIT_CODES[ pCard.getSuit().ordinal() ];		
+		return String.format("%s-of-%s.gif", pCard.getRank().name().toLowerCase(), 
+				pCard.getSuit().name().toLowerCase());
 	}
 }
