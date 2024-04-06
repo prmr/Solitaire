@@ -18,12 +18,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see http://www.gnu.org/licenses/.
  *******************************************************************************/
-package ca.mcgill.cs.stg.solitaire.cards;
+package ca.mcgill.cs.stg.solitaire.gui;
 
 
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.mcgill.cs.stg.solitaire.cards.Card;
 import javafx.scene.image.Image;
 
 /**

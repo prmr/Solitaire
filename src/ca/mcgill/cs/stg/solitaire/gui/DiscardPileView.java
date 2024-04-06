@@ -21,7 +21,6 @@
 package ca.mcgill.cs.stg.solitaire.gui;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
-import ca.mcgill.cs.stg.solitaire.cards.CardImages;
 import ca.mcgill.cs.stg.solitaire.model.GameModel;
 import ca.mcgill.cs.stg.solitaire.model.GameModelListener;
 import javafx.geometry.Insets;
