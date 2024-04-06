@@ -20,7 +20,6 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.gui;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +31,6 @@ import javafx.scene.image.Image;
  */
 public final class CardImages 
 {
-	private static final String IMAGE_LOCATION = "";
 	private static final String IMAGE_SUFFIX = ".gif";
 	private static final String[] RANK_CODES = {"a", "2", "3", "4", "5", "6", "7", "8", "9", "t", "j", "q", "k"};
 	private static final String[] SUIT_CODES = {"c", "d", "h", "s"};	
@@ -58,7 +56,7 @@ public final class CardImages
 		Image image = aCards.get( pCode );
 		if( image == null )
 		{
-			image = new Image(CardImages.class.getClassLoader().getResourceAsStream( IMAGE_LOCATION + pCode + IMAGE_SUFFIX ));
+			image = new Image(CardImages.class.getClassLoader().getResourceAsStream( pCode + IMAGE_SUFFIX ));
 			aCards.put( pCode, image );
 		}
 		return image;
