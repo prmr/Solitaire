@@ -41,7 +41,7 @@ public final class CardImages
 	 * @param pCard the target card
 	 * @return An icon representing the chosen card.
 	 */
-	public static Image getCard( Card pCard )
+	public static Image imageFor( Card pCard )
 	{
 		assert pCard != null;
 		return getCard( getFileNameFor( pCard ) );
@@ -62,7 +62,7 @@ public final class CardImages
 	 * Return an image of the back of a card.
 	 * @return An icon representing the back of a card.
 	 */
-	public static Image getBack()
+	public static Image imageForBackOfCard()
 	{
 		return getCard( "back.gif" );
 	}

@@ -41,7 +41,7 @@ class DiscardPileView extends HBox implements GameModelListener
 	{
 		aModel = pModel;
 		setPadding(new Insets(PADDING));
-    	final ImageView image = new ImageView(CardImages.getBack());
+    	final ImageView image = new ImageView(CardImages.imageForBackOfCard());
     	image.setVisible(false);
        	getChildren().add(image);
     	aDragHandler = new CardDragHandler(image);
@@ -61,7 +61,7 @@ class DiscardPileView extends HBox implements GameModelListener
 			getChildren().get(0).setVisible(true);
 			Card topCard = aModel.peekDiscardPile();
 			ImageView image = (ImageView)getChildren().get(0);
-			image.setImage(CardImages.getCard(topCard));
+			image.setImage(CardImages.imageFor(topCard));
 			aDragHandler.setCard(topCard);
 		}
 	}

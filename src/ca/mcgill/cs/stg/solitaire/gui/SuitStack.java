@@ -65,7 +65,7 @@ public class SuitStack extends StackPane implements GameModelListener
 		aIndex = pIndex;
 		setPadding(new Insets(PADDING));
 		setStyle(BORDER_STYLE);
-		final ImageView image = new ImageView(CardImages.getBack());
+		final ImageView image = new ImageView(CardImages.imageForBackOfCard());
     	image.setVisible(false);
        	getChildren().add(image);
     	aDragHandler = new CardDragHandler(image);
@@ -89,7 +89,7 @@ public class SuitStack extends StackPane implements GameModelListener
 			getChildren().get(0).setVisible(true);
 			Card topCard = aModel.peekSuitStack(aIndex);
 			ImageView image = (ImageView)getChildren().get(0);
-			image.setImage(CardImages.getCard(topCard));
+			image.setImage(CardImages.imageFor(topCard));
 			aDragHandler.setCard(topCard);
 		}
 	}
