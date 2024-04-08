@@ -20,6 +20,9 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.cards;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 /**
  * An immutable description of a playing card. This abstraction is designed to
  * be independent of game logic, so it does not provide any service that relies
@@ -33,18 +36,19 @@ package ca.mcgill.cs.stg.solitaire.cards;
  */
 public final class Card
 {
-	// Indexed by suit, then rank.
-	private static final Card[][] CARDS = new Card[Suit.values().length][];
-	
-	// Create the flyweight objects.
+	private static final Map<Suit, Map<Rank, Card>> CARDS = new EnumMap<>(Suit.class);
+
+	/*
+	 * Create the flyweight objects eagerly.
+	 */
 	static
 	{
 		for( Suit suit : Suit.values() )
 		{
-			CARDS[suit.ordinal()] = new Card[Rank.values().length];
+			Map<Rank, Card> forSuit = CARDS.computeIfAbsent(suit, key -> new EnumMap<>(Rank.class));
 			for( Rank rank : Rank.values() )
 			{
-				CARDS[suit.ordinal()][rank.ordinal()] = new Card(rank, suit);
+				forSuit.put(rank, new Card(rank, suit));
 			}
 		}
 	}
@@ -68,14 +72,14 @@ public final class Card
 	public static Card get(Rank pRank, Suit pSuit)
 	{
 		assert pRank != null && pSuit != null;
-		return CARDS[pSuit.ordinal()][pRank.ordinal()];
+		return CARDS.get(pSuit).get(pRank);
 	}
 	
 	/**
 	 * Obtain the rank of the card.
 	 * @return An object representing the rank of the card.
 	 */
-	public Rank getRank()
+	public Rank rank()
 	{
 		return aRank;
 	}
@@ -84,7 +88,7 @@ public final class Card
 	 * Obtain the suit of the card.
 	 * @return An object representing the suit of the card 
 	 */
-	public Suit getSuit()
+	public Suit suit()
 	{
 		return aSuit;
 	}
@@ -95,6 +99,11 @@ public final class Card
 	@Override
 	public String toString()
 	{
-		return aRank + " of " + aSuit;
+		return String.format("%s of %s", titleCase(aRank), titleCase(aSuit));
+	}
+	
+	private static String titleCase(Enum<?> pEnum)
+	{
+		return pEnum.name().charAt(0) + pEnum.name().substring(1).toLowerCase();
 	}
 }

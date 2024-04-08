@@ -38,8 +38,8 @@ public final class CardSerializer
 	private static String cardToInt(Card pCard)
 	{
 		assert pCard != null;
-		return Integer.toString(pCard.getSuit().ordinal() * 
-				Rank.values().length + pCard.getRank().ordinal());
+		return Integer.toString(pCard.suit().ordinal() * 
+				Rank.values().length + pCard.rank().ordinal());
 	}
 	
 	private static Card intToCard(int pNumber)

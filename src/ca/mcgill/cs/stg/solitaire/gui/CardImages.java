@@ -91,7 +91,7 @@ public final class CardImages
 	
 	private static String getFileNameFor( Card pCard )
 	{
-		return String.format("%s-of-%s.gif", pCard.getRank().name().toLowerCase(), 
-				pCard.getSuit().name().toLowerCase());
+		return String.format("%s-of-%s.gif", pCard.rank().name().toLowerCase(), 
+				pCard.suit().name().toLowerCase());
 	}
 }

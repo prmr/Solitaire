@@ -93,12 +93,12 @@ class Foundations
 		assert pCard != null && pLocation != null;
 		if( isEmpty(pLocation))
 		{
-			return pCard.getRank() == Rank.ACE;
+			return pCard.rank() == Rank.ACE;
 		}
 		else
 		{
-			return pCard.getSuit() == peek(pLocation).getSuit() && 
-					pCard.getRank().ordinal() == peek(pLocation).getRank().ordinal()+1;
+			return pCard.suit() == peek(pLocation).suit() && 
+					pCard.rank().ordinal() == peek(pLocation).rank().ordinal()+1;
 		}
 	}
 	
