@@ -20,10 +20,11 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.gui;
 
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
+import ca.mcgill.cs.stg.solitaire.cards.Deck;
 import javafx.scene.image.Image;
 
 /**
@@ -31,7 +32,8 @@ import javafx.scene.image.Image;
  */
 public final class CardImages 
 {
-	private static Map<String, Image> aCards = new HashMap<String, Image>();
+	private static final Image CARD_BACK = loadBackImage();
+	private static final Map<Card, Image> CARD_IMAGES = loadCardImages();
 	
 	private CardImages()
 	{}
@@ -44,18 +46,7 @@ public final class CardImages
 	public static Image imageFor( Card pCard )
 	{
 		assert pCard != null;
-		return getCard( getFileNameFor( pCard ) );
-	}
-	
-	private static Image getCard( String pCode )
-	{
-		Image image = aCards.get( pCode );
-		if( image == null )
-		{
-			image = new Image(CardImages.class.getClassLoader().getResourceAsStream( pCode ));
-			aCards.put( pCode, image );
-		}
-		return image;
+		return CARD_IMAGES.get(pCard);
 	}
 	
 	/**
@@ -64,7 +55,31 @@ public final class CardImages
 	 */
 	public static Image imageForBackOfCard()
 	{
-		return getCard( "back.gif" );
+		return CARD_BACK;
+	}
+	
+	private static Image loadBackImage()
+	{
+		return new Image(CardImages.class.getClassLoader()
+				.getResourceAsStream( "back.gif" ));
+	}
+	
+	/*
+	 * Loads images for all 52 cards in a map. Assumes that card objects are 
+	 * flyweights.
+	 */
+	private static Map<Card, Image> loadCardImages()
+	{
+		Deck deck = new Deck();
+		Map<Card, Image> images = new IdentityHashMap<>();
+		while( !deck.isEmpty() )
+		{
+			Card card = deck.draw();
+			Image image = new Image(CardImages.class.getClassLoader()
+					.getResourceAsStream( getFileNameFor(card) ));
+			images.put(card, image);
+		}
+		return images;
 	}
 	
 	private static String getFileNameFor( Card pCard )

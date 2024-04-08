@@ -20,6 +20,7 @@
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.gui;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class TestCardImages
 	{
 		assertSame(CardImages.imageForBackOfCard(), 
 				CardImages.imageForBackOfCard());
+		assertNotNull(CardImages.imageForBackOfCard());
 	}
 	
 	/*
