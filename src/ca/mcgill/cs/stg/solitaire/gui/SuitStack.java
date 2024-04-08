@@ -21,6 +21,8 @@
 package ca.mcgill.cs.stg.solitaire.gui;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
+import ca.mcgill.cs.stg.solitaire.cards.CardSerializer;
+import ca.mcgill.cs.stg.solitaire.cards.CardStack;
 import ca.mcgill.cs.stg.solitaire.model.GameModel;
 import ca.mcgill.cs.stg.solitaire.model.GameModelListener;
 import ca.mcgill.cs.stg.solitaire.model.FoundationPile;
@@ -103,8 +105,8 @@ public class SuitStack extends StackPane implements GameModelListener
     	    {
     	    	if(pEvent.getGestureSource() != pView && pEvent.getDragboard().hasString())
     	    	{
-    	    		CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
-    	    		if( transfer.size() == 1 && aModel.isLegalMove(transfer.getTop(), aIndex) )
+    	    		CardStack transfer = CardSerializer.deserialize(pEvent.getDragboard().getString());
+    	    		if( transfer.size() == 1 && aModel.isLegalMove(transfer.peek(), aIndex) )
     	    		{
     	    			pEvent.acceptTransferModes(TransferMode.MOVE);
     	    		}
@@ -122,8 +124,8 @@ public class SuitStack extends StackPane implements GameModelListener
     		@Override
 			public void handle(DragEvent pEvent) 
     		{
-    			CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
-	    		if( transfer.size() == 1 && aModel.isLegalMove(transfer.getTop(), aIndex) )
+    			CardStack transfer = CardSerializer.deserialize(pEvent.getDragboard().getString());
+	    		if( transfer.size() == 1 && aModel.isLegalMove(transfer.peek(), aIndex) )
     			{
     				setStyle(BORDER_STYLE_DRAGGED);
     			}
@@ -156,8 +158,7 @@ public class SuitStack extends StackPane implements GameModelListener
     			boolean success = false;
     			if(db.hasString()) 
     			{
-    				CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
-    				aModel.getCardMove(transfer.getTop(), aIndex).perform();
+    				aModel.getCardMove(CardSerializer.deserializeBottomCard(pEvent.getDragboard().getString()), aIndex).perform();
     				success = true;
     			}
     			pEvent.setDropCompleted(success);

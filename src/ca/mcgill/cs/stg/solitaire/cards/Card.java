@@ -72,40 +72,12 @@ public final class Card
 	}
 	
 	/**
-	 * Get a flyweight card object based on its serialized form.
-	 * 
-	 * @param pId The id string for the card. This is needs to have
-	 *     been produced by Card.getIDString to be considered a
-	 *     valid input to this method.
-	 * @return The card object with id string pId.
-	 */
-	public static Card get( String pId )
-	{
-		assert pId != null;
-		int id = Integer.parseInt(pId);
-		return get(Rank.values()[id % Rank.values().length],
-				Suit.values()[id / Rank.values().length]);
-	}
-	
-	/**
 	 * Obtain the rank of the card.
 	 * @return An object representing the rank of the card.
 	 */
 	public Rank getRank()
 	{
 		return aRank;
-	}
-	
-	/**
-	 * Return the id string for this card.
-	 * 
-	 * @return A string uniquely representing this card. The string
-	 *     format is not specified except that it is fully compatible
-	 *     with the format expected by Card.get(String).
-	 */
-	public String getIDString()
-	{
-		return Integer.toString(getSuit().ordinal() * Rank.values().length + getRank().ordinal());
 	}
 	
 	/**

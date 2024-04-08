@@ -123,6 +123,12 @@ public class CardStack implements Iterable<Card>
 	{
 		return aCards.size() == 0;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return aCards.toString();
+	}
 
 	@Override
 	public Iterator<Card> iterator()

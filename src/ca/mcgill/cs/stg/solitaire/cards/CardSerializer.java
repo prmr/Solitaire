@@ -89,4 +89,19 @@ public final class CardSerializer
 		}
 		return result;
 	}
+	
+	/**
+	 * Convenience method to deserialize a sequence of cards 
+	 * and obtain the top of the deserialized stack in one 
+	 * operation.
+	 * 
+	 * @param pCards A card stack to deserialize.
+	 * @return The cards at the top of the stack.
+	 * @pre !pCards.isEmpty()
+	 */
+	public static Card deserializeBottomCard(String pCards)
+	{
+		assert !pCards.isEmpty();
+		return deserialize(pCards).peek(0);
+	}
 }

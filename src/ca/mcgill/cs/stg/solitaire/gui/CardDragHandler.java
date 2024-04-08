@@ -21,6 +21,7 @@
 package ca.mcgill.cs.stg.solitaire.gui;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
+import ca.mcgill.cs.stg.solitaire.cards.CardSerializer;
 import javafx.event.EventHandler;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -52,7 +53,7 @@ public class CardDragHandler implements EventHandler<MouseEvent>
 	public void handle(MouseEvent pMouseEvent)
 	{
 		Dragboard db = aImageView.startDragAndDrop(TransferMode.ANY);
-        CLIPBOARD_CONTENT.putString(aCard.getIDString());
+        CLIPBOARD_CONTENT.putString(CardSerializer.serialize(aCard));
         db.setContent(CLIPBOARD_CONTENT);
         pMouseEvent.consume();
 	}

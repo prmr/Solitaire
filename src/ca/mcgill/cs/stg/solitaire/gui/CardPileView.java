@@ -21,6 +21,7 @@
 package ca.mcgill.cs.stg.solitaire.gui;
 
 import ca.mcgill.cs.stg.solitaire.cards.Card;
+import ca.mcgill.cs.stg.solitaire.cards.CardSerializer;
 import ca.mcgill.cs.stg.solitaire.cards.CardStack;
 import ca.mcgill.cs.stg.solitaire.model.GameModel;
 import ca.mcgill.cs.stg.solitaire.model.GameModelListener;
@@ -113,7 +114,7 @@ public class CardPileView extends StackPane implements GameModelListener
 			public void handle(MouseEvent pMouseEvent) 
 			{
 				Dragboard db = pImageView.startDragAndDrop(TransferMode.ANY);
-				CLIPBOARD_CONTENT.putString(CardTransfer.serialize(aModel.getSubStack(pCard, aIndex)));
+				CLIPBOARD_CONTENT.putString(CardSerializer.serialize(aModel.getSubStack(pCard, aIndex)));
 				db.setContent(CLIPBOARD_CONTENT);
 				pMouseEvent.consume();
 			}
@@ -129,8 +130,7 @@ public class CardPileView extends StackPane implements GameModelListener
 			{
 				if(pEvent.getGestureSource() != pImageView && pEvent.getDragboard().hasString())
 				{
-					CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
-					if( aModel.isLegalMove(transfer.getTop(), aIndex) )
+					if( aModel.isLegalMove(CardSerializer.deserializeBottomCard(pEvent.getDragboard().getString()), aIndex) )
 					{
 						pEvent.acceptTransferModes(TransferMode.MOVE);
 					}
@@ -147,8 +147,7 @@ public class CardPileView extends StackPane implements GameModelListener
 			@Override
 			public void handle(DragEvent pEvent)
 			{
-				CardTransfer transfer = new CardTransfer(pEvent.getDragboard().getString());
-				if( aModel.isLegalMove(transfer.getTop(), aIndex) )
+				if( aModel.isLegalMove(CardSerializer.deserializeBottomCard(pEvent.getDragboard().getString()), aIndex) )
 				{
 					pImageView.setEffect(new DropShadow());
 				}
@@ -181,7 +180,7 @@ public class CardPileView extends StackPane implements GameModelListener
 				boolean success = false;
 				if(db.hasString()) 
 				{
-					aModel.getCardMove(new CardTransfer(db.getString()).getTop(), aIndex).perform(); 
+					aModel.getCardMove(CardSerializer.deserializeBottomCard(db.getString()), aIndex).perform(); 
 					success = true;
 				}
 
