@@ -18,52 +18,50 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see http://www.gnu.org/licenses/.
  *******************************************************************************/
-package ca.mcgill.cs.stg.solitaire.gui;
+package ca.mcgill.cs.stg.solitaire.cards;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import ca.mcgill.cs.stg.solitaire.cards.Card;
 import ca.mcgill.cs.stg.solitaire.testutils.TestUtils;
-import javafx.scene.image.Image;
 
-public class TestCardImages
+public class TestCardTransfer
 {
-	/*
-	 * Checks that the card back image can be loaded and that it is a
-	 * flyweight. 
-	 */
-	@Test
-	void testimageForBackOfCard()
-	{
-		assertSame(CardImages.imageForBackOfCard(), 
-				CardImages.imageForBackOfCard());
-		assertNotNull(CardImages.imageForBackOfCard());
-	}
-	
-	/*
-	 * Checks that the image of each card can be loaded and that they are
-	 * flyweights. 
-	 */
 	@ParameterizedTest
 	@MethodSource("allCards")
-	void testimageForCard( Card pCard )
+	void testSerializeSingleCard(Card pCard)
 	{
-		try 
+		assertSame(pCard, CardSerializer
+				.deserialize(CardSerializer.serialize(pCard)).peek());
+	}
+	
+	void testSerializeEmpty()
+	{
+		CardStack actual = CardSerializer.deserialize(
+				CardSerializer.serialize(new CardStack()));
+		assertTrue(actual.isEmpty());
+	}
+	
+	@RepeatedTest(20)
+	void testSerializeThreeCards()
+	{
+		Deck deck = new Deck();
+		CardStack expected = new CardStack();
+		expected.push(deck.draw());
+		expected.push(deck.draw());
+		expected.push(deck.draw());
+		CardStack actual = CardSerializer.deserialize(CardSerializer.serialize(expected));
+		assertEquals(expected.size(), actual.size());
+		for( int i=0; i < expected.size(); i++ )
 		{
-			Image image1 = CardImages.imageFor( pCard );
-			Image image2 = CardImages.imageFor( pCard );
-			assertSame(image1, image2 );
-		}
-		catch( NullPointerException e )
-		{
-			throw new AssertionError(String.format("Image for %s cannot be loaded", pCard));
+			assertSame(expected.pop(), actual.pop());
 		}
 	}
 	
