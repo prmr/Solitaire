@@ -29,6 +29,13 @@ import javafx.scene.image.Image;
 
 /**
  * A class to store and manage images of the 52 cards and the back of a card.
+ * 
+ * To function properly, all 53 images must be accessible from a folder at
+ * the root of the path from which the class file for CardImages is loaded.
+ * If a file is missing or corrupted, launching the application will fail
+ * with "Exception in Application start method" indirectly caused by
+ * an ExceptionInInitializerError because this class will fail to 
+ * initialize.
  */
 public final class CardImages 
 {
