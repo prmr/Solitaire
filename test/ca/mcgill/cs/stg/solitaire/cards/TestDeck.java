@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 public class TestDeck
 {
 	@Test
-	public void testdraw()
+	void testdraw()
 	{
 		Deck lDeck = new Deck();
 		lDeck.shuffle();

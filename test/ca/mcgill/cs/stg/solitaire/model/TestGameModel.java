@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ca.mcgill.cs.stg.solitaire.ai.GreedyPlayingStrategy;
@@ -40,11 +39,7 @@ public class TestGameModel
 {
 	private final GameModel aModel = new GameModel(new GreedyPlayingStrategy());
 	
-	/*
-	 * Injects a deterministic deck of card in the GameEngine
-	 */
-	@BeforeEach
-	public void setup() throws Exception
+	TestGameModel() throws ReflectiveOperationException
 	{
 		Field deckField = GameModel.class.getDeclaredField("aDeck");
 		deckField.setAccessible(true);
@@ -53,7 +48,7 @@ public class TestGameModel
 	}
 	
 	@Test
-	public void testListeners()
+	void testListeners()
 	{
 		final boolean[] test = {false};
 		class ListenerStub implements GameModelListener
@@ -72,7 +67,7 @@ public class TestGameModel
 	}
 	
 	@Test
-	public void testDiscard()
+	void testDiscard()
 	{
 		assertTrue(aModel.isDiscardPileEmpty());
 		assertFalse(aModel.isDeckEmpty());// 3 of hearts
@@ -95,7 +90,7 @@ public class TestGameModel
 	}
 	
 	@Test
-	public void testGetStack()
+	void testGetStack()
 	{
 		GameModel model = aModel;
 		CardStack stack = model.getTableauPile(TableauPile.FIRST);
@@ -112,7 +107,7 @@ public class TestGameModel
 	}
 	
 	@Test
-	public void testGetSubStack()
+	void testGetSubStack()
 	{
 		GameModel model = aModel;
 		CardStack stack = model.getSubStack(Card.get(Rank.KING, Suit.SPADES), TableauPile.FIRST);
@@ -134,7 +129,7 @@ public class TestGameModel
 	}
 	
 	@Test 
-	public void testMoves()
+	void testMoves()
 	{
 		GameModel model = aModel;
 		assertTrue(model.isFoundationPileEmpty(FoundationPile.FIRST)); 
@@ -179,7 +174,7 @@ public class TestGameModel
 	}
 	
 	@Test 
-	public void testMoves2()
+	void testMoves2()
 	{
 		GameModel model = aModel;
 		model.getDiscardMove().perform();
@@ -217,7 +212,7 @@ public class TestGameModel
 	}
 	
 	@Test 
-	public void testMoves3()
+	void testMoves3()
 	{
 		GameModel model = aModel;
 		for( int i = 0; i < 14; i++ )
@@ -233,7 +228,7 @@ public class TestGameModel
 	}
 	
 	@Test
-	public void testNullMove()
+	void testNullMove()
 	{
 		GameModel model = aModel;
 		Move nullMove = model.getNullMove();
@@ -244,7 +239,7 @@ public class TestGameModel
 	}
 	
 	@Test
-	public void testUndo1()
+	void testUndo1()
 	{
 		// Tests undoing discard moves
 		GameModel model = aModel;
@@ -263,7 +258,7 @@ public class TestGameModel
 	}
 	
 	@Test
-	public void testGetScore()
+	void testGetScore()
 	{
 		GameModel model = aModel;
 		assertEquals( 0, model.getScore());

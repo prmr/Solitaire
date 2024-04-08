@@ -67,14 +67,14 @@ public class TestTableau
 	}
 	
 	@Test
-	public void testGetPreviousCard_First()
+	void testGetPreviousCard_First()
 	{
 		aTableau.push(CAC, TableauPile.FIRST);
 		assertFalse(getPreviousCard(CAC).isPresent());
 	}
 	
 	@Test
-	public void testGetPreviousCard_Second()
+	void testGetPreviousCard_Second()
 	{
 		aTableau.push(CAC, TableauPile.FIRST);
 		aTableau.push(C5D, TableauPile.FIRST);
@@ -82,7 +82,7 @@ public class TestTableau
 	}
 	
 	@Test
-	public void testInitialize()
+	void testInitialize()
 	{
 		for( TableauPile index : TableauPile.values())
 		{
@@ -109,7 +109,7 @@ public class TestTableau
 	}
 	
 	@Test
-	public void testContains()
+	void testContains()
 	{
 		assertFalse(aTableau.contains(CAC, TableauPile.FIRST));
 		aTableau.push(CAC, TableauPile.FIRST);
@@ -120,7 +120,7 @@ public class TestTableau
 	}
 	
 	@Test
-	public void testCanMoveTo()
+	void testCanMoveTo()
 	{
 		assertFalse(aTableau.canMoveTo(CAC, TableauPile.FIRST)); 
 		assertTrue(aTableau.canMoveTo(CKC, TableauPile.FIRST)); 
@@ -133,7 +133,7 @@ public class TestTableau
 	}
 	
 	@Test
-	public void testGetSequence()
+	void testGetSequence()
 	{
 		aTableau.push(C5D, TableauPile.SECOND);
 		CardStack sequence = aTableau.getSequence(C5D, TableauPile.SECOND);
@@ -150,7 +150,7 @@ public class TestTableau
 	}
 	
 	@Test 
-	public void testMoveWithin()
+	void testMoveWithin()
 	{
 		Deck deck = new Deck();
 		aTableau.initialize(deck);
@@ -177,7 +177,7 @@ public class TestTableau
 	}
 	
 	@Test
-	public void testContains2()
+	void testContains2()
 	{
 		Deck deck = new Deck();
 		aTableau.initialize(deck);
@@ -195,7 +195,7 @@ public class TestTableau
 	}
 	
 	@Test
-	public void testVisibility()
+	void testVisibility()
 	{
 		Deck deck = new Deck();
 		aTableau.initialize(deck);
@@ -216,7 +216,7 @@ public class TestTableau
 	}
 	
 	@Test
-	public void testShowHideTop()
+	void testShowHideTop()
 	{
 		aTableau.initialize(new Deck());
 		CardStack one = aTableau.getPile(TableauPile.FIRST); 

@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 public class TestCard
 {
 	@Test
-	public void testToString()
+	void testToString()
 	{
 		assertEquals("ACE of CLUBS", Card.get(Rank.ACE, Suit.CLUBS).toString());
 		assertEquals("TWO of CLUBS", Card.get(Rank.TWO, Suit.CLUBS).toString());

@@ -56,7 +56,7 @@ public class TestCompositeMove
 	}
 	
 	@Test
-	public void testAll()
+	void testAll()
 	{
 		StubMove[] moves = new StubMove[3];
 		for( int i = 0 ; i < moves.length; i++ )

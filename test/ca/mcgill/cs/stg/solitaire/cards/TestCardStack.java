@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class TestCardStack
@@ -35,14 +34,8 @@ public class TestCardStack
 	
 	private final CardStack aStack = new CardStack();
 	
-	@BeforeEach
-	public void setUp()
-	{
-		aStack.clear();
-	}
-	
 	@Test
-	public void testClear()
+	void testClear()
 	{
 		aStack.clear();
 		assertTrue(aStack.isEmpty());
@@ -55,7 +48,7 @@ public class TestCardStack
 	}
 	
 	@Test
-	public void testPeek()
+	void testPeek()
 	{
 		aStack.push(ACE_OF_CLUBS);
 		aStack.push(TWO_OF_CLUBS);
@@ -64,7 +57,7 @@ public class TestCardStack
 	}
 	
 	@Test
-	public void testPeek_int()
+	void testPeek_int()
 	{
 		aStack.push(ACE_OF_CLUBS);
 		aStack.push(TWO_OF_CLUBS);
@@ -73,7 +66,7 @@ public class TestCardStack
 	}
 	
 	@Test
-	public void testPop()
+	void testPop()
 	{
 		aStack.push(ACE_OF_CLUBS);
 		aStack.push(TWO_OF_CLUBS);
@@ -82,7 +75,7 @@ public class TestCardStack
 	}
 	
 	@Test
-	public void testPush()
+	void testPush()
 	{
 		aStack.push(ACE_OF_CLUBS);
 		assertSame(ACE_OF_CLUBS, aStack.peek());

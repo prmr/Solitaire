@@ -38,7 +38,7 @@ public class TestFoundations
 	private static final Card C3D = Card.get(Rank.THREE, Suit.DIAMONDS);
 	
 	@Test
-	public void testInitialize()
+	void testInitialize()
 	{
 		assertTrue( aFoundationPiles.isEmpty(FoundationPile.FIRST));
 		assertTrue( aFoundationPiles.isEmpty(FoundationPile.SECOND));
@@ -47,7 +47,7 @@ public class TestFoundations
 	}
 	
 	@Test
-	public void testPushPop()
+	void testPushPop()
 	{
 		aFoundationPiles.push(CAC, FoundationPile.FIRST);
 		assertTrue( aFoundationPiles.isEmpty(FoundationPile.SECOND));
@@ -64,7 +64,7 @@ public class TestFoundations
 	}
 	
 	@Test
-	public void testGetScore()
+	void testGetScore()
 	{
 		assertEquals(0, aFoundationPiles.getTotalSize());
 		aFoundationPiles.push(CAC, FoundationPile.FIRST);
@@ -73,14 +73,14 @@ public class TestFoundations
 	}
 	
 	@Test
-	public void testCanMoveTo_Empty()
+	void testCanMoveTo_Empty()
 	{
 		assertTrue(aFoundationPiles.canMoveTo(CAC, FoundationPile.FIRST));
 		assertFalse(aFoundationPiles.canMoveTo(C3D, FoundationPile.SECOND));
 	}
 	
 	@Test
-	public void testCanMoveTo_NotEmpty_NotSameSuit()
+	void testCanMoveTo_NotEmpty_NotSameSuit()
 	{
 		aFoundationPiles.push(Card.get(Rank.ACE, Suit.CLUBS), FoundationPile.FIRST);
 		aFoundationPiles.push(Card.get(Rank.TWO, Suit.CLUBS), FoundationPile.FIRST);
@@ -88,7 +88,7 @@ public class TestFoundations
 	}
 	
 	@Test
-	public void testCanMoveTo_NotEmpty_SameSuit_NotInSequence()
+	void testCanMoveTo_NotEmpty_SameSuit_NotInSequence()
 	{
 		aFoundationPiles.push(Card.get(Rank.ACE, Suit.CLUBS), FoundationPile.FIRST);
 		aFoundationPiles.push(Card.get(Rank.TWO, Suit.CLUBS), FoundationPile.FIRST);
@@ -96,7 +96,7 @@ public class TestFoundations
 	}
 	
 	@Test
-	public void testCanMoveTo_NotEmpty_SameSuit_InSequence()
+	void testCanMoveTo_NotEmpty_SameSuit_InSequence()
 	{
 		aFoundationPiles.push(Card.get(Rank.ACE, Suit.CLUBS), FoundationPile.FIRST);
 		aFoundationPiles.push(Card.get(Rank.TWO, Suit.CLUBS), FoundationPile.FIRST);
