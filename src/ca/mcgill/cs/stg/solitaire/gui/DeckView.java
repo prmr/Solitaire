@@ -1,22 +1,22 @@
 /*******************************************************************************
  * Solitaire
- *  
- *  Copyright (C) 2016-2024 by Martin P. Robillard
- *  
- *  See: https://github.com/prmr/Solitaire
- *  
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *  
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see http://www.gnu.org/licenses/.
+ * 
+ * Copyright (C) 2016-2024 by Martin P. Robillard
+ * 
+ * See: https://github.com/prmr/Solitaire
+ * 
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see http://www.gnu.org/licenses/.
  *******************************************************************************/
 package ca.mcgill.cs.stg.solitaire.gui;
 
@@ -38,97 +38,82 @@ import javafx.scene.text.TextAlignment;
  * Component that shows the deck and allows clicking it to draw cards. Listens
  * to game model state changes and updates itself to disappear if it is empty.
  */
-class DeckView extends HBox implements GameModelListener
-{
+class DeckView extends HBox implements GameModelListener {
 	private static final String BUTTON_STYLE_NORMAL = "-fx-background-color: transparent; -fx-padding: 5, 5, 5, 5;";
-    private static final String BUTTON_STYLE_PRESSED = "-fx-background-color: transparent; -fx-padding: 6 4 4 6;";
-    private static final int IMAGE_NEW_LINE_WIDTH = 10;
-    private static final int IMAGE_FONT_SIZE = 15;
-	
-    private final GameModel aModel;
-    
-	DeckView(GameModel pModel)
-	{
+	private static final String BUTTON_STYLE_PRESSED = "-fx-background-color: transparent; -fx-padding: 6 4 4 6;";
+	private static final int IMAGE_NEW_LINE_WIDTH = 10;
+	private static final int IMAGE_FONT_SIZE = 15;
+
+	private final GameModel aModel;
+
+	DeckView(GameModel pModel) {
 		aModel = pModel;
-        final Button button = new Button();
-        button.setGraphic(new ImageView(CardImages.imageForBackOfCard()));
-        button.setStyle(BUTTON_STYLE_NORMAL);
+		final Button button = new Button();
+		button.setGraphic(new ImageView(CardImages.imageForBackOfCard()));
+		button.setStyle(BUTTON_STYLE_NORMAL);
 
-    	button.setOnMousePressed(new EventHandler<MouseEvent>() 
-    	{
-    		@Override
-    		public void handle(MouseEvent pEvent) 
-    		{
-    			((Button)pEvent.getSource()).setStyle(BUTTON_STYLE_PRESSED);
-    		}            
-    	});
+		button.setOnMousePressed(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent pEvent) {
+				((Button) pEvent.getSource()).setStyle(BUTTON_STYLE_PRESSED);
+			}
+		});
 
-    	button.setOnMouseReleased(new EventHandler<MouseEvent>() 
-    	{
-    		@Override
-    		public void handle(MouseEvent pEvent) 
-    		{
-    			((Button)pEvent.getSource()).setStyle(BUTTON_STYLE_NORMAL);
-    			if( aModel.isDeckEmpty() )
-    			{
-    				aModel.reset();
-    			}
-    			else
-    			{
-    				aModel.getDiscardMove().perform();
-    			}
-    		}            
-    	});
-        
-        getChildren().add(button);
-    	aModel.addListener(this);
+		button.setOnMouseReleased(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent pEvent) {
+				((Button) pEvent.getSource()).setStyle(BUTTON_STYLE_NORMAL);
+				if (aModel.isDeckEmpty()) {
+					aModel.reset();
+				}
+				else {
+					aModel.getDiscardMove().perform();
+				}
+			}
+		});
+
+		getChildren().add(button);
+		aModel.addListener(this);
 	}
-	
-	private Canvas createNewGameImage()
-	{
+
+	private Canvas createNewGameImage() {
 		double width = CardImages.imageForBackOfCard().getWidth();
 		double height = CardImages.imageForBackOfCard().getHeight();
-		Canvas canvas = new Canvas( width, height );
+		Canvas canvas = new Canvas(width, height);
 		GraphicsContext context = canvas.getGraphicsContext2D();
-		
+
 		// The reset image
 		context.setStroke(Color.DARKGREEN);
 		context.setLineWidth(IMAGE_NEW_LINE_WIDTH);
-		context.strokeOval(width/4, height/2-width/4 + IMAGE_FONT_SIZE, width/2, width/2);
+		context.strokeOval(width / 4, height / 2 - width / 4 + IMAGE_FONT_SIZE, width / 2, width / 2);
 
 		// The text
 		context.setTextAlign(TextAlignment.CENTER);
 		context.setTextBaseline(VPos.CENTER);
 		context.setFill(Color.DARKKHAKI);
 		context.setFont(Font.font(Font.getDefault().getName(), IMAGE_FONT_SIZE));
-		
-		if( aModel.isCompleted() )
-		{
-			context.fillText("You won!", Math.round(width/2), IMAGE_FONT_SIZE);
+
+		if (aModel.isCompleted()) {
+			context.fillText("You won!", Math.round(width / 2), IMAGE_FONT_SIZE);
 		}
-		else
-		{
-			context.fillText("Give up?", Math.round(width/2), IMAGE_FONT_SIZE);
+		else {
+			context.fillText("Give up?", Math.round(width / 2), IMAGE_FONT_SIZE);
 		}
 		context.setTextAlign(TextAlignment.CENTER);
 		return canvas;
 	}
-	
+
 	@Override
-	public void gameStateChanged()
-	{
-		if( aModel.isDeckEmpty() )
-		{
-			((Button)getChildren().get(0)).setGraphic(createNewGameImage());
+	public void gameStateChanged() {
+		if (aModel.isDeckEmpty()) {
+			((Button) getChildren().get(0)).setGraphic(createNewGameImage());
 		}
-		else
-		{
-			((Button)getChildren().get(0)).setGraphic(new ImageView(CardImages.imageForBackOfCard()));
+		else {
+			((Button) getChildren().get(0)).setGraphic(new ImageView(CardImages.imageForBackOfCard()));
 		}
 	}
-	
-	public void reset()
-	{
+
+	public void reset() {
 		getChildren().get(0).setVisible(true);
 	}
 }

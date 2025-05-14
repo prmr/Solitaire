@@ -21,21 +21,20 @@
 package ca.mcgill.cs.stg.solitaire.cards;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 /**
  * Represents a general-purpose stack of cards.
  */
-public class CardStack implements Iterable<Card>
-{
+public class CardStack implements Iterable<Card> {
 	private final List<Card> aCards;
 	
 	/**
 	 * Creates an empty CardStack.
 	 */
-	public CardStack()
-	{
+	public CardStack() {
 		aCards = new ArrayList<>();
 	}
 	
@@ -45,11 +44,9 @@ public class CardStack implements Iterable<Card>
 	 * 
 	 * @param pCards The cards to initialize the stack with.
 	 */
-	public CardStack(Iterable<Card> pCards)
-	{
+	public CardStack(Iterable<Card> pCards) {
 		this();
-		for( Card card : pCards )
-		{
+		for (Card card : pCards) {
 			aCards.add(card);
 		}
 	}
@@ -61,8 +58,7 @@ public class CardStack implements Iterable<Card>
 	 * @pre pCard != null;
 	 * @pre !aCards.contains(pCard)
 	 */
-	public void push(Card pCard)
-	{
+	public void push(Card pCard) {
 		assert pCard != null && !aCards.contains(pCard);
 		aCards.add(pCard);
 	}
@@ -73,8 +69,7 @@ public class CardStack implements Iterable<Card>
 	 * @return The card on top of the stack.
 	 * @pre !isEmpty()
 	 */
-	public Card pop()
-	{
+	public Card pop() {
 		assert !isEmpty();
 		return aCards.remove(aCards.size()-1);
 	}
@@ -83,8 +78,7 @@ public class CardStack implements Iterable<Card>
 	 * @return The card at the top of the stack.
 	 * @pre !isEmpty();
 	 */
-	public Card peek()
-	{
+	public Card peek() {
 		assert !isEmpty();
 		return aCards.get(aCards.size()-1);
 	}
@@ -94,8 +88,7 @@ public class CardStack implements Iterable<Card>
 	 * @return The card at the position indicated by pIndex
 	 * @pre pIndex >= 0 && pIndex < size();
 	 */
-	public Card peek(int pIndex)
-	{
+	public Card peek(int pIndex) {
 		assert pIndex >= 0 && pIndex < size();
 		return aCards.get(pIndex);
 	}
@@ -103,36 +96,31 @@ public class CardStack implements Iterable<Card>
 	/**
 	 * @return The number of cards in the stack.
 	 */
-	public int size()
-	{
+	public int size() {
 		return aCards.size();
 	}
 	
 	/**
 	 * Removes all the cards in the stack.
 	 */
-	public void clear()
-	{
+	public void clear() {
 		aCards.clear();
 	}
 	
 	/**
 	 * @return True if and only if the stack has no cards in it.
 	 */
-	public boolean isEmpty()
-	{
-		return aCards.size() == 0;
+	public boolean isEmpty() {
+		return aCards.isEmpty();
 	}
 	
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return aCards.toString();
 	}
 
 	@Override
-	public Iterator<Card> iterator()
-	{
-		return aCards.iterator();
+	public Iterator<Card> iterator() {
+		return Collections.unmodifiableList(aCards).iterator();
 	}
 }

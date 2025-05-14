@@ -29,21 +29,18 @@ import java.util.StringJoiner;
  * stack of cards is represented as a semicolon-separated sequence of integers,
  * going in sequence from bottom to top.
  */
-public final class CardSerializer
-{
+public final class CardSerializer {
 	private static final String SEPARATOR = ";";
 	
 	private CardSerializer() {}
 	
-	private static String cardToInt(Card pCard)
-	{
+	private static String cardToInt(Card pCard) {
 		assert pCard != null;
 		return Integer.toString(pCard.suit().ordinal() * 
 				Rank.values().length + pCard.rank().ordinal());
 	}
 	
-	private static Card intToCard(int pNumber)
-	{
+	private static Card intToCard(int pNumber) {
 		assert pNumber >=0 && pNumber < Rank.values().length * 
 				Suit.values().length;
 		return Card.get(Rank.values()[pNumber % Rank.values().length], 
@@ -54,8 +51,7 @@ public final class CardSerializer
 	 * @param pCard The card to serialize.
 	 * @return A serialized version of this card.
 	 */
-	public static String serialize(Card pCard)
-	{
+	public static String serialize(Card pCard) {
 		assert pCard != null;
 		return cardToInt(pCard);
 	}
@@ -64,12 +60,10 @@ public final class CardSerializer
 	 * @param pCards A card stack to serialize.
 	 * @return A serialized version of this stack.
 	 */
-	public static String serialize(CardStack pCards)
-	{
+	public static String serialize(CardStack pCards) {
 		assert pCards != null;
 		StringJoiner serialized = new StringJoiner(SEPARATOR);
-		for( Card card : pCards )
-		{
+		for (Card card : pCards) {
 			serialized.add(cardToInt(card));
 		}
 		return serialized.toString();
@@ -79,12 +73,10 @@ public final class CardSerializer
 	 * @param pCards A card stack to deserialize.
 	 * @return A deserialized version of this stack.
 	 */
-	public static CardStack deserialize(String pCards)
-	{
+	public static CardStack deserialize(String pCards) {
 		assert pCards != null;
 		CardStack result = new CardStack();
-		for( String card : pCards.split(SEPARATOR))
-		{
+		for (String card : pCards.split(SEPARATOR)) {
 			result.push(intToCard(Integer.parseInt(card)));
 		}
 		return result;
@@ -99,8 +91,7 @@ public final class CardSerializer
 	 * @return The cards at the top of the stack.
 	 * @pre !pCards.isEmpty()
 	 */
-	public static Card deserializeBottomCard(String pCards)
-	{
+	public static Card deserializeBottomCard(String pCards) {
 		assert !pCards.isEmpty();
 		return deserialize(pCards).peek(0);
 	}
