@@ -25,21 +25,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 public class TestCard
-{
+{	
 	@Test
 	void testToString()
 	{
 		assertEquals("Ace of Clubs", Card.get(Rank.ACE, Suit.CLUBS).toString());
 		assertEquals("Two of Clubs", Card.get(Rank.TWO, Suit.CLUBS).toString());
-		assertEquals("King of Clubs", Card.get(Rank.KING, Suit.CLUBS).toString());
-		assertEquals("Ace of Diamonds", Card.get(Rank.ACE, Suit.DIAMONDS).toString());
-		assertEquals("Two of Diamonds", Card.get(Rank.TWO, Suit.DIAMONDS).toString());
-		assertEquals("King of Diamonds", Card.get(Rank.KING, Suit.DIAMONDS).toString());
-		assertEquals("Ace of Hearts", Card.get(Rank.ACE, Suit.HEARTS).toString());
-		assertEquals("Two of Hearts", Card.get(Rank.TWO, Suit.HEARTS).toString());
-		assertEquals("King of Hearts", Card.get(Rank.KING, Suit.HEARTS).toString());
-		assertEquals("Ace of Spades", Card.get(Rank.ACE, Suit.SPADES).toString());
-		assertEquals("Two of Spades", Card.get(Rank.TWO, Suit.SPADES).toString());
+		assertEquals("Three of Clubs", Card.get(Rank.THREE, Suit.CLUBS).toString());
+		assertEquals("Four of Diamonds", Card.get(Rank.FOUR, Suit.DIAMONDS).toString());
+		assertEquals("Five of Diamonds", Card.get(Rank.FIVE, Suit.DIAMONDS).toString());
+		assertEquals("Six of Diamonds", Card.get(Rank.SIX, Suit.DIAMONDS).toString());
+		assertEquals("Seven of Hearts", Card.get(Rank.SEVEN, Suit.HEARTS).toString());
+		assertEquals("Eight of Hearts", Card.get(Rank.EIGHT, Suit.HEARTS).toString());
+		assertEquals("Nine of Hearts", Card.get(Rank.NINE, Suit.HEARTS).toString());
+		assertEquals("Ten of Spades", Card.get(Rank.TEN, Suit.SPADES).toString());
+		assertEquals("Jack of Spades", Card.get(Rank.JACK, Suit.SPADES).toString());
+		assertEquals("Queen of Spades", Card.get(Rank.QUEEN, Suit.SPADES).toString());
 		assertEquals("King of Spades", Card.get(Rank.KING, Suit.SPADES).toString());
 	}
 }
