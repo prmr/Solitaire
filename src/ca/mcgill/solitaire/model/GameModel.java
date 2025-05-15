@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import ca.mcgill.solitaire.ai.PlayingStrategy;
+import ca.mcgill.solitaire.auto.PlayingStrategy;
 import ca.mcgill.solitaire.cards.Card;
 import ca.mcgill.solitaire.cards.CardStack;
 import ca.mcgill.solitaire.cards.Deck;

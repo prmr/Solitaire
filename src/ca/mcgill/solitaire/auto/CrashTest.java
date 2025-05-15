@@ -18,22 +18,42 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see http://www.gnu.org/licenses/.
  *******************************************************************************/
-package ca.mcgill.solitaire.ai;
+package ca.mcgill.solitaire.auto;
 
-import ca.mcgill.solitaire.model.GameModelView;
-import ca.mcgill.solitaire.model.Move;
+import ca.mcgill.solitaire.model.GameModel;
 
 /**
- * Never does anything.
+ * Plays N games and, for each game, undo all moves and redo them.
  */
-public class NullPlayingStrategy implements PlayingStrategy {
-	/**
-	 * Creates a new strategy.
-	 */
-	public NullPlayingStrategy() {}
+public final class CrashTest {
+	private static final int NUMBER_OF_GAMES = 1000;
 
-	@Override
-	public Move getLegalMove(GameModelView pModel) {
-		return pModel.getNullMove();
+	private CrashTest() {
+	}
+
+	/**
+	 * @param pArgs Not used.
+	 */
+	public static void main(String[] pArgs) {
+		GameModel model = new GameModel(new GreedyPlayingStrategy());
+		for (int i = 0; i < NUMBER_OF_GAMES; i++) {
+			playGame(model);
+		}
+		System.out.println("Runs completed.");
+	}
+
+	private static void playGame(GameModel pModel) {
+		pModel.reset();
+		boolean advanced = true;
+		while (advanced) {
+			advanced = pModel.tryToAutoPlay();
+		}
+		while (pModel.canUndo()) {
+			pModel.undoLast();
+		}
+		advanced = true;
+		while (advanced) {
+			advanced = pModel.tryToAutoPlay();
+		}
 	}
 }

@@ -20,7 +20,7 @@
  *******************************************************************************/
 package ca.mcgill.solitaire.gui;
 
-import ca.mcgill.solitaire.ai.GreedyPlayingStrategy;
+import ca.mcgill.solitaire.auto.GreedyPlayingStrategy;
 import ca.mcgill.solitaire.model.FoundationPile;
 import ca.mcgill.solitaire.model.GameModel;
 import ca.mcgill.solitaire.model.TableauPile;

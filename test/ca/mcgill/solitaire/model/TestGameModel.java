@@ -29,7 +29,7 @@ import java.lang.reflect.Field;
 
 import org.junit.jupiter.api.Test;
 
-import ca.mcgill.solitaire.ai.GreedyPlayingStrategy;
+import ca.mcgill.solitaire.auto.GreedyPlayingStrategy;
 import ca.mcgill.solitaire.cards.Card;
 import ca.mcgill.solitaire.cards.CardStack;
 import ca.mcgill.solitaire.cards.Rank;
