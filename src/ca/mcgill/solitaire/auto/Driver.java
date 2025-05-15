@@ -30,8 +30,7 @@ public final class Driver {
 	private static final int NUMBER_OF_GAMES = 10000;
 	private static final int TO_PERCENT = 100;
 
-	private Driver() {
-	}
+	private Driver() {}
 
 	/**
 	 * @param pArgs Not used.

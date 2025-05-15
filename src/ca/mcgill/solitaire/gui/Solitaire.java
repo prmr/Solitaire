@@ -48,8 +48,7 @@ public class Solitaire extends Application {
 	/**
 	 * Application head.
 	 */
-	public Solitaire() {
-	}
+	public Solitaire() {}
 
 	/**
 	 * Launches the application.

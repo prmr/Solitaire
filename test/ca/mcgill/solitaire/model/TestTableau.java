@@ -1,22 +1,22 @@
 /*******************************************************************************
  * Solitaire
- *  
- *  Copyright (C) 2016-2024 by Martin P. Robillard
- *  
- *  See: https://github.com/prmr/Solitaire
- *  
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *  
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see http://www.gnu.org/licenses/.
+ * 
+ * Copyright (C) 2016-2024 by Martin P. Robillard
+ * 
+ * See: https://github.com/prmr/Solitaire
+ * 
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see http://www.gnu.org/licenses/.
  *******************************************************************************/
 package ca.mcgill.solitaire.model;
 
@@ -37,8 +37,7 @@ import ca.mcgill.solitaire.cards.Deck;
 import ca.mcgill.solitaire.cards.Rank;
 import ca.mcgill.solitaire.cards.Suit;
 
-public class TestTableau
-{
+public class TestTableau {
 	private Tableau aTableau = new Tableau();
 	private static final Card CKC = Card.get(Rank.KING, Suit.CLUBS);
 	private static final Card CAC = Card.get(Rank.ACE, Suit.CLUBS);
@@ -48,69 +47,61 @@ public class TestTableau
 	private static final Card C4S = Card.get(Rank.FOUR, Suit.SPADES);
 	private static final Card C4H = Card.get(Rank.FOUR, Suit.HEARTS);
 	private static final Card C3H = Card.get(Rank.THREE, Suit.HEARTS);
-	
+
 	@SuppressWarnings("unchecked")
-	private Optional<Card> getPreviousCard(Card pCard)
-	{
-		try
-		{
+	private Optional<Card> getPreviousCard(Card pCard) {
+		try {
 			Method method = Tableau.class.getDeclaredMethod("getPreviousCard", Card.class);
 			method.setAccessible(true);
 			return (Optional<Card>) method.invoke(aTableau, pCard);
 		}
-		catch( ReflectiveOperationException exception )
-		{
+		catch (ReflectiveOperationException exception) {
 			exception.printStackTrace();
 			fail();
 			return Optional.empty();
 		}
 	}
-	
+
 	@Test
-	void testGetPreviousCard_First()
-	{
+	void testGetPreviousCard_First() {
 		aTableau.push(CAC, TableauPile.FIRST);
 		assertFalse(getPreviousCard(CAC).isPresent());
 	}
-	
+
 	@Test
-	void testGetPreviousCard_Second()
-	{
+	void testGetPreviousCard_Second() {
 		aTableau.push(CAC, TableauPile.FIRST);
 		aTableau.push(C5D, TableauPile.FIRST);
 		assertSame(CAC, getPreviousCard(C5D).get());
 	}
-	
+
 	@Test
-	void testInitialize()
-	{
-		for( TableauPile index : TableauPile.values())
-		{
+	void testInitialize() {
+		for (TableauPile index : TableauPile.values()) {
 			assertEquals(0, aTableau.getPile(index).size());
 		}
 		Deck deck = new Deck();
 		aTableau.initialize(deck);
-		assertEquals(1,aTableau.getPile(TableauPile.FIRST).size());
-		assertEquals(2,aTableau.getPile(TableauPile.SECOND).size());
-		assertEquals(3,aTableau.getPile(TableauPile.THIRD).size());
-		assertEquals(4,aTableau.getPile(TableauPile.FOURTH).size());
-		assertEquals(5,aTableau.getPile(TableauPile.FIFTH).size());
-		assertEquals(6,aTableau.getPile(TableauPile.SIXTH).size());
-		assertEquals(7,aTableau.getPile(TableauPile.SEVENTH).size());
+		assertEquals(1, aTableau.getPile(TableauPile.FIRST).size());
+		assertEquals(2, aTableau.getPile(TableauPile.SECOND).size());
+		assertEquals(3, aTableau.getPile(TableauPile.THIRD).size());
+		assertEquals(4, aTableau.getPile(TableauPile.FOURTH).size());
+		assertEquals(5, aTableau.getPile(TableauPile.FIFTH).size());
+		assertEquals(6, aTableau.getPile(TableauPile.SIXTH).size());
+		assertEquals(7, aTableau.getPile(TableauPile.SEVENTH).size());
 		deck.shuffle();
 		aTableau.initialize(deck);
-		assertEquals(1,aTableau.getPile(TableauPile.FIRST).size());
-		assertEquals(2,aTableau.getPile(TableauPile.SECOND).size());
-		assertEquals(3,aTableau.getPile(TableauPile.THIRD).size());
-		assertEquals(4,aTableau.getPile(TableauPile.FOURTH).size());
-		assertEquals(5,aTableau.getPile(TableauPile.FIFTH).size());
-		assertEquals(6,aTableau.getPile(TableauPile.SIXTH).size());
-		assertEquals(7,aTableau.getPile(TableauPile.SEVENTH).size());
+		assertEquals(1, aTableau.getPile(TableauPile.FIRST).size());
+		assertEquals(2, aTableau.getPile(TableauPile.SECOND).size());
+		assertEquals(3, aTableau.getPile(TableauPile.THIRD).size());
+		assertEquals(4, aTableau.getPile(TableauPile.FOURTH).size());
+		assertEquals(5, aTableau.getPile(TableauPile.FIFTH).size());
+		assertEquals(6, aTableau.getPile(TableauPile.SIXTH).size());
+		assertEquals(7, aTableau.getPile(TableauPile.SEVENTH).size());
 	}
-	
+
 	@Test
-	void testContains()
-	{
+	void testContains() {
 		assertFalse(aTableau.contains(CAC, TableauPile.FIRST));
 		aTableau.push(CAC, TableauPile.FIRST);
 		assertTrue(aTableau.contains(CAC, TableauPile.FIRST));
@@ -118,12 +109,11 @@ public class TestTableau
 		aTableau.push(C5D, TableauPile.FIRST);
 		assertTrue(aTableau.contains(C5D, TableauPile.FIRST));
 	}
-	
+
 	@Test
-	void testCanMoveTo()
-	{
-		assertFalse(aTableau.canMoveTo(CAC, TableauPile.FIRST)); 
-		assertTrue(aTableau.canMoveTo(CKC, TableauPile.FIRST)); 
+	void testCanMoveTo() {
+		assertFalse(aTableau.canMoveTo(CAC, TableauPile.FIRST));
+		assertTrue(aTableau.canMoveTo(CKC, TableauPile.FIRST));
 		aTableau.push(C5D, TableauPile.FIRST);
 		assertFalse(aTableau.canMoveTo(CAC, TableauPile.FIRST));
 		assertFalse(aTableau.canMoveTo(C4D, TableauPile.FIRST));
@@ -131,10 +121,9 @@ public class TestTableau
 		assertTrue(aTableau.canMoveTo(C4C, TableauPile.FIRST));
 		assertTrue(aTableau.canMoveTo(C4S, TableauPile.FIRST));
 	}
-	
+
 	@Test
-	void testGetSequence()
-	{
+	void testGetSequence() {
 		aTableau.push(C5D, TableauPile.SECOND);
 		CardStack sequence = aTableau.getSequence(C5D, TableauPile.SECOND);
 		assertEquals(1, sequence.size());
@@ -148,10 +137,9 @@ public class TestTableau
 		assertEquals(1, sequence.size());
 		assertEquals(C4C, sequence.peek(0));
 	}
-	
-	@Test 
-	void testMoveWithin()
-	{
+
+	@Test
+	void testMoveWithin() {
 		Deck deck = new Deck();
 		aTableau.initialize(deck);
 		CardStack stack2a = aTableau.getPile(TableauPile.SECOND);
@@ -159,8 +147,8 @@ public class TestTableau
 		aTableau.moveWithin(stack2a.peek(1), TableauPile.SECOND, TableauPile.FOURTH);
 		CardStack stack2b = aTableau.getPile(TableauPile.SECOND);
 		CardStack stack4b = aTableau.getPile(TableauPile.FOURTH);
-		assertEquals(1,stack2b.size());
-		assertEquals(5,stack4b.size());
+		assertEquals(1, stack2b.size());
+		assertEquals(5, stack4b.size());
 		assertEquals(stack2a.peek(0), stack2b.peek(0));
 		assertEquals(stack4a.peek(0), stack4b.peek(0));
 		assertEquals(stack4a.peek(1), stack4b.peek(1));
@@ -170,40 +158,33 @@ public class TestTableau
 		assertTrue(aTableau.isVisible(stack4b.peek(4)));
 		aTableau.moveWithin(stack4b.peek(3), TableauPile.FOURTH, TableauPile.SECOND);
 		CardStack stack2c = aTableau.getPile(TableauPile.SECOND);
-		assertEquals(3,stack2c.size());
+		assertEquals(3, stack2c.size());
 		assertEquals(stack2a.peek(0), stack2c.peek(0));
 		assertEquals(stack4b.peek(3), stack2c.peek(1));
 		assertEquals(stack4b.peek(4), stack2c.peek(2));
 	}
-	
+
 	@Test
-	void testContains2()
-	{
+	void testContains2() {
 		Deck deck = new Deck();
 		aTableau.initialize(deck);
-		while( !deck.isEmpty() )
-		{
+		while (!deck.isEmpty()) {
 			assertFalse(aTableau.contains(deck.draw()));
 		}
-		for( TableauPile index : TableauPile.values())
-		{
-			for( Card card : aTableau.getPile(index) )
-			{
-				assertTrue( aTableau.contains(card));
+		for (TableauPile index : TableauPile.values()) {
+			for (Card card : aTableau.getPile(index)) {
+				assertTrue(aTableau.contains(card));
 			}
 		}
 	}
-	
+
 	@Test
-	void testVisibility()
-	{
+	void testVisibility() {
 		Deck deck = new Deck();
 		aTableau.initialize(deck);
-		for( TableauPile index : TableauPile.values())
-		{
+		for (TableauPile index : TableauPile.values()) {
 			CardStack cards = aTableau.getPile(index);
-			for( int i = 0; i < cards.size()-1; i++ )
-			{
+			for (int i = 0; i < cards.size() - 1; i++) {
 				assertFalse(aTableau.isVisible(cards.peek(i)));
 			}
 			assertTrue(aTableau.isVisible(cards.peek()));
@@ -214,19 +195,18 @@ public class TestTableau
 		assertTrue(aTableau.isVisible(stack.peek(1)));
 		assertTrue(aTableau.isVisible(stack.peek(2)));
 	}
-	
+
 	@Test
-	void testShowHideTop()
-	{
+	void testShowHideTop() {
 		aTableau.initialize(new Deck());
-		CardStack one = aTableau.getPile(TableauPile.FIRST); 
-		CardStack two = aTableau.getPile(TableauPile.SECOND); 
+		CardStack one = aTableau.getPile(TableauPile.FIRST);
+		CardStack two = aTableau.getPile(TableauPile.SECOND);
 		assertTrue(aTableau.isVisible(one.peek(0)));
 		aTableau.hideTop(TableauPile.FIRST);
 		assertFalse(aTableau.isVisible(one.peek(0)));
 		aTableau.showTop(TableauPile.FIRST);
 		assertTrue(aTableau.isVisible(one.peek(0)));
-		
+
 		assertTrue(aTableau.isVisible(two.peek(1)));
 		aTableau.hideTop(TableauPile.SECOND);
 		assertFalse(aTableau.isVisible(two.peek(1)));

@@ -58,8 +58,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy {
 	/**
 	 * Creates a new strategy.
 	 */
-	public GreedyPlayingStrategy() {
-	}
+	public GreedyPlayingStrategy() {}
 
 	/*
 	 * If the discard pile is empty, discard.

@@ -28,8 +28,7 @@ import ca.mcgill.solitaire.model.GameModel;
 public final class CrashTest {
 	private static final int NUMBER_OF_GAMES = 1000;
 
-	private CrashTest() {
-	}
+	private CrashTest() {}
 
 	/**
 	 * @param pArgs Not used.
