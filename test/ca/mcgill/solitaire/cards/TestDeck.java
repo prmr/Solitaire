@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  *  
- *  Copyright (C) 2016 by Martin P. Robillard
+ *  Copyright (C) 2016-2024 by Martin P. Robillard
  *  
  *  See: https://github.com/prmr/Solitaire
  *  
@@ -18,9 +18,30 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see http://www.gnu.org/licenses/.
  *******************************************************************************/
-module solitaire {
-	requires javafx.controls;
-	requires transitive javafx.graphics;
-	exports ca.mcgill.solitaire.gui;
-	exports ca.mcgill.solitaire.cards;
+package ca.mcgill.solitaire.cards;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import org.junit.jupiter.api.Test;
+
+public class TestDeck
+{
+	@Test
+	void testdraw()
+	{
+		Deck lDeck = new Deck();
+		lDeck.shuffle();
+		Set<Card> lCards = new HashSet<Card>();
+		for( int i = 0; i < 52; i++ )
+		{
+			Card lCard = lDeck.draw();
+			assertFalse( lCards.contains(lCard));
+			lCards.add( lCard );
+		}
+		assertTrue( lDeck.isEmpty() );
+	}
 }

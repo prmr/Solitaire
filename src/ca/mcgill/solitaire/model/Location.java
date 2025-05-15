@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  *  
- *  Copyright (C) 2016 by Martin P. Robillard
+ *  Copyright (C) 2016-2024 by Martin P. Robillard
  *  
  *  See: https://github.com/prmr/Solitaire
  *  
@@ -18,9 +18,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see http://www.gnu.org/licenses/.
  *******************************************************************************/
-module solitaire {
-	requires javafx.controls;
-	requires transitive javafx.graphics;
-	exports ca.mcgill.solitaire.gui;
-	exports ca.mcgill.solitaire.cards;
-}
+package ca.mcgill.solitaire.model;
+
+/**
+ * Represents anywhere a card can be placed in Solitaire.
+ */
+public interface Location 
+{}
