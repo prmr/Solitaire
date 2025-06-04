@@ -69,26 +69,31 @@ public class CardStack implements Iterable<Card> {
 	 */
 	public Card pop() {
 		assert !isEmpty();
-		return aCards.remove(aCards.size()-1);
+		return aCards.removeLast();
 	}
 	
 	/**
+	 * Returns the card at the top of the stack, without 
+	 * removing it.
+	 * 
 	 * @return The card at the top of the stack.
 	 * @pre !isEmpty();
 	 */
-	public Card peek() {
+	public Card peekTop() {
 		assert !isEmpty();
-		return aCards.get(aCards.size()-1);
+		return aCards.getLast();
 	}
 	
 	/**
-	 * @param pIndex The index to peek in the stack.
-	 * @return The card at the position indicated by pIndex
-	 * @pre pIndex >= 0 && pIndex < size();
+	 * Returns the card at the bottom of the stack, without
+	 * removing it.
+	 * 
+	 * @return The card at the bottom of the stack.
+	 * @pre !isEmpty()
 	 */
-	public Card peek(int pIndex) {
-		assert pIndex >= 0 && pIndex < size();
-		return aCards.get(pIndex);
+	public Card peekBottom() {
+		assert !isEmpty();
+		return aCards.getFirst();
 	}
 	
 	/**

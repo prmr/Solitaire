@@ -93,6 +93,6 @@ public final class CardSerializer {
 	 */
 	public static Card deserializeBottomCard(String pCards) {
 		assert !pCards.isEmpty();
-		return deserialize(pCards).peek(0);
+		return deserialize(pCards).peekBottom();
 	}
 }

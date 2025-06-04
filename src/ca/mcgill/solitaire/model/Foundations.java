@@ -100,7 +100,7 @@ class Foundations {
 	 */
 	Card peek(FoundationPile pLocation) {
 		assert pLocation != null && !aPiles.get(pLocation).isEmpty();
-		return aPiles.get(pLocation).peek();
+		return aPiles.get(pLocation).peekTop();
 	}
 
 	/**

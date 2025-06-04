@@ -175,7 +175,7 @@ public final class GameModel implements GameModelView {
 	@Override
 	public Card peekDiscardPile() {
 		assert aDiscard.size() != 0;
-		return aDiscard.peek();
+		return aDiscard.peekTop();
 	}
 
 	/**
@@ -184,7 +184,7 @@ public final class GameModel implements GameModelView {
 	 * @pre the card is in a location where it can be found and moved.
 	 */
 	private Location find(Card pCard) {
-		if (!aDiscard.isEmpty() && aDiscard.peek() == pCard) {
+		if (!aDiscard.isEmpty() && aDiscard.peekTop() == pCard) {
 			return OtherLocation.DISCARD_PILE;
 		}
 		for (FoundationPile index : FoundationPile.values()) {

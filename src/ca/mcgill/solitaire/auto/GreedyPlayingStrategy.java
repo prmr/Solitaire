@@ -104,7 +104,7 @@ public class GreedyPlayingStrategy implements PlayingStrategy {
 		for (TableauPile tableauPile : TableauPile.values()) {
 			CardStack stack = pModel.getTableauPile(tableauPile);
 			if (!stack.isEmpty()) {
-				Card card = stack.peek();
+				Card card = stack.peekTop();
 				for (FoundationPile foundationPile : FoundationPile.values()) {
 					if (pModel.isLegalMove(card, foundationPile)) {
 						return pModel.getCardMove(card, foundationPile);

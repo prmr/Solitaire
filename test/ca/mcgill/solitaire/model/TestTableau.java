@@ -20,6 +20,7 @@
  *******************************************************************************/
 package ca.mcgill.solitaire.model;
 
+import static ca.mcgill.solitaire.cards.Utils.peekAtIndex;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -127,15 +128,15 @@ public class TestTableau {
 		aTableau.push(C5D, TableauPile.SECOND);
 		CardStack sequence = aTableau.getSequence(C5D, TableauPile.SECOND);
 		assertEquals(1, sequence.size());
-		assertEquals(C5D, sequence.peek(0));
+		assertEquals(C5D, sequence.peekBottom());
 		aTableau.push(C4C, TableauPile.SECOND);
 		sequence = aTableau.getSequence(C5D, TableauPile.SECOND);
 		assertEquals(2, sequence.size());
-		assertEquals(C5D, sequence.peek(0));
-		assertEquals(C4C, sequence.peek(1));
+		assertEquals(C5D, sequence.peekBottom());
+		assertEquals(C4C, peekAtIndex(sequence, 1));
 		sequence = aTableau.getSequence(C4C, TableauPile.SECOND);
 		assertEquals(1, sequence.size());
-		assertEquals(C4C, sequence.peek(0));
+		assertEquals(C4C, sequence.peekBottom());
 	}
 
 	@Test
@@ -144,24 +145,24 @@ public class TestTableau {
 		aTableau.initialize(deck);
 		CardStack stack2a = aTableau.getPile(TableauPile.SECOND);
 		CardStack stack4a = aTableau.getPile(TableauPile.FOURTH);
-		aTableau.moveWithin(stack2a.peek(1), TableauPile.SECOND, TableauPile.FOURTH);
+		aTableau.moveWithin(peekAtIndex(stack2a, 1), TableauPile.SECOND, TableauPile.FOURTH);
 		CardStack stack2b = aTableau.getPile(TableauPile.SECOND);
 		CardStack stack4b = aTableau.getPile(TableauPile.FOURTH);
 		assertEquals(1, stack2b.size());
 		assertEquals(5, stack4b.size());
-		assertEquals(stack2a.peek(0), stack2b.peek(0));
-		assertEquals(stack4a.peek(0), stack4b.peek(0));
-		assertEquals(stack4a.peek(1), stack4b.peek(1));
-		assertEquals(stack4a.peek(2), stack4b.peek(2));
-		assertEquals(stack4a.peek(3), stack4b.peek(3));
-		assertEquals(stack2a.peek(1), stack4b.peek(4));
-		assertTrue(aTableau.isVisible(stack4b.peek(4)));
-		aTableau.moveWithin(stack4b.peek(3), TableauPile.FOURTH, TableauPile.SECOND);
+		assertEquals(stack2a.peekBottom(), stack2b.peekBottom());
+		assertEquals(stack4a.peekBottom(), stack4b.peekBottom());
+		assertEquals(peekAtIndex(stack4a, 1), peekAtIndex(stack4b, 1));
+		assertEquals(peekAtIndex(stack4a, 2), peekAtIndex(stack4b, 2));
+		assertEquals(peekAtIndex(stack4a, 3), peekAtIndex(stack4b, 3));
+		assertEquals(peekAtIndex(stack2a, 1), peekAtIndex(stack4b, 4));
+		assertTrue(aTableau.isVisible(peekAtIndex(stack4b, 4)));
+		aTableau.moveWithin(peekAtIndex(stack4b, 3), TableauPile.FOURTH, TableauPile.SECOND);
 		CardStack stack2c = aTableau.getPile(TableauPile.SECOND);
 		assertEquals(3, stack2c.size());
-		assertEquals(stack2a.peek(0), stack2c.peek(0));
-		assertEquals(stack4b.peek(3), stack2c.peek(1));
-		assertEquals(stack4b.peek(4), stack2c.peek(2));
+		assertEquals(stack2a.peekBottom(), stack2c.peekBottom());
+		assertEquals(peekAtIndex(stack4b, 3), peekAtIndex(stack2c, 1));
+		assertEquals(peekAtIndex(stack4b, 4), peekAtIndex(stack2c, 2));
 	}
 
 	@Test
@@ -185,15 +186,15 @@ public class TestTableau {
 		for (TableauPile index : TableauPile.values()) {
 			CardStack cards = aTableau.getPile(index);
 			for (int i = 0; i < cards.size() - 1; i++) {
-				assertFalse(aTableau.isVisible(cards.peek(i)));
+				assertFalse(aTableau.isVisible(peekAtIndex(cards, i)));
 			}
-			assertTrue(aTableau.isVisible(cards.peek()));
+			assertTrue(aTableau.isVisible(cards.peekTop()));
 		}
 		aTableau.push(deck.draw(), TableauPile.SECOND);
 		CardStack stack = aTableau.getPile(TableauPile.SECOND);
-		assertFalse(aTableau.isVisible(stack.peek(0)));
-		assertTrue(aTableau.isVisible(stack.peek(1)));
-		assertTrue(aTableau.isVisible(stack.peek(2)));
+		assertFalse(aTableau.isVisible(peekAtIndex(stack,0)));
+		assertTrue(aTableau.isVisible(peekAtIndex(stack, 1)));
+		assertTrue(aTableau.isVisible(peekAtIndex(stack, 2)));
 	}
 
 	@Test
@@ -201,16 +202,16 @@ public class TestTableau {
 		aTableau.initialize(new Deck());
 		CardStack one = aTableau.getPile(TableauPile.FIRST);
 		CardStack two = aTableau.getPile(TableauPile.SECOND);
-		assertTrue(aTableau.isVisible(one.peek(0)));
+		assertTrue(aTableau.isVisible(one.peekBottom()));
 		aTableau.hideTop(TableauPile.FIRST);
-		assertFalse(aTableau.isVisible(one.peek(0)));
+		assertFalse(aTableau.isVisible(one.peekBottom()));
 		aTableau.showTop(TableauPile.FIRST);
-		assertTrue(aTableau.isVisible(one.peek(0)));
+		assertTrue(aTableau.isVisible(one.peekBottom()));
 
-		assertTrue(aTableau.isVisible(two.peek(1)));
+		assertTrue(aTableau.isVisible(peekAtIndex(two, 1)));
 		aTableau.hideTop(TableauPile.SECOND);
-		assertFalse(aTableau.isVisible(two.peek(1)));
+		assertFalse(aTableau.isVisible(peekAtIndex(two, 1)));
 		aTableau.showTop(TableauPile.SECOND);
-		assertTrue(aTableau.isVisible(two.peek(1)));
+		assertTrue(aTableau.isVisible(peekAtIndex(two, 1)));
 	}
 }

@@ -46,7 +46,7 @@ public class TestCardStack {
 	void testConstructor_WithInput_SingleElement()
 	{
 		CardStack stack = new CardStack(List.of(ACE_OF_CLUBS));
-		assertSame(ACE_OF_CLUBS, stack.peek());
+		assertSame(ACE_OF_CLUBS, stack.peekTop());
 		assertEquals(1, stack.size());
 	}
 	
@@ -54,8 +54,8 @@ public class TestCardStack {
 	void testConstructor_WithInput_MultipleElement()
 	{
 		CardStack stack = new CardStack(List.of(ACE_OF_CLUBS, TWO_OF_CLUBS));
-		assertSame(TWO_OF_CLUBS, stack.peek());
-		assertSame(ACE_OF_CLUBS, stack.peek(1));
+		assertSame(TWO_OF_CLUBS, stack.peekTop());
+		assertSame(ACE_OF_CLUBS, stack.peekBottom());
 		assertEquals(2, stack.size());
 	}
 	
@@ -72,19 +72,17 @@ public class TestCardStack {
 	}
 
 	@Test
-	void testPeek() {
+	void testPeekTop() {
 		aStack.push(ACE_OF_CLUBS);
 		aStack.push(TWO_OF_CLUBS);
-		assertSame(TWO_OF_CLUBS, aStack.peek());
-		assertEquals(2, aStack.size());
+		assertSame(TWO_OF_CLUBS, aStack.peekTop());
 	}
 
 	@Test
-	void testPeek_int() {
+	void testPeekBottom() {
 		aStack.push(ACE_OF_CLUBS);
 		aStack.push(TWO_OF_CLUBS);
-		assertSame(ACE_OF_CLUBS, aStack.peek(0));
-		assertSame(TWO_OF_CLUBS, aStack.peek(1));
+		assertSame(ACE_OF_CLUBS, aStack.peekBottom());
 	}
 
 	@Test
@@ -98,10 +96,10 @@ public class TestCardStack {
 	@Test
 	void testPush() {
 		aStack.push(ACE_OF_CLUBS);
-		assertSame(ACE_OF_CLUBS, aStack.peek());
+		assertSame(ACE_OF_CLUBS, aStack.peekTop());
 		assertEquals(1, aStack.size());
 		aStack.push(TWO_OF_CLUBS);
-		assertSame(TWO_OF_CLUBS, aStack.peek());
+		assertSame(TWO_OF_CLUBS, aStack.peekTop());
 		assertEquals(2, aStack.size());
 	}
 }

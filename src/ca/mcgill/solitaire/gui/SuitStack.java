@@ -97,7 +97,7 @@ public class SuitStack extends StackPane implements GameModelListener {
 			public void handle(DragEvent pEvent) {
 				if (pEvent.getGestureSource() != pView && pEvent.getDragboard().hasString()) {
 					CardStack transfer = CardSerializer.deserialize(pEvent.getDragboard().getString());
-					if (transfer.size() == 1 && aModel.isLegalMove(transfer.peek(), aIndex)) {
+					if (transfer.size() == 1 && aModel.isLegalMove(transfer.peekTop(), aIndex)) {
 						pEvent.acceptTransferModes(TransferMode.MOVE);
 					}
 				}
@@ -112,7 +112,7 @@ public class SuitStack extends StackPane implements GameModelListener {
 			@Override
 			public void handle(DragEvent pEvent) {
 				CardStack transfer = CardSerializer.deserialize(pEvent.getDragboard().getString());
-				if (transfer.size() == 1 && aModel.isLegalMove(transfer.peek(), aIndex)) {
+				if (transfer.size() == 1 && aModel.isLegalMove(transfer.peekTop(), aIndex)) {
 					setStyle(BORDER_STYLE_DRAGGED);
 				}
 				pEvent.consume();

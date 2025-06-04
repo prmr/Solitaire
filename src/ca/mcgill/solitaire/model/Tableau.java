@@ -91,8 +91,8 @@ class Tableau {
 			return pCard.rank() == Rank.KING;
 		}
 		else {
-			return pCard.rank().ordinal() == pile.peek().rank().ordinal() - 1 && 
-					!pCard.suit().sameColorAs(pile.peek().suit());
+			return pCard.rank().ordinal() == pile.peekTop().rank().ordinal() - 1 && 
+					!pCard.suit().sameColorAs(pile.peekTop().suit());
 		}
 	}
 
@@ -104,7 +104,7 @@ class Tableau {
 	 */
 	public boolean isBottomKing(Card pCard) {
 		assert pCard != null && contains(pCard);
-		return pCard.rank() == Rank.KING && aPiles.get(getPile(pCard)).peek(0) == pCard;
+		return pCard.rank() == Rank.KING && aPiles.get(getPile(pCard)).peekBottom() == pCard;
 	}
 
 	/**
@@ -216,7 +216,7 @@ class Tableau {
 	 */
 	void showTop(TableauPile pIndex) {
 		assert !aPiles.get(pIndex).isEmpty();
-		aVisible.add(aPiles.get(pIndex).peek());
+		aVisible.add(aPiles.get(pIndex).peekTop());
 	}
 
 	/**
@@ -227,7 +227,7 @@ class Tableau {
 	 */
 	void hideTop(TableauPile pIndex) {
 		assert !aPiles.get(pIndex).isEmpty();
-		aVisible.remove(aPiles.get(pIndex).peek());
+		aVisible.remove(aPiles.get(pIndex).peekTop());
 	}
 
 	/**

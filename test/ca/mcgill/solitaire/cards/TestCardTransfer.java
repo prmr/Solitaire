@@ -36,7 +36,7 @@ public class TestCardTransfer {
 	@ParameterizedTest
 	@MethodSource("allCards")
 	void testSerializeSingleCard(Card pCard) {
-		assertSame(pCard, CardSerializer.deserialize(CardSerializer.serialize(pCard)).peek());
+		assertSame(pCard, CardSerializer.deserialize(CardSerializer.serialize(pCard)).peekTop());
 	}
 
 	void testSerializeEmpty() {
