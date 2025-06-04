@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import ca.mcgill.solitaire.testutils.TestUtils;
 
-public class TestCard {
+public class CardTest {
 	
 	@ParameterizedTest
 	@MethodSource("allCards")

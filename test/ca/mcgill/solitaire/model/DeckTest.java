@@ -36,7 +36,7 @@ import ca.mcgill.solitaire.cards.Suit;
  * Models a deck of 52 cards that is not shuffled so that the cards drawn can be
  * predicted, in order of suit then rank.
  */
-public class TestDeck extends Deck {
+public class DeckTest extends Deck {
 	/**
 	 * Only resets the deck without shuffling it.
 	 */

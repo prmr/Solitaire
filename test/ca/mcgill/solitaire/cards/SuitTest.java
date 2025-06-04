@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-public class TestSuit {
+public class SuitTest {
 	@Test
 	void testSameColor() {
 		assertTrue(Suit.CLUBS.sameColorAs(Suit.CLUBS));
@@ -44,6 +44,5 @@ public class TestSuit {
 		assertFalse(Suit.SPADES.sameColorAs(Suit.DIAMONDS));
 		assertFalse(Suit.SPADES.sameColorAs(Suit.HEARTS));
 		assertTrue(Suit.SPADES.sameColorAs(Suit.SPADES));
-
 	}
 }

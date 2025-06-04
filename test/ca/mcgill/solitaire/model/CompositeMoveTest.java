@@ -18,27 +18,53 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see http://www.gnu.org/licenses/.
  *******************************************************************************/
-package ca.mcgill.solitaire.cards;
+package ca.mcgill.solitaire.model;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.jupiter.api.Test;
 
-public class TestDeck {
-	@Test
-	void testdraw() {
-		Deck lDeck = new Deck();
-		lDeck.shuffle();
-		Set<Card> lCards = new HashSet<Card>();
-		for (int i = 0; i < 52; i++) {
-			Card lCard = lDeck.draw();
-			assertFalse(lCards.contains(lCard));
-			lCards.add(lCard);
+public class CompositeMoveTest {
+	class StubMove implements Move {
+		private boolean aPerformed = false;
+		private boolean aUndone = false;
+
+		public boolean isPerformed() {
+			return aPerformed;
 		}
-		assertTrue(lDeck.isEmpty());
+
+		public boolean isUndone() {
+			return aUndone;
+		}
+
+		@Override
+		public void perform() {
+			aPerformed = true;
+		}
+
+		@Override
+		public void undo() {
+			aUndone = true;
+		}
+	}
+
+	@Test
+	void testAll() {
+		StubMove[] moves = new StubMove[3];
+		for (int i = 0; i < moves.length; i++) {
+			moves[i] = new StubMove();
+		}
+		CompositeMove composite = new CompositeMove(moves);
+		assertFalse(composite.isNull());
+		composite.perform();
+		for (StubMove move : moves) {
+			assertTrue(move.isPerformed());
+			assertFalse(move.isUndone());
+		}
+		composite.undo();
+		for (StubMove move : moves) {
+			assertTrue(move.isUndone());
+		}
 	}
 }

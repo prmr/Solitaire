@@ -29,7 +29,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-public class TestCardStack {
+public class CardStackTest {
 	private final static Card ACE_OF_CLUBS = Card.get(Rank.ACE, Suit.CLUBS);
 	private final static Card TWO_OF_CLUBS = Card.get(Rank.TWO, Suit.CLUBS);
 

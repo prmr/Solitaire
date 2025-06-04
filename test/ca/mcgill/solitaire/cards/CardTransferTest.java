@@ -32,7 +32,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import ca.mcgill.solitaire.testutils.TestUtils;
 
-public class TestCardTransfer {
+public class CardTransferTest {
 	@ParameterizedTest
 	@MethodSource("allCards")
 	void testSerializeSingleCard(Card pCard) {

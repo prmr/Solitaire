@@ -36,13 +36,13 @@ import ca.mcgill.solitaire.cards.CardStack;
 import ca.mcgill.solitaire.cards.Rank;
 import ca.mcgill.solitaire.cards.Suit;
 
-public class TestGameModel {
+public class GameModelTest {
 	private final GameModel aModel = new GameModel(new GreedyPlayingStrategy());
 
-	TestGameModel() throws ReflectiveOperationException {
+	GameModelTest() throws ReflectiveOperationException {
 		Field deckField = GameModel.class.getDeclaredField("aDeck");
 		deckField.setAccessible(true);
-		deckField.set(aModel, new TestDeck());
+		deckField.set(aModel, new DeckTest());
 		aModel.reset();
 	}
 

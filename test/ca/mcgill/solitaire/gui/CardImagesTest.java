@@ -33,7 +33,7 @@ import ca.mcgill.solitaire.cards.Card;
 import ca.mcgill.solitaire.testutils.TestUtils;
 import javafx.scene.image.Image;
 
-public class TestCardImages {
+public class CardImagesTest {
 
 	@Test
 	void testimageForBackOfCard() {

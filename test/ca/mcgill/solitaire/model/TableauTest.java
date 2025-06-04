@@ -38,7 +38,7 @@ import ca.mcgill.solitaire.cards.Deck;
 import ca.mcgill.solitaire.cards.Rank;
 import ca.mcgill.solitaire.cards.Suit;
 
-public class TestTableau {
+public class TableauTest {
 	private Tableau aTableau = new Tableau();
 	private static final Card CKC = Card.get(Rank.KING, Suit.CLUBS);
 	private static final Card CAC = Card.get(Rank.ACE, Suit.CLUBS);
