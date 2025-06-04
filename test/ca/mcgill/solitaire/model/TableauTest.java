@@ -20,7 +20,7 @@
  *******************************************************************************/
 package ca.mcgill.solitaire.model;
 
-import static ca.mcgill.solitaire.cards.Utils.peekAtIndex;
+import static ca.mcgill.solitaire.testutils.Utils.peekAtIndex;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;

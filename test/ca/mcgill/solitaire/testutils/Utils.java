@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  * 
- * Copyright (C) 2016-2025 by Martin P. Robillard
+ * Copyright (C) 2016-2024 by Martin P. Robillard
  * 
  * See: https://github.com/prmr/Solitaire
  * 
@@ -18,21 +18,39 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see http://www.gnu.org/licenses/.
  *******************************************************************************/
-
-package ca.mcgill.solitaire.cards;
+package ca.mcgill.solitaire.testutils;
 
 import static org.junit.Assert.assertSame;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import ca.mcgill.solitaire.cards.Card;
+import ca.mcgill.solitaire.cards.CardStack;
+import ca.mcgill.solitaire.cards.Rank;
+import ca.mcgill.solitaire.cards.Suit;
+
 /**
- * Helper methods for testing cards.
+ * Utilities to help with testing.
  */
 public final class Utils {
 	
 	private Utils() {}
+
+	/**
+	 * @return All 52 cards sorted by suit, then rank.
+	 */
+	public static List<Card> allCards() {
+		List<Card> allCards = new ArrayList<>();
+		for (Suit suit : Suit.values()) {
+			for (Rank rank : Rank.values()) {
+				allCards.add(Card.get(rank, suit));
+			}
+		}
+		return allCards;
+	}
 	
 	/**
 	 * Returns a card at a specified index from the stack, without permanently

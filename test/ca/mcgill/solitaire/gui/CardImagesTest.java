@@ -30,7 +30,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import ca.mcgill.solitaire.cards.Card;
-import ca.mcgill.solitaire.testutils.TestUtils;
+import ca.mcgill.solitaire.testutils.Utils;
 import javafx.scene.image.Image;
 
 public class CardImagesTest {
@@ -55,6 +55,6 @@ public class CardImagesTest {
 	}
 
 	private static List<Card> allCards() {
-		return TestUtils.allCards();
+		return Utils.allCards();
 	}
 }

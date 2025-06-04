@@ -30,7 +30,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import ca.mcgill.solitaire.testutils.TestUtils;
+import ca.mcgill.solitaire.testutils.Utils;
 
 public class CardTransferTest {
 	@ParameterizedTest
@@ -59,6 +59,6 @@ public class CardTransferTest {
 	}
 
 	private static List<Card> allCards() {
-		return TestUtils.allCards();
+		return Utils.allCards();
 	}
 }
