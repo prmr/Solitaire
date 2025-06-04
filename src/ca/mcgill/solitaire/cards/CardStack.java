@@ -29,23 +29,21 @@ import java.util.List;
  * Represents a general-purpose stack of cards.
  */
 public class CardStack implements Iterable<Card> {
-	private final List<Card> aCards;
+	
+	private final List<Card> aCards = new ArrayList<>();
 	
 	/**
 	 * Creates an empty CardStack.
 	 */
-	public CardStack() {
-		aCards = new ArrayList<>();
-	}
+	public CardStack() {}
 	
 	/**
-	 * Creates a CardStack that contains all the cards in pCard, in the
+	 * Creates a CardStack that contains all the cards in pCards, in the
 	 * iteration order, from bottom to top.
 	 * 
 	 * @param pCards The cards to initialize the stack with.
 	 */
 	public CardStack(Iterable<Card> pCards) {
-		this();
 		for (Card card : pCards) {
 			aCards.add(card);
 		}

@@ -25,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 public class TestCardStack {
@@ -33,6 +35,30 @@ public class TestCardStack {
 
 	private final CardStack aStack = new CardStack();
 
+	@Test
+	void testConstructor_WithInput_Empty()
+	{
+		CardStack stack = new CardStack(List.of());
+		assertTrue(stack.isEmpty());
+	}
+	
+	@Test
+	void testConstructor_WithInput_SingleElement()
+	{
+		CardStack stack = new CardStack(List.of(ACE_OF_CLUBS));
+		assertSame(ACE_OF_CLUBS, stack.peek());
+		assertEquals(1, stack.size());
+	}
+	
+	@Test
+	void testConstructor_WithInput_MultipleElement()
+	{
+		CardStack stack = new CardStack(List.of(ACE_OF_CLUBS, TWO_OF_CLUBS));
+		assertSame(TWO_OF_CLUBS, stack.peek());
+		assertSame(ACE_OF_CLUBS, stack.peek(1));
+		assertEquals(2, stack.size());
+	}
+	
 	@Test
 	void testClear() {
 		aStack.clear();

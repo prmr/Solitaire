@@ -34,22 +34,16 @@ import ca.mcgill.solitaire.testutils.TestUtils;
 import javafx.scene.image.Image;
 
 public class TestCardImages {
-	/*
-	 * Checks that the card back image can be loaded and that it is a flyweight.
-	 */
+
 	@Test
 	void testimageForBackOfCard() {
 		assertSame(CardImages.imageForBackOfCard(), CardImages.imageForBackOfCard());
 		assertNotNull(CardImages.imageForBackOfCard());
 	}
 
-	/*
-	 * Checks that the image of each card can be loaded and that they are
-	 * flyweights.
-	 */
 	@ParameterizedTest
 	@MethodSource("allCards")
-	void testimageForCard(Card pCard) {
+	void testImageForCard(Card pCard) {
 		try {
 			Image image1 = CardImages.imageFor(pCard);
 			Image image2 = CardImages.imageFor(pCard);

@@ -20,11 +20,32 @@
  *******************************************************************************/
 package ca.mcgill.solitaire.cards;
 
+import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import ca.mcgill.solitaire.testutils.TestUtils;
 
 public class TestCard {
+	
+	@ParameterizedTest
+	@MethodSource("allCards")
+	void testGet_CorrectAssignment(Card pCard) {
+		assertSame(pCard.rank(), Card.get(pCard.rank(), pCard.suit()).rank());
+		assertSame(pCard.suit(), Card.get(pCard.rank(), pCard.suit()).suit());
+	}
+	
+	@ParameterizedTest
+	@MethodSource("allCards")
+	void testGet_CardAreUnique(Card pCard) {
+		assertSame(Card.get(pCard.rank(), pCard.suit()), pCard);
+	}
+	
 	@Test
 	void testToString() {
 		assertEquals("Ace of Clubs", Card.get(Rank.ACE, Suit.CLUBS).toString());
@@ -40,5 +61,9 @@ public class TestCard {
 		assertEquals("Jack of Spades", Card.get(Rank.JACK, Suit.SPADES).toString());
 		assertEquals("Queen of Spades", Card.get(Rank.QUEEN, Suit.SPADES).toString());
 		assertEquals("King of Spades", Card.get(Rank.KING, Suit.SPADES).toString());
+	}
+	
+	private static List<Card> allCards() {
+		return TestUtils.allCards();
 	}
 }
