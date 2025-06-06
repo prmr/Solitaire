@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.lang.reflect.Method;
 import java.util.Optional;
@@ -50,30 +49,28 @@ public class TableauTest {
 	private static final Card C3H = Card.get(Rank.THREE, Suit.HEARTS);
 
 	@SuppressWarnings("unchecked")
-	private Optional<Card> getPreviousCard(Card pCard) {
+	private Optional<Card> executeGetPreviousCard(Card pCard) {
 		try {
 			Method method = Tableau.class.getDeclaredMethod("getPreviousCard", Card.class);
 			method.setAccessible(true);
 			return (Optional<Card>) method.invoke(aTableau, pCard);
 		}
 		catch (ReflectiveOperationException exception) {
-			exception.printStackTrace();
-			fail();
-			return Optional.empty();
+			throw new AssertionError(exception);
 		}
 	}
 
 	@Test
 	void testGetPreviousCard_First() {
 		aTableau.push(CAC, TableauPile.FIRST);
-		assertFalse(getPreviousCard(CAC).isPresent());
+		assertFalse(executeGetPreviousCard(CAC).isPresent());
 	}
 
 	@Test
 	void testGetPreviousCard_Second() {
 		aTableau.push(CAC, TableauPile.FIRST);
 		aTableau.push(C5D, TableauPile.FIRST);
-		assertSame(CAC, getPreviousCard(C5D).get());
+		assertSame(CAC, executeGetPreviousCard(C5D).get());
 	}
 
 	@Test
