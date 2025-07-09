@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  * 
- * Copyright (C) 2016-2024 by Martin P. Robillard
+ * Copyright (C) 2016-2025 by Martin P. Robillard
  * 
  * See: https://github.com/prmr/Solitaire
  * 
@@ -20,7 +20,7 @@
  *******************************************************************************/
 package ca.mcgill.solitaire.testutils;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.util.ArrayList;
 import java.util.List;
