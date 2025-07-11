@@ -37,6 +37,7 @@ import ca.mcgill.solitaire.cards.Suit;
  * predicted, in order of suit then rank.
  */
 public class DeckTest extends Deck {
+	
 	/**
 	 * Only resets the deck without shuffling it.
 	 */

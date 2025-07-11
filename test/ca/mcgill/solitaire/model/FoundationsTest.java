@@ -31,6 +31,7 @@ import ca.mcgill.solitaire.cards.Rank;
 import ca.mcgill.solitaire.cards.Suit;
 
 public class FoundationsTest {
+	
 	private Foundations aFoundationPiles = new Foundations();
 	private static final Card CAC = Card.get(Rank.ACE, Suit.CLUBS);
 	private static final Card CAD = Card.get(Rank.ACE, Suit.DIAMONDS);

@@ -37,6 +37,7 @@ import ca.mcgill.solitaire.cards.Rank;
 import ca.mcgill.solitaire.cards.Suit;
 
 public class GameModelTest {
+	
 	private final GameModel aModel = new GameModel(new GreedyPlayingStrategy());
 
 	GameModelTest() throws ReflectiveOperationException {
