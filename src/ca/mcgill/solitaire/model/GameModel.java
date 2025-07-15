@@ -272,10 +272,10 @@ public final class GameModel implements GameModelView {
 	}
 
 	/**
-	 * Get the sequence consisting of pCard and all the other cards below it,
-	 * from the tableau.
+	 * Get the sequence consisting of pCard and all the other cards above it,
+	 * in the tableau.
 	 * 
-	 * @param pCard The top card of the sequence.
+	 * @param pCard The bottom card of the sequence, inclusive
 	 * @param pPile The requested pile.
 	 * @return A non-empty sequence of cards.
 	 * @pre pCard != null and is in pile pPile.

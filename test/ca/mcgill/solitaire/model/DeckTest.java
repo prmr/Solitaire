@@ -43,13 +43,13 @@ public class DeckTest extends Deck {
 	 */
 	@Override
 	public void shuffle() {
-		try {
-			List<Card> cards = new ArrayList<>();
-			for (Suit suit : Suit.values()) {
-				for (Rank rank : Rank.values()) {
-					cards.add(Card.get(rank, suit));
-				}
+		List<Card> cards = new ArrayList<>();
+		for (Suit suit : Suit.values()) {
+			for (Rank rank : Rank.values()) {
+				cards.add(Card.get(rank, suit));
 			}
+		}
+		try {
 			Field cardsField = Deck.class.getDeclaredField("aCards");
 			cardsField.setAccessible(true);
 			cardsField.set(this, new CardStack(cards));
