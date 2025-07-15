@@ -20,11 +20,14 @@
  *******************************************************************************/
 package ca.mcgill.solitaire.model;
 
+import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ca.mcgill.solitaire.cards.Card;
 import ca.mcgill.solitaire.cards.Rank;
@@ -33,46 +36,57 @@ import ca.mcgill.solitaire.cards.Suit;
 public class FoundationsTest {
 	
 	private Foundations aFoundationPiles = new Foundations();
-	private static final Card CAC = Card.get(Rank.ACE, Suit.CLUBS);
-	private static final Card CAD = Card.get(Rank.ACE, Suit.DIAMONDS);
-	private static final Card C3D = Card.get(Rank.THREE, Suit.DIAMONDS);
+	private static final Card ACE_OF_CLUBS = Card.get(Rank.ACE, Suit.CLUBS);
+	private static final Card TWO_OF_CLUBS = Card.get(Rank.TWO, Suit.CLUBS);
+	private static final Card ACE_OF_DIAMONDS = Card.get(Rank.ACE, Suit.DIAMONDS);
+	private static final Card THREE_OF_DIAMONDS = Card.get(Rank.THREE, Suit.DIAMONDS);
 
-	@Test
-	void testInitialize() {
-		assertTrue(aFoundationPiles.isEmpty(FoundationPile.FIRST));
-		assertTrue(aFoundationPiles.isEmpty(FoundationPile.SECOND));
-		assertTrue(aFoundationPiles.isEmpty(FoundationPile.THIRD));
-		assertTrue(aFoundationPiles.isEmpty(FoundationPile.FOURTH));
+	@ParameterizedTest
+	@EnumSource(FoundationPile.class)
+	void testInitialize(FoundationPile pFoundationPile) {
+		assertTrue(aFoundationPiles.isEmpty(pFoundationPile));
 	}
-
-	@Test
-	void testPushPop() {
-		aFoundationPiles.push(CAC, FoundationPile.FIRST);
-		assertTrue(aFoundationPiles.isEmpty(FoundationPile.SECOND));
-		assertTrue(aFoundationPiles.isEmpty(FoundationPile.THIRD));
-		assertTrue(aFoundationPiles.isEmpty(FoundationPile.FOURTH));
-		aFoundationPiles.push(CAD, FoundationPile.SECOND);
-		assertEquals(CAD, aFoundationPiles.peek(FoundationPile.SECOND));
-		aFoundationPiles.push(C3D, FoundationPile.SECOND);
-		assertEquals(C3D, aFoundationPiles.peek(FoundationPile.SECOND));
-		aFoundationPiles.pop(FoundationPile.SECOND);
-		assertEquals(CAD, aFoundationPiles.peek(FoundationPile.SECOND));
-		aFoundationPiles.pop(FoundationPile.SECOND);
-		assertTrue(aFoundationPiles.isEmpty(FoundationPile.SECOND));
+	
+	@ParameterizedTest
+	@EnumSource(FoundationPile.class)
+	void testPush(FoundationPile pFoundationPile) {
+		
+		// From empty
+		aFoundationPiles.push(ACE_OF_CLUBS, pFoundationPile);
+		assertSame(ACE_OF_CLUBS, aFoundationPiles.peek(pFoundationPile));
+		
+		// From not empty
+		aFoundationPiles.push(TWO_OF_CLUBS, pFoundationPile);
+		assertSame(TWO_OF_CLUBS, aFoundationPiles.peek(pFoundationPile));
 	}
-
+	
+	@ParameterizedTest
+	@EnumSource(FoundationPile.class)
+	void testPop(FoundationPile pFoundationFile) {
+		aFoundationPiles.push(ACE_OF_CLUBS, pFoundationFile);
+		aFoundationPiles.push(TWO_OF_CLUBS, pFoundationFile);
+		
+		assertSame(TWO_OF_CLUBS, aFoundationPiles.pop(pFoundationFile));
+		assertSame(ACE_OF_CLUBS, aFoundationPiles.pop(pFoundationFile));
+	}
+	
 	@Test
-	void testGetScore() {
+	void testGetScore_Zero() {
 		assertEquals(0, aFoundationPiles.getTotalSize());
-		aFoundationPiles.push(CAC, FoundationPile.FIRST);
-		aFoundationPiles.push(CAD, FoundationPile.SECOND);
+	}
+	
+	@Test
+	void testGetScore_NonZero() {
+		assertEquals(0, aFoundationPiles.getTotalSize());
+		aFoundationPiles.push(ACE_OF_CLUBS, FoundationPile.FIRST);
+		aFoundationPiles.push(ACE_OF_DIAMONDS, FoundationPile.SECOND);
 		assertEquals(2, aFoundationPiles.getTotalSize());
 	}
 
 	@Test
 	void testCanMoveTo_Empty() {
-		assertTrue(aFoundationPiles.canMoveTo(CAC, FoundationPile.FIRST));
-		assertFalse(aFoundationPiles.canMoveTo(C3D, FoundationPile.SECOND));
+		assertTrue(aFoundationPiles.canMoveTo(ACE_OF_CLUBS, FoundationPile.FIRST));
+		assertFalse(aFoundationPiles.canMoveTo(THREE_OF_DIAMONDS, FoundationPile.SECOND));
 	}
 
 	@Test
