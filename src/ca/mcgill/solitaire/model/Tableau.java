@@ -102,7 +102,7 @@ class Tableau {
 	 *     pile.
 	 * @pre pCard != null && contains(pCard);
 	 */
-	public boolean isBottomKing(Card pCard) {
+	boolean isBottomKing(Card pCard) {
 		assert pCard != null && contains(pCard);
 		return pCard.rank() == Rank.KING && aPiles.get(getPile(pCard)).peekBottom() == pCard;
 	}

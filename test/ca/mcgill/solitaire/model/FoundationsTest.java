@@ -20,26 +20,24 @@
  *******************************************************************************/
 package ca.mcgill.solitaire.model;
 
-import static org.junit.Assert.assertSame;
+import static ca.mcgill.solitaire.testutils.Cards.C2C;
+import static ca.mcgill.solitaire.testutils.Cards.C3C;
+import static ca.mcgill.solitaire.testutils.Cards.C3D;
+import static ca.mcgill.solitaire.testutils.Cards.C4C;
+import static ca.mcgill.solitaire.testutils.Cards.CAC;
+import static ca.mcgill.solitaire.testutils.Cards.CAD;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-import ca.mcgill.solitaire.cards.Card;
-import ca.mcgill.solitaire.cards.Rank;
-import ca.mcgill.solitaire.cards.Suit;
-
 public class FoundationsTest {
 	
 	private Foundations aFoundationPiles = new Foundations();
-	private static final Card ACE_OF_CLUBS = Card.get(Rank.ACE, Suit.CLUBS);
-	private static final Card TWO_OF_CLUBS = Card.get(Rank.TWO, Suit.CLUBS);
-	private static final Card ACE_OF_DIAMONDS = Card.get(Rank.ACE, Suit.DIAMONDS);
-	private static final Card THREE_OF_DIAMONDS = Card.get(Rank.THREE, Suit.DIAMONDS);
 
 	@ParameterizedTest
 	@EnumSource(FoundationPile.class)
@@ -52,22 +50,22 @@ public class FoundationsTest {
 	void testPush(FoundationPile pFoundationPile) {
 		
 		// From empty
-		aFoundationPiles.push(ACE_OF_CLUBS, pFoundationPile);
-		assertSame(ACE_OF_CLUBS, aFoundationPiles.peek(pFoundationPile));
+		aFoundationPiles.push(CAC, pFoundationPile);
+		assertSame(CAC, aFoundationPiles.peek(pFoundationPile));
 		
 		// From not empty
-		aFoundationPiles.push(TWO_OF_CLUBS, pFoundationPile);
-		assertSame(TWO_OF_CLUBS, aFoundationPiles.peek(pFoundationPile));
+		aFoundationPiles.push(C2C, pFoundationPile);
+		assertSame(C2C, aFoundationPiles.peek(pFoundationPile));
 	}
 	
 	@ParameterizedTest
 	@EnumSource(FoundationPile.class)
 	void testPop(FoundationPile pFoundationFile) {
-		aFoundationPiles.push(ACE_OF_CLUBS, pFoundationFile);
-		aFoundationPiles.push(TWO_OF_CLUBS, pFoundationFile);
+		aFoundationPiles.push(CAC, pFoundationFile);
+		aFoundationPiles.push(C2C, pFoundationFile);
 		
-		assertSame(TWO_OF_CLUBS, aFoundationPiles.pop(pFoundationFile));
-		assertSame(ACE_OF_CLUBS, aFoundationPiles.pop(pFoundationFile));
+		assertSame(C2C, aFoundationPiles.pop(pFoundationFile));
+		assertSame(CAC, aFoundationPiles.pop(pFoundationFile));
 	}
 	
 	@Test
@@ -78,35 +76,35 @@ public class FoundationsTest {
 	@Test
 	void testGetScore_NonZero() {
 		assertEquals(0, aFoundationPiles.getTotalSize());
-		aFoundationPiles.push(ACE_OF_CLUBS, FoundationPile.FIRST);
-		aFoundationPiles.push(ACE_OF_DIAMONDS, FoundationPile.SECOND);
+		aFoundationPiles.push(CAC, FoundationPile.FIRST);
+		aFoundationPiles.push(CAD, FoundationPile.SECOND);
 		assertEquals(2, aFoundationPiles.getTotalSize());
 	}
 
 	@Test
 	void testCanMoveTo_Empty() {
-		assertTrue(aFoundationPiles.canMoveTo(ACE_OF_CLUBS, FoundationPile.FIRST));
-		assertFalse(aFoundationPiles.canMoveTo(THREE_OF_DIAMONDS, FoundationPile.SECOND));
+		assertTrue(aFoundationPiles.canMoveTo(CAC, FoundationPile.FIRST));
+		assertFalse(aFoundationPiles.canMoveTo(C3D, FoundationPile.SECOND));
 	}
 
 	@Test
 	void testCanMoveTo_NotEmpty_NotSameSuit() {
-		aFoundationPiles.push(Card.get(Rank.ACE, Suit.CLUBS), FoundationPile.FIRST);
-		aFoundationPiles.push(Card.get(Rank.TWO, Suit.CLUBS), FoundationPile.FIRST);
-		assertFalse(aFoundationPiles.canMoveTo(Card.get(Rank.THREE, Suit.DIAMONDS), FoundationPile.FIRST));
+		aFoundationPiles.push(CAC, FoundationPile.FIRST);
+		aFoundationPiles.push(C2C, FoundationPile.FIRST);
+		assertFalse(aFoundationPiles.canMoveTo(C3D, FoundationPile.FIRST));
 	}
 
 	@Test
 	void testCanMoveTo_NotEmpty_SameSuit_NotInSequence() {
-		aFoundationPiles.push(Card.get(Rank.ACE, Suit.CLUBS), FoundationPile.FIRST);
-		aFoundationPiles.push(Card.get(Rank.TWO, Suit.CLUBS), FoundationPile.FIRST);
-		assertFalse(aFoundationPiles.canMoveTo(Card.get(Rank.FOUR, Suit.CLUBS), FoundationPile.FIRST));
+		aFoundationPiles.push(CAC, FoundationPile.FIRST);
+		aFoundationPiles.push(C2C, FoundationPile.FIRST);
+		assertFalse(aFoundationPiles.canMoveTo(C4C, FoundationPile.FIRST));
 	}
 
 	@Test
 	void testCanMoveTo_NotEmpty_SameSuit_InSequence() {
-		aFoundationPiles.push(Card.get(Rank.ACE, Suit.CLUBS), FoundationPile.FIRST);
-		aFoundationPiles.push(Card.get(Rank.TWO, Suit.CLUBS), FoundationPile.FIRST);
-		assertTrue(aFoundationPiles.canMoveTo(Card.get(Rank.THREE, Suit.CLUBS), FoundationPile.FIRST));
+		aFoundationPiles.push(CAC, FoundationPile.FIRST);
+		aFoundationPiles.push(C2C, FoundationPile.FIRST);
+		assertTrue(aFoundationPiles.canMoveTo(C3C, FoundationPile.FIRST));
 	}
 }
