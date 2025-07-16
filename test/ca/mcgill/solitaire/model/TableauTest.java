@@ -21,6 +21,7 @@
 package ca.mcgill.solitaire.model;
 
 import static ca.mcgill.solitaire.testutils.Cards.*;
+import static ca.mcgill.solitaire.testutils.Utils.assertCardStackHas;
 import static ca.mcgill.solitaire.testutils.Utils.peekAtIndex;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -226,30 +227,44 @@ public class TableauTest {
 		assertTrue(aTableau.revealsTop(C4C));
 	}
 	
-	@Test
-	void testMoveWithin() {
-		Deck deck = new Deck();
-		aTableau.initialize(deck);
-		CardStack stack2a = aTableau.getPile(TableauPile.SECOND);
-		CardStack stack4a = aTableau.getPile(TableauPile.FOURTH);
-		aTableau.moveWithin(peekAtIndex(stack2a, 1), TableauPile.SECOND, TableauPile.FOURTH);
-		CardStack stack2b = aTableau.getPile(TableauPile.SECOND);
-		CardStack stack4b = aTableau.getPile(TableauPile.FOURTH);
-		assertEquals(1, stack2b.size());
-		assertEquals(5, stack4b.size());
-		assertEquals(stack2a.peekBottom(), stack2b.peekBottom());
-		assertEquals(stack4a.peekBottom(), stack4b.peekBottom());
-		assertEquals(peekAtIndex(stack4a, 1), peekAtIndex(stack4b, 1));
-		assertEquals(peekAtIndex(stack4a, 2), peekAtIndex(stack4b, 2));
-		assertEquals(peekAtIndex(stack4a, 3), peekAtIndex(stack4b, 3));
-		assertEquals(peekAtIndex(stack2a, 1), peekAtIndex(stack4b, 4));
-		assertTrue(aTableau.isVisible(peekAtIndex(stack4b, 4)));
-		aTableau.moveWithin(peekAtIndex(stack4b, 3), TableauPile.FOURTH, TableauPile.SECOND);
-		CardStack stack2c = aTableau.getPile(TableauPile.SECOND);
-		assertEquals(3, stack2c.size());
-		assertEquals(stack2a.peekBottom(), stack2c.peekBottom());
-		assertEquals(peekAtIndex(stack4b, 3), peekAtIndex(stack2c, 1));
-		assertEquals(peekAtIndex(stack4b, 4), peekAtIndex(stack2c, 2));
+	@Test 
+	void testMoveWithin_SingleCard() {
+		aTableau.push(CAC, TableauPile.FIRST);
+		aTableau.push(C2D, TableauPile.SECOND);
+		aTableau.moveWithin(CAC, TableauPile.SECOND);
+		assertCardStackHas(aTableau.getPile(TableauPile.FIRST));
+		assertCardStackHas(aTableau.getPile(TableauPile.SECOND), C2D, CAC);
+	}
+	
+	@Test 
+	void testMoveWithin_AllCards() {
+		aTableau.push(C3D, TableauPile.FIRST);
+		aTableau.push(C2C, TableauPile.FIRST);
+		aTableau.push(CAD, TableauPile.FIRST);
+		aTableau.push(C4C, TableauPile.SECOND);
+		aTableau.moveWithin(C3D, TableauPile.SECOND);
+		assertCardStackHas(aTableau.getPile(TableauPile.FIRST));
+		assertCardStackHas(aTableau.getPile(TableauPile.SECOND), C4C, C3D, C2C, CAD);
+	}
+	
+	@Test 
+	void testMoveWithin_PartialCards() {
+		aTableau.push(C3D, TableauPile.FIRST);
+		aTableau.push(C2C, TableauPile.FIRST);
+		aTableau.push(CAD, TableauPile.FIRST);
+		aTableau.push(C3H, TableauPile.SECOND);
+		aTableau.moveWithin(C2C, TableauPile.SECOND);
+		assertCardStackHas(aTableau.getPile(TableauPile.FIRST), C3D);
+		assertCardStackHas(aTableau.getPile(TableauPile.SECOND), C3H, C2C, CAD);
+	}
+	
+	@Test 
+	void testMoveWithin_ToEmptyPile() {
+		aTableau.push(CKD, TableauPile.FIRST);
+		aTableau.push(CQC, TableauPile.FIRST);
+		aTableau.moveWithin(CKD, TableauPile.SECOND);
+		assertCardStackHas(aTableau.getPile(TableauPile.FIRST));
+		assertCardStackHas(aTableau.getPile(TableauPile.SECOND), CKD, CQC);
 	}
 	
 	// ***** BELOW ARE OLD TESTS ***** //

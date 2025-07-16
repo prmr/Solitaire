@@ -238,7 +238,7 @@ public final class GameModel implements GameModelView {
 	private void move(Card pCard, Location pDestination) {
 		Location source = find(pCard);
 		if (source instanceof TableauPile && pDestination instanceof TableauPile) {
-			aTableau.moveWithin(pCard, (TableauPile) source, (TableauPile) pDestination);
+			aTableau.moveWithin(pCard, (TableauPile) pDestination);
 		}
 		else {
 			absorbCard(source);

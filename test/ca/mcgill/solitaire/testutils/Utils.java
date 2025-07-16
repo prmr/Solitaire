@@ -20,9 +20,11 @@
  *******************************************************************************/
 package ca.mcgill.solitaire.testutils;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -84,6 +86,18 @@ public final class Utils {
 			}
 		}
 		return result;
+	}
+	
+	/**
+	 * Asserts that pCardStack consists of exactly the cards in pCards.
+	 * @param pCards Expected cards. Left to right for bottom to top.
+	 */
+	public static void assertCardStackHas(CardStack pCardStack, Card... pCards) {
+		List<Card> cards = new ArrayList<>();
+		for (Card card : pCardStack) {
+			cards.add(card);
+		}
+		assertEquals(cards, Arrays.asList(pCards));
 	}
 	
 	@Test

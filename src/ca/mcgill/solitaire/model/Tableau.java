@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.Stack;
 
 import ca.mcgill.solitaire.cards.Card;
 import ca.mcgill.solitaire.cards.CardStack;
@@ -103,7 +102,7 @@ class Tableau {
 	 */
 	boolean isBottomKing(Card pCard) {
 		assert pCard != null && contains(pCard);
-		return pCard.rank() == Rank.KING && aPiles.get(getPile(pCard)).peekBottom() == pCard;
+		return pCard.rank() == Rank.KING && aPiles.get(getPileIndex(pCard)).peekBottom() == pCard;
 	}
 
 	/**
@@ -119,7 +118,7 @@ class Tableau {
 		return new CardStack(aPiles.get(pPile));
 	}
 
-	private TableauPile getPile(Card pCard) {
+	private TableauPile getPileIndex(Card pCard) {
 		assert contains(pCard);
 		for (TableauPile pile : TableauPile.values()) {
 			if (contains(pCard, pile)) {
@@ -129,7 +128,7 @@ class Tableau {
 		assert false;
 		return null;
 	}
-
+	
 	/**
 	 * Returns true if moving pCard away makes the card underneath visible.
 	 * 
@@ -148,7 +147,7 @@ class Tableau {
 
 	private Optional<Card> getPreviousCard(Card pCard) {
 		Optional<Card> previous = Optional.empty();
-		for (Card card : aPiles.get(getPile(pCard))) {
+		for (Card card : aPiles.get(getPileIndex(pCard))) {
 			if (card == pCard) {
 				return previous;
 			}
@@ -162,20 +161,21 @@ class Tableau {
 	 * 
 	 * @param pCard The card to move, possibly including all the cards on top of
 	 *     it.
-	 * @param pOrigin The location of the card before the move.
 	 * @param pDestination The intended destination of the card.
 	 * @pre this is a legal move.
 	 */
-	void moveWithin(Card pCard, TableauPile pOrigin, TableauPile pDestination) {
-		assert pCard != null && pOrigin != null && pDestination != null;
-		assert contains(pCard, pOrigin);
+	void moveWithin(Card pCard, TableauPile pDestination) {
+		assert pCard != null && pDestination != null;
+		assert contains(pCard);
 		assert isVisible(pCard);
 		
-		Stack<Card> temp = new Stack<>();
-		Card card = aPiles.get(pOrigin).pop();
+		TableauPile origin = getPileIndex(pCard);
+		
+		CardStack temp = new CardStack();
+		Card card = aPiles.get(origin).pop();
 		temp.push(card);
 		while (card != pCard) {
-			card = aPiles.get(pOrigin).pop();
+			card = aPiles.get(origin).pop();
 			temp.push(card);
 		}
 		while (!temp.isEmpty()) {
