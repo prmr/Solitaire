@@ -102,7 +102,7 @@ public class CardPileView extends StackPane implements GameModelListener {
 			@Override
 			public void handle(MouseEvent pMouseEvent) {
 				Dragboard db = pImageView.startDragAndDrop(TransferMode.ANY);
-				CLIPBOARD_CONTENT.putString(CardSerializer.serialize(aModel.getSubStack(pCard, aIndex)));
+				CLIPBOARD_CONTENT.putString(CardSerializer.serialize(aModel.getSubpile(pCard)));
 				db.setContent(CLIPBOARD_CONTENT);
 				pMouseEvent.consume();
 			}

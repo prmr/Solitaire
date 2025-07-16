@@ -276,13 +276,12 @@ public final class GameModel implements GameModelView {
 	 * in the tableau.
 	 * 
 	 * @param pCard The bottom card of the sequence, inclusive
-	 * @param pPile The requested pile.
 	 * @return A non-empty sequence of cards.
-	 * @pre pCard != null and is in pile pPile.
+	 * @pre pCard != null && contains(pCard).
 	 */
-	public CardStack getSubStack(Card pCard, TableauPile pPile) {
-		assert pCard != null && pPile != null && find(pCard) == pPile;
-		return aTableau.getSequence(pCard, pPile);
+	public CardStack getSubpile(Card pCard) {
+		assert pCard != null && aTableau.contains(pCard);
+		return aTableau.getSubpile(pCard);
 	}
 
 	@Override

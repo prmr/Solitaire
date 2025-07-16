@@ -267,6 +267,40 @@ public class TableauTest {
 		assertCardStackHas(aTableau.getPile(TableauPile.SECOND), CKD, CQC);
 	}
 	
+	@Test
+	void testGetSubpile_Copy() {
+		aTableau.push(CAC, TableauPile.FIRST);
+		aTableau.push(C2C, TableauPile.FIRST);
+		CardStack pile = aTableau.getSubpile(CAC);
+		CardStack pile2 = aTableau.getSubpile(CAC);
+		assertNotSame(pile, pile2);
+	}
+	
+	@Test
+	void testGetSubpile_SingleCard() {
+		aTableau.push(CAC, TableauPile.FIRST);
+		CardStack pile = aTableau.getSubpile(CAC);
+		assertCardStackHas(pile, CAC);
+	}
+	
+	@Test
+	void testGetSubpile_AllCards() {
+		aTableau.push(CKC, TableauPile.FIRST);
+		aTableau.push(CQD, TableauPile.FIRST);
+		aTableau.push(CJC, TableauPile.FIRST);
+		CardStack pile = aTableau.getSubpile(CKC);
+		assertCardStackHas(pile, CKC, CQD, CJC);
+	}
+	
+	@Test
+	void testGetSubpile_SomeCards() {
+		aTableau.push(CKC, TableauPile.FIRST);
+		aTableau.push(CQD, TableauPile.FIRST);
+		aTableau.push(CJC, TableauPile.FIRST);
+		CardStack pile = aTableau.getSubpile(CQD);
+		assertCardStackHas(pile, CQD, CJC);
+	}
+	
 	// ***** BELOW ARE OLD TESTS ***** //
 	
 	@Test
@@ -292,21 +326,7 @@ public class TableauTest {
 		assertTrue(aTableau.contains(C5D, TableauPile.FIRST));
 	}
 
-	@Test
-	void testGetSequence() {
-		aTableau.push(C5D, TableauPile.SECOND);
-		CardStack sequence = aTableau.getSequence(C5D, TableauPile.SECOND);
-		assertEquals(1, sequence.size());
-		assertEquals(C5D, sequence.peekBottom());
-		aTableau.push(C4C, TableauPile.SECOND);
-		sequence = aTableau.getSequence(C5D, TableauPile.SECOND);
-		assertEquals(2, sequence.size());
-		assertEquals(C5D, sequence.peekBottom());
-		assertEquals(C4C, peekAtIndex(sequence, 1));
-		sequence = aTableau.getSequence(C4C, TableauPile.SECOND);
-		assertEquals(1, sequence.size());
-		assertEquals(C4C, sequence.peekBottom());
-	}
+	
 
 	
 

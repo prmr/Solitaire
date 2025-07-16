@@ -194,14 +194,14 @@ public class GameModelTest {
 	
 	@Test
 	void testGetSubStack_SingleCard() {
-		CardStack stack = aModel.getSubStack(CKS, TableauPile.FIRST);
+		CardStack stack = aModel.getSubpile(CKS);
 		assertEquals(1, stack.size());
 		assertSame(CKS, stack.peekTop());
 	}
 	
 	@Test
 	void testGetSubStack_AllCards() {
-		CardStack stack = aModel.getSubStack(CTS, TableauPile.THIRD);
+		CardStack stack = aModel.getSubpile(CTS);
 		assertEquals(3, stack.size());
 		assertSame(C8S, stack.pop());
 		assertSame(C9S, stack.pop());
@@ -210,7 +210,7 @@ public class GameModelTest {
 	
 	@Test
 	void testGetSubStack_TopTwo() {
-		CardStack stack = aModel.getSubStack(C9S, TableauPile.THIRD);
+		CardStack stack = aModel.getSubpile(C9S);
 		assertEquals(2, stack.size());
 		assertSame(C8S, stack.pop());
 		assertSame(C9S, stack.pop());
@@ -218,7 +218,7 @@ public class GameModelTest {
 	
 	@Test
 	void testGetSubStack_TopOnly() {
-		CardStack stack = aModel.getSubStack(C8S, TableauPile.THIRD);
+		CardStack stack = aModel.getSubpile(C8S);
 		assertEquals(1, stack.size());
 		assertSame(C8S, stack.pop());
 	}

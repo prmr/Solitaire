@@ -188,13 +188,12 @@ class Tableau {
 	 * top of it.
 	 * 
 	 * @param pCard The bottom card in the sequence.
-	 * @param pPile The target pile.
 	 * @return A copy of the requested sequence.
 	 * @pre pCard != null && pPile != null.
 	 */
-	CardStack getSequence(Card pCard, TableauPile pPile) {
-		assert pCard != null && pPile != null;
-		CardStack stack = aPiles.get(pPile);
+	CardStack getSubpile(Card pCard) {
+		assert pCard != null && contains(pCard);
+		CardStack stack = aPiles.get(getPileIndex(pCard));
 		List<Card> lReturn = new ArrayList<>();
 		boolean aSeen = false;
 		for (Card card : stack) {
