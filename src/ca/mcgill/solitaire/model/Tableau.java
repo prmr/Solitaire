@@ -98,8 +98,7 @@ class Tableau {
 
 	/**
 	 * @param pCard The card to check.
-	 * @return True if pCard is a visible king located at the bottom of the
-	 *     pile.
+	 * @return True if pCard is a king located at the bottom of the pile.
 	 * @pre pCard != null && contains(pCard);
 	 */
 	boolean isBottomKing(Card pCard) {
@@ -132,10 +131,10 @@ class Tableau {
 	}
 
 	/**
-	 * Returns true if moving pCard away reveals the top of the card.
+	 * Returns true if moving pCard away makes the card underneath visible.
 	 * 
 	 * @param pCard The card to test.
-	 * @return true if the card above pCard is not visible and pCard is visible.
+	 * @return true if the card below pCard is not visible and pCard is visible.
 	 * @pre pCard != null && contains(pCard).
 	 */
 	boolean revealsTop(Card pCard) {
@@ -159,7 +158,7 @@ class Tableau {
 	}
 
 	/**
-	 * Move pCard and all the cards below to pDestination.
+	 * Move pCard and all the cards above it to pDestination.
 	 * 
 	 * @param pCard The card to move, possibly including all the cards on top of
 	 *     it.
@@ -171,6 +170,7 @@ class Tableau {
 		assert pCard != null && pOrigin != null && pDestination != null;
 		assert contains(pCard, pOrigin);
 		assert isVisible(pCard);
+		
 		Stack<Card> temp = new Stack<>();
 		Card card = aPiles.get(pOrigin).pop();
 		temp.push(card);
