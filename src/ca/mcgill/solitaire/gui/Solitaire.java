@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  * 
- * Copyright (C) 2016-2024 by Martin P. Robillard
+ * Copyright (C) 2025 by Martin P. Robillard
  * 
  * See: https://github.com/prmr/Solitaire
  * 
@@ -43,7 +43,7 @@ public class Solitaire extends Application {
 	private static final int HEIGHT = 500;
 	private static final int MARGIN_OUTER = 10;
 	private static final String TITLE = "Solitaire";
-	private static final String VERSION = "1.2";
+	private static final String VERSION = "1.3";
 
 	/**
 	 * Application head.

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Solitaire
  * 
- * Copyright (C) 2016-2024 by Martin P. Robillard
+ * Copyright (C) 2025 by Martin P. Robillard
  * 
  * See: https://github.com/prmr/Solitaire
  * 
