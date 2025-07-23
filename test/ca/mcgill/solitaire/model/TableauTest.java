@@ -20,9 +20,46 @@
  *******************************************************************************/
 package ca.mcgill.solitaire.model;
 
-import static ca.mcgill.solitaire.testutils.Cards.*;
+import static ca.mcgill.solitaire.testutils.Cards.C2C;
+import static ca.mcgill.solitaire.testutils.Cards.C2D;
+import static ca.mcgill.solitaire.testutils.Cards.C2H;
+import static ca.mcgill.solitaire.testutils.Cards.C2S;
+import static ca.mcgill.solitaire.testutils.Cards.C3C;
+import static ca.mcgill.solitaire.testutils.Cards.C3D;
+import static ca.mcgill.solitaire.testutils.Cards.C3H;
+import static ca.mcgill.solitaire.testutils.Cards.C3S;
+import static ca.mcgill.solitaire.testutils.Cards.C4C;
+import static ca.mcgill.solitaire.testutils.Cards.C4H;
+import static ca.mcgill.solitaire.testutils.Cards.C4S;
+import static ca.mcgill.solitaire.testutils.Cards.C5D;
+import static ca.mcgill.solitaire.testutils.Cards.C5H;
+import static ca.mcgill.solitaire.testutils.Cards.C5S;
+import static ca.mcgill.solitaire.testutils.Cards.C6H;
+import static ca.mcgill.solitaire.testutils.Cards.C6S;
+import static ca.mcgill.solitaire.testutils.Cards.C7H;
+import static ca.mcgill.solitaire.testutils.Cards.C7S;
+import static ca.mcgill.solitaire.testutils.Cards.C8H;
+import static ca.mcgill.solitaire.testutils.Cards.C8S;
+import static ca.mcgill.solitaire.testutils.Cards.C9H;
+import static ca.mcgill.solitaire.testutils.Cards.C9S;
+import static ca.mcgill.solitaire.testutils.Cards.CAC;
+import static ca.mcgill.solitaire.testutils.Cards.CAD;
+import static ca.mcgill.solitaire.testutils.Cards.CAH;
+import static ca.mcgill.solitaire.testutils.Cards.CAS;
+import static ca.mcgill.solitaire.testutils.Cards.CJC;
+import static ca.mcgill.solitaire.testutils.Cards.CJH;
+import static ca.mcgill.solitaire.testutils.Cards.CJS;
+import static ca.mcgill.solitaire.testutils.Cards.CKC;
+import static ca.mcgill.solitaire.testutils.Cards.CKD;
+import static ca.mcgill.solitaire.testutils.Cards.CKH;
+import static ca.mcgill.solitaire.testutils.Cards.CKS;
+import static ca.mcgill.solitaire.testutils.Cards.CQC;
+import static ca.mcgill.solitaire.testutils.Cards.CQD;
+import static ca.mcgill.solitaire.testutils.Cards.CQH;
+import static ca.mcgill.solitaire.testutils.Cards.CQS;
+import static ca.mcgill.solitaire.testutils.Cards.CTH;
+import static ca.mcgill.solitaire.testutils.Cards.CTS;
 import static ca.mcgill.solitaire.testutils.Utils.assertCardStackHas;
-import static ca.mcgill.solitaire.testutils.Utils.peekAtIndex;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
@@ -301,7 +338,77 @@ public class TableauTest {
 		assertCardStackHas(pile, CQD, CJC);
 	}
 	
-	// ***** BELOW ARE OLD TESTS ***** //
+	@ParameterizedTest
+	@EnumSource(TableauPile.class)
+	void testShowTop(TableauPile pPile) {
+		aTableau.push(C2C, pPile);
+		aTableau.hideTop(pPile);
+		aTableau.push(CAD, pPile);
+		aTableau.hideTop(pPile);
+		aTableau.showTop(pPile);
+		assertTrue(aTableau.isVisible(CAD));
+	}
+	
+	@ParameterizedTest
+	@EnumSource(TableauPile.class)
+	void testHideTop(TableauPile pPile) {
+		aTableau.push(C2C, pPile);
+		aTableau.push(CAD, pPile);
+		aTableau.hideTop(pPile);
+		assertFalse(aTableau.isVisible(CAD));
+	}
+	
+	@Test
+	void testIsLowestVisible_NotVisible() {
+		aTableau.push(CAS, TableauPile.FIRST);
+		aTableau.hideTop(TableauPile.FIRST);
+		assertFalse(aTableau.isLowestVisible(CAS));
+	}
+	
+	@Test
+	void testIsLowestVisible_IsOnlyCard() {
+		aTableau.push(CAS, TableauPile.FIRST);
+		assertTrue(aTableau.isLowestVisible(CAS));
+	}
+	
+	@Test
+	void testIsLowestVisible_IsBottomCard() {
+		aTableau.push(C2S, TableauPile.FIRST);
+		aTableau.push(CAD, TableauPile.FIRST);
+		assertTrue(aTableau.isLowestVisible(C2S));
+	}
+	
+	@Test
+	void testIsLowestVisible_AtTop_True() {
+		aTableau.push(C2S, TableauPile.FIRST);
+		aTableau.hideTop(TableauPile.FIRST);
+		aTableau.push(CAD, TableauPile.FIRST);
+		assertTrue(aTableau.isLowestVisible(CAD));
+	}
+	
+	@Test
+	void testIsLowestVisible_AtTop_False() {
+		aTableau.push(C2S, TableauPile.FIRST);
+		aTableau.push(CAD, TableauPile.FIRST);
+		assertFalse(aTableau.isLowestVisible(CAD));
+	}
+	
+	@Test
+	void testIsLowestVisible_InMiddle_True() {
+		aTableau.push(C3D, TableauPile.FIRST);
+		aTableau.hideTop(TableauPile.FIRST);
+		aTableau.push(C2S, TableauPile.FIRST);
+		aTableau.push(CAD, TableauPile.FIRST);
+		assertTrue(aTableau.isLowestVisible(C2S));
+	}
+	
+	@Test
+	void testIsLowestVisible_InMiddle_False() {
+		aTableau.push(C3D, TableauPile.FIRST);
+		aTableau.push(C2S, TableauPile.FIRST);
+		aTableau.push(CAD, TableauPile.FIRST);
+		assertFalse(aTableau.isLowestVisible(C2S));
+	}
 	
 	@Test
 	void testGetPreviousCard_First() {
@@ -315,7 +422,10 @@ public class TableauTest {
 		aTableau.push(C5D, TableauPile.FIRST);
 		assertSame(CAC, executeGetPreviousCard(C5D).get());
 	}
-
+	
+	// ***** BELOW ARE OLD TESTS ***** //
+	
+	
 	@Test
 	void testContains() {
 		assertFalse(aTableau.contains(CAC, TableauPile.FIRST));
@@ -325,10 +435,6 @@ public class TableauTest {
 		aTableau.push(C5D, TableauPile.FIRST);
 		assertTrue(aTableau.contains(C5D, TableauPile.FIRST));
 	}
-
-	
-
-	
 
 	@Test
 	void testContains2() {
@@ -342,41 +448,5 @@ public class TableauTest {
 				assertTrue(aTableau.contains(card));
 			}
 		}
-	}
-
-	@Test
-	void testVisibility() {
-		Deck deck = new Deck();
-		aTableau.initialize(deck);
-		for (TableauPile index : TableauPile.values()) {
-			CardStack cards = aTableau.getPile(index);
-			for (int i = 0; i < cards.size() - 1; i++) {
-				assertFalse(aTableau.isVisible(peekAtIndex(cards, i)));
-			}
-			assertTrue(aTableau.isVisible(cards.peekTop()));
-		}
-		aTableau.push(deck.draw(), TableauPile.SECOND);
-		CardStack stack = aTableau.getPile(TableauPile.SECOND);
-		assertFalse(aTableau.isVisible(peekAtIndex(stack,0)));
-		assertTrue(aTableau.isVisible(peekAtIndex(stack, 1)));
-		assertTrue(aTableau.isVisible(peekAtIndex(stack, 2)));
-	}
-
-	@Test
-	void testShowHideTop() {
-		aTableau.initialize(new Deck());
-		CardStack one = aTableau.getPile(TableauPile.FIRST);
-		CardStack two = aTableau.getPile(TableauPile.SECOND);
-		assertTrue(aTableau.isVisible(one.peekBottom()));
-		aTableau.hideTop(TableauPile.FIRST);
-		assertFalse(aTableau.isVisible(one.peekBottom()));
-		aTableau.showTop(TableauPile.FIRST);
-		assertTrue(aTableau.isVisible(one.peekBottom()));
-
-		assertTrue(aTableau.isVisible(peekAtIndex(two, 1)));
-		aTableau.hideTop(TableauPile.SECOND);
-		assertFalse(aTableau.isVisible(peekAtIndex(two, 1)));
-		aTableau.showTop(TableauPile.SECOND);
-		assertTrue(aTableau.isVisible(peekAtIndex(two, 1)));
 	}
 }
